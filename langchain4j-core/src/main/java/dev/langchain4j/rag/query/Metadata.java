@@ -13,12 +13,22 @@ import dev.langchain4j.rag.AugmentationRequest;
 import dev.langchain4j.rag.RetrievalAugmentor;
 
 /**
+ * 查询元数据
  * Represents metadata that may be useful or necessary for retrieval or augmentation purposes.
  */
 public class Metadata {
 
+    /**
+     * 对话消息
+     */
     private final ChatMessage chatMessage;
+    /**
+     * 对话记忆
+     */
     private final List<ChatMessage> chatMemory;
+    /**
+     * 调用上下文
+     */
     private final InvocationContext invocationContext;
 
     public Metadata(Builder builder) {

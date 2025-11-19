@@ -9,6 +9,7 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 用户查询
  * Represents a query from the user intended for retrieving relevant {@link Content}s.
  * <br>
  * Currently, it is limited to text,
@@ -18,7 +19,13 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
  */
 public class Query {
 
+    /**
+     * 文本
+     */
     private final String text;
+    /**
+     * 元数据
+     */
     private final Metadata metadata;
 
     public Query(String text) {
