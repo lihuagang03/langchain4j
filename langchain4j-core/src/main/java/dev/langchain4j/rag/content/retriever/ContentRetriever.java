@@ -6,6 +6,7 @@ import dev.langchain4j.rag.query.Query;
 import java.util.List;
 
 /**
+ * 内容检索器
  * Retrieves {@link Content}s from an underlying data source using a given {@link Query}.
  * <br>
  * The goal is to retrieve only relevant {@link Content}s in relation to a given {@link Query}.
