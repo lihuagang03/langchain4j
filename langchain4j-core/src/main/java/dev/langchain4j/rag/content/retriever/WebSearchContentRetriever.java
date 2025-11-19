@@ -13,6 +13,7 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 import static java.util.stream.Collectors.toList;
 
 /**
+ * 网页搜索的内容检索器
  * A {@link ContentRetriever} that retrieves relevant {@link Content} from the web using a {@link WebSearchEngine}.
  * <br>
  * It returns one {@link Content} for each result that a {@link WebSearchEngine} has returned for a given {@link Query}.
@@ -22,7 +23,13 @@ import static java.util.stream.Collectors.toList;
  */
 public class WebSearchContentRetriever implements ContentRetriever {
 
+    /**
+     * 网页搜索引擎
+     */
     private final WebSearchEngine webSearchEngine;
+    /**
+     * 最大结果数量
+     */
     private final int maxResults;
 
     public WebSearchContentRetriever(WebSearchEngine webSearchEngine, Integer maxResults) {

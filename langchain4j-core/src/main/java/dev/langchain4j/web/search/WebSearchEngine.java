@@ -1,6 +1,7 @@
 package dev.langchain4j.web.search;
 
 /**
+ * 网页搜索引擎
  * Represents a web search engine that can be used to perform searches on the Web in response to a user query.
  */
 public interface WebSearchEngine {
