@@ -9,6 +9,7 @@ import static dev.langchain4j.internal.Utils.copy;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 内容的默认实现
  * A default implementation of a {@link Content}.
  * <br>
  * The class includes optional metadata which can store additional information about the content.
@@ -17,7 +18,13 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
  */
 public class DefaultContent implements Content {
 
+    /**
+     * 文本片段
+     */
     private final TextSegment textSegment;
+    /**
+     * 内容元数据
+     */
     private final Map<ContentMetadata, Object> metadata;
 
     public DefaultContent(TextSegment textSegment, Map<ContentMetadata, Object> metadata) {

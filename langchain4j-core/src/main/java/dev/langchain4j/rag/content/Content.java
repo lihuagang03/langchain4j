@@ -9,6 +9,7 @@ import dev.langchain4j.rag.query.Query;
 import java.util.Map;
 
 /**
+ * 内容
  * Represents content relevant to a user {@link Query} with the potential to enhance and ground the LLM's response.
  * <br>
  * Currently, it is limited to text content (i.e., {@link TextSegment}),

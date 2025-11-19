@@ -9,13 +9,20 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 文本片段
  * Represents a semantically meaningful segment (chunk/piece/fragment) of a larger entity such as a document or chat conversation.
  * This might be a sentence, a paragraph, or any other discrete unit of text that carries meaning.
  * This class encapsulates a piece of text and its associated metadata.
  */
 public class TextSegment {
 
+    /**
+     * 文本
+     */
     private final String text;
+    /**
+     * 元数据
+     */
     private final Metadata metadata;
 
     /**

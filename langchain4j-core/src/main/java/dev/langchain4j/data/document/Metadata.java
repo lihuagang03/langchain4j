@@ -17,6 +17,7 @@ import java.util.UUID;
 import org.jspecify.annotations.Nullable;
 
 /**
+ * 文档或文本片段的元数据
  * Represents metadata of a {@link Document} or a {@link TextSegment}.
  * <br>
  * For a {@link Document}, the metadata could store information such as the source, creation date,
@@ -53,6 +54,9 @@ public class Metadata {
         SUPPORTED_VALUE_TYPES.add(Double.class);
     }
 
+    /**
+     * 元数据的映射表
+     */
     private final Map<String, Object> metadata;
 
     /**
