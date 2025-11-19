@@ -232,6 +232,7 @@ public class EmbeddingStoreContentRetriever implements ContentRetriever {
     @Override
     public List<Content> retrieve(Query query) {
 
+        // 1.查询文本->嵌入向量
         Embedding embeddedQuery = embeddingModel.embed(query.text()).content();
 
         EmbeddingSearchRequest searchRequest = EmbeddingSearchRequest.builder()
@@ -241,6 +242,7 @@ public class EmbeddingStoreContentRetriever implements ContentRetriever {
                 .filter(filterProvider.apply(query))
                 .build();
 
+        // 2. 向量检索
         EmbeddingSearchResult<TextSegment> searchResult = embeddingStore.search(searchRequest);
 
         return searchResult.matches().stream()
