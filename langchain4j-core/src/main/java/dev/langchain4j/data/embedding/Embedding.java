@@ -7,6 +7,7 @@ import java.util.List;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 嵌入向量，表示文本的密集向量嵌入。
  * Represents a dense vector embedding of a text.
  * This class encapsulates a float array that captures the "meaning" or semantic information of the text.
  * Texts with similar meanings will have their vectors located close to each other in the embedding space.
@@ -15,6 +16,9 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
  */
 public class Embedding {
 
+    /**
+     * 向量
+     */
     private final float[] vector;
 
     /**

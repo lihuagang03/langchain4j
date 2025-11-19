@@ -10,6 +10,7 @@ import java.util.List;
 import static java.util.Collections.singletonList;
 
 /**
+ * 嵌入向量模型
  * Represents a model that can convert a given text into an embedding (vector representation of the text).
  */
 public interface EmbeddingModel {
