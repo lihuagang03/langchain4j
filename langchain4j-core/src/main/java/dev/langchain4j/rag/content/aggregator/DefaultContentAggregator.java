@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 内容聚合器的默认实现
  * Default implementation of {@link ContentAggregator} intended to be suitable for the majority of use cases.
  * <br>
  * <br>

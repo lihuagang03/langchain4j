@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 内容聚合器
  * Aggregates all {@link Content}s retrieved from all {@link ContentRetriever}s using all {@link Query}s.
  * <br>
  * The goal is to ensure that only the most relevant and non-redundant {@link Content}s are presented to the LLM.

@@ -3,7 +3,6 @@ package dev.langchain4j.rag.content.aggregator;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.scoring.ScoringModel;
 import dev.langchain4j.rag.content.Content;
-import dev.langchain4j.rag.content.ContentMetadata;
 import dev.langchain4j.rag.query.Query;
 import dev.langchain4j.rag.query.transformer.ExpandingQueryTransformer;
 
@@ -22,6 +21,7 @@ import static dev.langchain4j.rag.content.ContentMetadata.RERANKED_SCORE;
 import static java.util.Collections.emptyList;
 
 /**
+ * 重排序的内容聚合器
  * A {@link ContentAggregator} that performs re-ranking using a {@link ScoringModel}, such as Cohere.
  * <br>
  * The {@link ScoringModel} scores {@link Content}s against a (single) {@link Query}.
@@ -61,9 +61,21 @@ public class ReRankingContentAggregator implements ContentAggregator {
                 return queryToContents.keySet().iterator().next();
             };
 
+    /**
+     * 评分模型
+     */
     private final ScoringModel scoringModel;
+    /**
+     * 查询选择器
+     */
     private final Function<Map<Query, Collection<List<Content>>>, Query> querySelector;
+    /**
+     * 最小分数
+     */
     private final Double minScore;
+    /**
+     * 最大结果数量
+     */
     private final Integer maxResults;
 
     public ReRankingContentAggregator(ScoringModel scoringModel) {
