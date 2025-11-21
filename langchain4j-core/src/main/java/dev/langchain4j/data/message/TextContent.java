@@ -7,10 +7,14 @@ import static dev.langchain4j.internal.Utils.quoted;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 
 /**
+ * 文本内容
  * Represents a text content.
  */
 public class TextContent implements Content {
 
+    /**
+     * 文本
+     */
     private final String text;
 
     /**

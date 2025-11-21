@@ -1,6 +1,7 @@
 package dev.langchain4j.data.message;
 
 /**
+ * 内容类型
  * The type of content, e.g. text or image.
  * Maps to implementations of {@link Content}.
  */

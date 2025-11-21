@@ -1,6 +1,7 @@
 package dev.langchain4j.data.message;
 
 /**
+ * 消息内容
  * Abstract base interface for message content.
  *
  * @see TextContent
