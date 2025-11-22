@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * 文本片段转换器
  * Defines the interface for transforming a {@link TextSegment}.
  * Implementations can perform a variety of tasks such as transforming, filtering, enriching, etc.
  */
