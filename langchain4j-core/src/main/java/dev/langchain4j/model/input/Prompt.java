@@ -13,12 +13,18 @@ import static dev.langchain4j.internal.Utils.quoted;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 
 /**
+ * 提示，一个发送给LLM的输入文本。
+ * 一个提示通常包含指令、上下文信息、最终用户输入等。
+ * 一个提示通常是通过将一个或多个值应用于提示模板来创建的。
  * Represents a prompt (an input text sent to the LLM).
  * A prompt usually contains instructions, contextual information, end-user input, etc.
  * A Prompt is typically created by applying one or multiple values to a PromptTemplate.
  */
 public class Prompt {
 
+    /**
+     * 输入文本
+     */
     private final String text;
 
     /**
@@ -38,6 +44,7 @@ public class Prompt {
     }
 
     /**
+     * 将这个提示转换为系统消息。
      * Convert this prompt to a SystemMessage.
      * @return the SystemMessage.
      */
@@ -46,6 +53,7 @@ public class Prompt {
     }
 
     /**
+     * 将这个提示转换为用户消息，使用指定的用户名称。
      * Convert this prompt to a UserMessage with specified userName.
      * @return the UserMessage.
      */
@@ -54,6 +62,7 @@ public class Prompt {
     }
 
     /**
+     * 将这个提示转换为用户消息。
      * Convert this prompt to a UserMessage.
      * @return the UserMessage.
      */
@@ -63,6 +72,7 @@ public class Prompt {
 
     /**
      * Convert this prompt to an AiMessage.
+     * 将这个提示转换为AI消息。
      * @return the AiMessage.
      */
     public AiMessage toAiMessage() {
