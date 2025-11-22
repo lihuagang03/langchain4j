@@ -9,15 +9,19 @@ import static dev.langchain4j.internal.ValidationUtils.ensureEq;
 import static java.util.Collections.singletonList;
 
 /**
+ * 评分模型，一个能够根据查询对文本进行评分的模型。
  * Represents a model capable of scoring a text against a query.
  * <br>
+ * 在针对同一查询对多个文本进行评分时，有助于识别最相关的文本。
  * Useful for identifying the most relevant texts when scoring multiple texts against the same query.
  * <br>
+ * 评分模型可以用于重新排序。
  * The scoring model can be employed for re-ranking purposes.
  */
 public interface ScoringModel {
 
     /**
+     * 根据给定的查询对指定文本进行评分。
      * Scores a given text against a given query.
      *
      * @param text  The text to be scored.
@@ -29,6 +33,7 @@ public interface ScoringModel {
     }
 
     /**
+     * 根据给定的查询对指定文本段进行评分。
      * Scores a given {@link TextSegment} against a given query.
      *
      * @param segment The {@link TextSegment} to be scored.
