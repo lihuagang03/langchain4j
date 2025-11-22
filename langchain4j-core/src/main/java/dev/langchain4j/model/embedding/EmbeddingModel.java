@@ -10,12 +10,13 @@ import java.util.List;
 import static java.util.Collections.singletonList;
 
 /**
- * 嵌入向量模型
+ * 嵌入向量模型，表示一个可以将给定文本转换为嵌入（文本的向量表示）的模型。
  * Represents a model that can convert a given text into an embedding (vector representation of the text).
  */
 public interface EmbeddingModel {
 
     /**
+     * 嵌入文本。
      * Embed a text.
      *
      * @param text the text to embed.
@@ -26,6 +27,7 @@ public interface EmbeddingModel {
     }
 
     /**
+     * 嵌入文本段的文本内容。
      * Embed the text content of a TextSegment.
      *
      * @param textSegment the text segment to embed.

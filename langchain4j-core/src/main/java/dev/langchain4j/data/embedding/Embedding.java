@@ -50,6 +50,7 @@ public class Embedding {
     }
 
     /**
+     * 归一化向量
      * Normalize vector
      */
     public void normalize() {
