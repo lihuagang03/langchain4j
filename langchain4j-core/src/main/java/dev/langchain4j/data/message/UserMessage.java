@@ -17,6 +17,7 @@ import dev.langchain4j.Experimental;
 import dev.langchain4j.memory.ChatMemory;
 
 /**
+ * 用户消息，通常是应用程序的最终用户。
  * Represents a message from a user, typically an end user of the application.
  * <br>
  * <br>
@@ -35,8 +36,17 @@ import dev.langchain4j.memory.ChatMemory;
  */
 public class UserMessage implements ChatMessage {
 
+    /**
+     * 用户名称
+     */
     private final String name;
+    /**
+     * 消息内容列表
+     */
     private final List<Content> contents;
+    /**
+     * 属性映射表
+     */
     private final Map<String, Object> attributes;
 
     /**
