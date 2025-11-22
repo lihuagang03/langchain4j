@@ -9,6 +9,7 @@ import java.io.InputStream;
 public interface DocumentParser {
 
     /**
+     * 将给定的输入流解析为文档。
      * Parses a given {@link InputStream} into a {@link Document}.
      * The specific implementation of this method will depend on the type of the document being parsed.
      * <p>

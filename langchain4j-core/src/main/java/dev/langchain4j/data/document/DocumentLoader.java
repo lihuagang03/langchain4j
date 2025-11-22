@@ -3,6 +3,7 @@ package dev.langchain4j.data.document;
 import java.io.InputStream;
 
 /**
+ * 文档加载器
  * Utility class for loading documents.
  */
 public class DocumentLoader {
@@ -11,6 +12,7 @@ public class DocumentLoader {
     }
 
     /**
+     * 使用指定的文档解析器从给定的源加载文档。
      * Loads a document from the given source using the given parser.
      *
      * <p>Forwards the source Metadata to the parsed Document.

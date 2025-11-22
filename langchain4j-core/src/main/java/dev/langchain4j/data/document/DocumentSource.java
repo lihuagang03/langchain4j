@@ -10,6 +10,7 @@ import java.io.InputStream;
 public interface DocumentSource {
 
     /**
+     * 提供一个输入流来读取文档的内容。
      * Provides an {@link InputStream} to read the content of the document.
      * This method can be implemented to read from various sources like a local file or a network connection.
      *
