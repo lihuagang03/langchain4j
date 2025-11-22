@@ -7,6 +7,7 @@ import dev.langchain4j.rag.content.Content;
 import java.util.List;
 
 /**
+ * 内容注入器
  * Injects given {@link Content}s into a given {@link UserMessage}.
  * <br>
  * The goal is to format and incorporate the {@link Content}s into the original {@link UserMessage}

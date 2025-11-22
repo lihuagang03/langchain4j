@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 内容注入器的默认实现
  * Default implementation of {@link ContentInjector} intended to be suitable for the majority of use cases.
  * <br>
  * <br>
@@ -44,6 +45,9 @@ import java.util.Map;
  */
 public class DefaultContentInjector implements ContentInjector {
 
+    /**
+     * 默认的提示模版
+     */
     public static final PromptTemplate DEFAULT_PROMPT_TEMPLATE = PromptTemplate.from(
             """
                     {{userMessage}}
@@ -51,6 +55,9 @@ public class DefaultContentInjector implements ContentInjector {
                     Answer using the following information:
                     {{contents}}""");
 
+    /**
+     * 提示模版
+     */
     private final PromptTemplate promptTemplate;
     private final List<String> metadataKeysToInclude;
 
@@ -81,29 +88,36 @@ public class DefaultContentInjector implements ContentInjector {
             return chatMessage;
         }
 
+        // 提示
         Prompt prompt = createPrompt(chatMessage, contents);
         if (chatMessage instanceof UserMessage userMessage) {
+            // 用户消息
             return userMessage.toBuilder()
                     .contents(List.of(TextContent.from(prompt.text())))
                     .build();
         } else {
+            // 转换为用户消息
             return prompt.toUserMessage();
         }
     }
 
     protected Prompt createPrompt(ChatMessage chatMessage, List<Content> contents) {
         Map<String, Object> variables = new HashMap<>();
+        // 用户消息
         variables.put("userMessage", ((UserMessage) chatMessage).singleText());
+        // 内容列表
         variables.put("contents", format(contents));
         return promptTemplate.apply(variables);
     }
 
     protected String format(List<Content> contents) {
+        // 内容格式化，两个换行符间隔
         return contents.stream().map(this::format).collect(joining("\n\n"));
     }
 
     protected String format(Content content) {
 
+        // 文本片段
         TextSegment segment = content.textSegment();
 
         if (metadataKeysToInclude.isEmpty()) {
@@ -124,6 +138,7 @@ public class DefaultContentInjector implements ContentInjector {
                 if (!formattedMetadata.isEmpty()) {
                     formattedMetadata.append("\n");
                 }
+                // key: value，每个一行
                 formattedMetadata.append(metadataKey).append(": ").append(metadataValue);
             }
         }
@@ -131,6 +146,7 @@ public class DefaultContentInjector implements ContentInjector {
     }
 
     protected String format(String segmentContent, String segmentMetadata) {
+        // 内容，换行，元数据
         return segmentMetadata.isEmpty()
                 ? segmentContent
                 : String.format("content: %s\n%s", segmentContent, segmentMetadata);
