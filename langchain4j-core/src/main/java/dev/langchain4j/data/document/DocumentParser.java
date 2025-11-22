@@ -3,6 +3,9 @@ package dev.langchain4j.data.document;
 import java.io.InputStream;
 
 /**
+ * 文档解析器
+ * 定义将输入流解析为文档的接口。
+ * 不同的文档类型需要专门的解析逻辑。
  * Defines the interface for parsing an {@link InputStream} into a {@link Document}.
  * Different document types require specialized parsing logic.
  */

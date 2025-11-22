@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * 文档来源
+ * 文档可以从各种来源加载，例如文件系统、HTTP、FTP等。
  * Defines the interface for a Document source.
  * Documents can be loaded from various sources such as the file system, HTTP, FTP, etc.
  */
