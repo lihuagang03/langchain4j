@@ -6,6 +6,7 @@ import static dev.langchain4j.internal.Exceptions.illegalArgument;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 计算两个向量之间的余弦相似度。
  * Utility class for calculating cosine similarity between two vectors.
  */
 public class CosineSimilarity {
