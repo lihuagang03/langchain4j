@@ -9,11 +9,15 @@ import static dev.langchain4j.data.message.ChatMessageType.CUSTOM;
 import static dev.langchain4j.internal.Utils.copy;
 
 /**
+ * 自定义消息
  * Represents a custom message.
  * Can be used only with {@link ChatModel} implementations that support this type of message.
  */
 public class CustomMessage implements ChatMessage {
 
+    /**
+     * 属性映射表
+     */
     private final Map<String, Object> attributes;
 
     /**
