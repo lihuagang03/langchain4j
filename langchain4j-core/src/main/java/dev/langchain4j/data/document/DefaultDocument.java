@@ -7,11 +7,18 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 文档的默认实现
  * A default implementation of a {@link Document}.
  */
 public class DefaultDocument implements Document {
 
+    /**
+     * 文档的文本
+     */
     private final String text;
+    /**
+     * 文档的元数据
+     */
     private final Metadata metadata;
 
     public DefaultDocument(String text, Metadata metadata) {
