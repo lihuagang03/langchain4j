@@ -9,13 +9,23 @@ import static dev.langchain4j.internal.Utils.quoted;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 
 /**
+ * 工具执行结果消息，表示工具执行响应请求的结果。
  * Represents the result of a tool execution in response to a {@link ToolExecutionRequest}.
  * {@link ToolExecutionRequest}s come from a previous {@link AiMessage#toolExecutionRequests()}.
  */
 public class ToolExecutionResultMessage implements ChatMessage {
 
+    /**
+     * 工具身份ID
+     */
     private final String id;
+    /**
+     * 工具名称
+     */
     private final String toolName;
+    /**
+     * 工具执行的结果
+     */
     private final String text;
 
     /**

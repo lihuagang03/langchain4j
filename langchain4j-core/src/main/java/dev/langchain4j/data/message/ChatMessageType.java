@@ -26,8 +26,7 @@ public enum ChatMessageType {
 
     /**
      * A message from a tool.
-     * 工具消息
-     * 工具执行结果
+     * 工具执行结果消息
      */
     TOOL_EXECUTION_RESULT(ToolExecutionResultMessage.class),
 
