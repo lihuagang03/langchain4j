@@ -13,7 +13,8 @@ import dev.langchain4j.rag.AugmentationRequest;
 import dev.langchain4j.rag.RetrievalAugmentor;
 
 /**
- * 查询元数据
+ * 元数据
+ * 可能对检索或增强目的有用或必要的元数据。
  * Represents metadata that may be useful or necessary for retrieval or augmentation purposes.
  */
 public class Metadata {

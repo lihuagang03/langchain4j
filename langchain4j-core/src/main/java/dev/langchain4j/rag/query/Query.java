@@ -9,7 +9,7 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
- * 用户查询
+ * 用户查询，用户用于检索相关内容的查询。
  * Represents a query from the user intended for retrieving relevant {@link Content}s.
  * <br>
  * Currently, it is limited to text,

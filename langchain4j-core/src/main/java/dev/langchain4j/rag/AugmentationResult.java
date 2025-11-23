@@ -9,16 +9,19 @@ import static dev.langchain4j.internal.Utils.copy;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 增强结果，聊天对话消息增强的结果。
  * Represents the result of a {@link ChatMessage} augmentation.
  */
 public class AugmentationResult {
 
     /**
+     * 增强的聊天对话消息。
      * The augmented chat message.
      */
     private final ChatMessage chatMessage;
 
     /**
+     * 用于增强原始聊天对话消息的内容列表。
      * A list of content used to augment the original chat message.
      */
     private final List<Content> contents;

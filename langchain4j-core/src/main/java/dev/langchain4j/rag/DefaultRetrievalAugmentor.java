@@ -34,10 +34,10 @@ import static java.util.Collections.singletonMap;
 import static java.util.concurrent.CompletableFuture.allOf;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
 
 /**
+ * 检索增强器的默认实现，旨在适用于大多数使用场景。
  * The default implementation of {@link RetrievalAugmentor} intended to be suitable for the majority of use cases.
  * <br>
  * <br>
@@ -107,10 +107,25 @@ import static java.util.stream.Collectors.toMap;
  */
 public class DefaultRetrievalAugmentor implements RetrievalAugmentor {
 
+    /**
+     * 查询转换器
+     */
     private final QueryTransformer queryTransformer;
+    /**
+     * 查询路由器
+     */
     private final QueryRouter queryRouter;
+    /**
+     * 内容聚合器
+     */
     private final ContentAggregator contentAggregator;
+    /**
+     * 内容注入器
+     */
     private final ContentInjector contentInjector;
+    /**
+     * 执行器
+     */
     private final Executor executor;
 
     public DefaultRetrievalAugmentor(QueryTransformer queryTransformer,
@@ -136,21 +151,28 @@ public class DefaultRetrievalAugmentor implements RetrievalAugmentor {
     @Override
     public AugmentationResult augment(AugmentationRequest augmentationRequest) {
 
+        // 要增强的聊天对话消息
         ChatMessage chatMessage = augmentationRequest.chatMessage();
         String queryText;
         if (chatMessage instanceof UserMessage userMessage) {
+            // 用户消息的文本
             queryText = userMessage.singleText();
         } else {
             throw new IllegalArgumentException("Unsupported message type: " + chatMessage.type());
         }
+        // 查询
         Query originalQuery = Query.from(queryText, augmentationRequest.metadata());
 
+        // 查询转换器
         Collection<Query> queries = queryTransformer.transform(originalQuery);
 
+        // 处理查询
         Map<Query, Collection<List<Content>>> queryToContents = process(queries);
 
+        // 内容聚合器
         List<Content> contents = contentAggregator.aggregate(queryToContents);
 
+        // 内容注入器
         ChatMessage augmentedChatMessage = contentInjector.inject(contents, chatMessage);
 
         return AugmentationResult.builder()
@@ -161,9 +183,12 @@ public class DefaultRetrievalAugmentor implements RetrievalAugmentor {
 
     private Map<Query, Collection<List<Content>>> process(Collection<Query> queries) {
         if (queries.size() == 1) {
+            // 查询，一个
             Query query = queries.iterator().next();
+            // 查询路由器
             Collection<ContentRetriever> retrievers = queryRouter.route(query);
             if (retrievers.size() == 1) {
+                // 内容检索器，一个
                 ContentRetriever contentRetriever = retrievers.iterator().next();
                 List<Content> contents = contentRetriever.retrieve(query);
                 return singletonMap(query, singletonList(contents));
@@ -187,8 +212,9 @@ public class DefaultRetrievalAugmentor implements RetrievalAugmentor {
         }
     }
 
-    private CompletableFuture<Collection<List<Content>>> retrieveFromAll(Collection<ContentRetriever> retrievers,
-                                                                         Query query) {
+    private CompletableFuture<Collection<List<Content>>> retrieveFromAll(
+            Collection<ContentRetriever> retrievers,
+            Query query) {
         List<CompletableFuture<List<Content>>> futureContents = retrievers.stream()
             .map(retriever -> supplyAsync(() -> retriever.retrieve(query), executor))
             .collect(Collectors.toList());

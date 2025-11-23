@@ -7,11 +7,14 @@ import dev.langchain4j.rag.query.Metadata;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 增强请求，对聊天对话消息增强的请求。
  * Represents a request for {@link ChatMessage} augmentation.
  */
 public class AugmentationRequest {
 
     /**
+     * 要增强的聊天对话消息。
+     * 目前，仅支持用户消息。
      * The chat message to be augmented.
      * Currently, only {@link UserMessage} is supported.
      */
