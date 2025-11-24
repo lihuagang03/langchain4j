@@ -1,5 +1,8 @@
 package dev.langchain4j.model;
 
+/**
+ * 模型提供者
+ */
 public enum ModelProvider {
     ANTHROPIC,
     AMAZON_BEDROCK,

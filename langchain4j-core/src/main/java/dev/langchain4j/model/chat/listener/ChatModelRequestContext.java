@@ -8,6 +8,7 @@ import java.util.Map;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 聊天对话模型请求的上下文。
  * The chat model request context.
  * It contains the {@link ChatRequest}, {@link ModelProvider} and attributes.
  * The attributes can be used to pass data between methods of a {@link ChatModelListener}
@@ -15,8 +16,17 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
  */
 public class ChatModelRequestContext {
 
+    /**
+     * 聊天对话请求
+     */
     private final ChatRequest chatRequest;
+    /**
+     * 模型提供者
+     */
     private final ModelProvider modelProvider;
+    /**
+     * 属性映射
+     */
     private final Map<Object, Object> attributes;
 
     public ChatModelRequestContext(ChatRequest chatRequest,
