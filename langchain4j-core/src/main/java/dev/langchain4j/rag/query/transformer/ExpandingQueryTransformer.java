@@ -18,6 +18,7 @@ import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
 /**
+ * 扩展查询转换器，一个使用聊天对话模型扩展给定查询。
  * A {@link QueryTransformer} that utilizes a {@link ChatModel} to expand a given {@link Query}.
  * <br>
  * Refer to {@link #DEFAULT_PROMPT_TEMPLATE} and implementation for more details.
@@ -34,6 +35,18 @@ import static java.util.stream.Collectors.toList;
  */
 public class ExpandingQueryTransformer implements QueryTransformer {
 
+    /**
+     * 默认的提示模版
+     */
+    /*
+     * 生成用户提供的查询的 {{n}} 个不同版本。
+     * 每个版本的措辞应不同，可使用同义词或替代的句子结构，
+     * 但它们都应该保留原意。
+     * 这些版本将用于检索相关文档。
+     * 将每个查询版本放在单独的一行上是非常重要的，
+     * 不要有列举、连字符或任何额外格式！
+     * 用户查询：{{query}}
+     */
     public static final PromptTemplate DEFAULT_PROMPT_TEMPLATE = PromptTemplate.from(
             """
                     Generate {{n}} different versions of a provided user query. \
@@ -46,8 +59,17 @@ public class ExpandingQueryTransformer implements QueryTransformer {
     );
     public static final int DEFAULT_N = 3;
 
+    /**
+     * 聊天对话模型
+     */
     protected final ChatModel chatModel;
+    /**
+     * 提示模版
+     */
     protected final PromptTemplate promptTemplate;
+    /**
+     * N个不同版本的查询
+     */
     protected final int n;
 
     public ExpandingQueryTransformer(ChatModel chatModel) {
@@ -74,8 +96,11 @@ public class ExpandingQueryTransformer implements QueryTransformer {
 
     @Override
     public Collection<Query> transform(Query query) {
+        // 提示
         Prompt prompt = createPrompt(query);
+        // 聊天对话
         String response = chatModel.chat(prompt.text());
+        // 解析响应内容
         List<String> queries = parse(response);
         return queries.stream()
                 .map(queryText -> query.metadata() == null
@@ -86,7 +111,9 @@ public class ExpandingQueryTransformer implements QueryTransformer {
 
     protected Prompt createPrompt(Query query) {
         Map<String, Object> variables = new HashMap<>();
+        // 查询文本
         variables.put("query", query.text());
+        // N个不同版本的查询
         variables.put("n", n);
         return promptTemplate.apply(variables);
     }
