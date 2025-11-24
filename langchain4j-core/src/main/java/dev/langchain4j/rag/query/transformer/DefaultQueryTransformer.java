@@ -7,6 +7,7 @@ import java.util.Collection;
 import static java.util.Collections.singletonList;
 
 /**
+ * 查询转换器的默认实现，旨在适用于大多数使用场景。
  * Default implementation of {@link QueryTransformer} intended to be suitable for the majority of use cases.
  * <br>
  * <br>

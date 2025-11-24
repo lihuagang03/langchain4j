@@ -1,7 +1,7 @@
 package dev.langchain4j.data.message;
 
 /**
- * 对话消息类型
+ * 聊天对话消息类型
  * The type of chat message, e.g. system, user or AI.
  * Maps to implementations of {@link ChatMessage}.
  */
