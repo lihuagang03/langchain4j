@@ -1,6 +1,8 @@
 package dev.langchain4j.model.chat.request.json;
 
 /**
+ * JSON模式元素
+ * JSON架构元素的基本接口。
  * A base interface for a JSON schema element.
  *
  * @see JsonAnyOfSchema

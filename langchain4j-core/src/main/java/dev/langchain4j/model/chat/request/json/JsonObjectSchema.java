@@ -6,12 +6,27 @@ import static java.util.Arrays.asList;
 
 import java.util.*;
 
+/**
+ * JSON对象模式
+ */
 public class JsonObjectSchema implements JsonSchemaElement {
 
+    /**
+     * 描述
+     */
     private final String description;
+    /**
+     * 属性映射
+     */
     private final Map<String, JsonSchemaElement> properties;
+    /**
+     * 必选参数列表
+     */
     private final List<String> required;
     private final Boolean additionalProperties;
+    /**
+     * 定义列表
+     */
     private final Map<String, JsonSchemaElement> definitions;
 
     public JsonObjectSchema(Builder builder) {
