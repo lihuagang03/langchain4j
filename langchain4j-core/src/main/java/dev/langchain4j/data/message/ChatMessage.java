@@ -4,7 +4,7 @@ import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.StreamingChatModel;
 
 /**
- * 对话消息
+ * 聊天对话消息
  * Represents a chat message.
  * Used together with {@link ChatModel} and {@link StreamingChatModel}.
  *

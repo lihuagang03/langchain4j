@@ -19,6 +19,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 聊天对话模型
+ * 表示具有聊天 API 的语言模型。
  * Represents a language model that has a chat API.
  *
  * @see StreamingChatModel
@@ -26,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public interface ChatModel {
 
     /**
+     * 这是与聊天对话模型交互的主要 API。
      * This is the main API to interact with the chat model.
      *
      * @param chatRequest a {@link ChatRequest}, containing all the inputs to the LLM
@@ -33,20 +36,26 @@ public interface ChatModel {
      */
     default ChatResponse chat(ChatRequest chatRequest) {
 
+        // 聊天对话请求
         ChatRequest finalChatRequest = ChatRequest.builder()
                 .messages(chatRequest.messages())
                 .parameters(defaultRequestParameters().overrideWith(chatRequest.parameters()))
                 .build();
 
+        // 聊天对话模型监听器列表
         List<ChatModelListener> listeners = listeners();
         Map<Object, Object> attributes = new ConcurrentHashMap<>();
 
+        // 在将请求发送到模型之前，会调用此方法
         onRequest(finalChatRequest, provider(), attributes, listeners);
         try {
+            // 进行聊天对话
             ChatResponse chatResponse = doChat(finalChatRequest);
+            // 在收到模型的响应后，会调用此方法
             onResponse(chatResponse, finalChatRequest, provider(), attributes, listeners);
             return chatResponse;
         } catch (Exception error) {
+            // 当与模型交互时发生错误时，会调用此方法
             onError(error, finalChatRequest, provider(), attributes, listeners);
             throw error;
         }
@@ -70,11 +79,14 @@ public interface ChatModel {
 
     default String chat(String userMessage) {
 
+        // 聊天对话请求，用户消息
         ChatRequest chatRequest =
                 ChatRequest.builder().messages(UserMessage.from(userMessage)).build();
 
+        // 聊天对话
         ChatResponse chatResponse = chat(chatRequest);
 
+        // AI消息文本
         return chatResponse.aiMessage().text();
     }
 

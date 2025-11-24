@@ -26,6 +26,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 流式聊天对话模型
+ * 表示一个具有聊天 API 的语言模型，可以一次一个令牌地流式传输响应。
  * Represents a language model that has a chat API and can stream a response one token at a time.
  *
  * @see ChatModel
@@ -33,6 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public interface StreamingChatModel {
 
     /**
+     * 这是与聊天对话模型交互的主要 API。
      * This is the main API to interact with the chat model.
      *
      * @param chatRequest a {@link ChatRequest}, containing all the inputs to the LLM
@@ -40,11 +43,13 @@ public interface StreamingChatModel {
      */
     default void chat(ChatRequest chatRequest, StreamingChatResponseHandler handler) {
 
+        // 聊天对话请求
         ChatRequest finalChatRequest = ChatRequest.builder()
                 .messages(chatRequest.messages())
                 .parameters(defaultRequestParameters().overrideWith(chatRequest.parameters()))
                 .build();
 
+        // 聊天对话模型监听器列表
         List<ChatModelListener> listeners = listeners();
         Map<Object, Object> attributes = new ConcurrentHashMap<>();
 
