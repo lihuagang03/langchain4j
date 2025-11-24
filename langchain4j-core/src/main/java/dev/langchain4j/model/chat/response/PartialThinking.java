@@ -6,11 +6,16 @@ import dev.langchain4j.Experimental;
 import java.util.Objects;
 
 /**
+ * 部分思考
+ *
  * @since 1.2.0
  */
 @Experimental
 public class PartialThinking {
 
+    /**
+     * 思考/推理文本
+     */
     private final String text;
 
     public PartialThinking(String text) {

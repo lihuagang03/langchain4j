@@ -4,6 +4,8 @@ import dev.langchain4j.Experimental;
 import dev.langchain4j.model.chat.StreamingChatModel;
 
 /**
+ * 流式聊天对话模型的响应处理器
+ * 表示流式聊天对话模型响应的处理程序。
  * Represents a handler for a {@link StreamingChatModel} response.
  *
  * @see StreamingChatModel

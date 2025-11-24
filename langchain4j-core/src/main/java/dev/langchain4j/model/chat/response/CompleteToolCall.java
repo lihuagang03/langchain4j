@@ -8,6 +8,9 @@ import dev.langchain4j.agent.tool.ToolExecutionRequest;
 import java.util.Objects;
 
 /**
+ * 完成工具调用
+ * 表示一次完整的工具调用。
+ * 包括索引以及完整的工具执行请求。
  * Represents a complete tool call.
  * Includes the index, and complete {@link ToolExecutionRequest}.
  *
@@ -17,7 +20,13 @@ import java.util.Objects;
 @Experimental
 public class CompleteToolCall {
 
+    /**
+     * 索引
+     */
     private final int index;
+    /**
+     * 工具执行请求
+     */
     private final ToolExecutionRequest toolExecutionRequest;
 
     public CompleteToolCall(int index, ToolExecutionRequest toolExecutionRequest) {

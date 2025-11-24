@@ -6,11 +6,16 @@ import java.util.Objects;
 import dev.langchain4j.Experimental;
 
 /**
+ * 部分响应
+ *
  * @since 1.8.0
  */
 @Experimental
 public class PartialResponse {
 
+    /**
+     * 响应文本
+     */
     private final String text;
 
     public PartialResponse(String text) {

@@ -9,6 +9,9 @@ import dev.langchain4j.Experimental;
 import java.util.Objects;
 
 /**
+ * 部分工具调用
+ * 表示部分工具调用。
+ * 包括索引、ID、名称以及部分参数。
  * Represents a partial tool call.
  * Includes the index, ID, name, and a portion of the arguments.
  *
@@ -18,9 +21,21 @@ import java.util.Objects;
 @Experimental
 public class PartialToolCall {
 
+    /**
+     * 索引
+     */
     private final int index;
+    /**
+     * 工具调用ID
+     */
     private final String id;
+    /**
+     * 工具名称
+     */
     private final String name;
+    /**
+     * 部分参数列表
+     */
     private final String partialArguments;
 
     public PartialToolCall(Builder builder) {
