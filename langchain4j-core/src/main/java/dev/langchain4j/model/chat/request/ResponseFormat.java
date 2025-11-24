@@ -6,12 +6,21 @@ import java.util.Objects;
 
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
+/**
+ * 响应格式
+ */
 public class ResponseFormat {
 
     public static final ResponseFormat TEXT = ResponseFormat.builder().type(ResponseFormatType.TEXT).build();
     public static final ResponseFormat JSON = ResponseFormat.builder().type(ResponseFormatType.JSON).build();
 
+    /**
+     * 响应格式类型
+     */
     private final ResponseFormatType type;
+    /**
+     * JSON模式
+     */
     private final JsonSchema jsonSchema;
 
     private ResponseFormat(Builder builder) {

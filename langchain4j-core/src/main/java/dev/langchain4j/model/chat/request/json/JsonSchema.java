@@ -4,9 +4,18 @@ import java.util.Objects;
 
 import static dev.langchain4j.internal.Utils.quoted;
 
+/**
+ * JSON模式
+ */
 public class JsonSchema {
 
+    /**
+     * 模式名称
+     */
     private final String name;
+    /**
+     * JSON模式的根元素
+     */
     private final JsonSchemaElement rootElement;
 
     private JsonSchema(Builder builder) {
