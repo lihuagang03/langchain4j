@@ -5,6 +5,9 @@ import dev.langchain4j.agent.tool.ToolSpecification;
 import java.util.List;
 
 /**
+ * 聊天对话请求参数
+ * 表示大多数大型语言模型提供商支持的常见聊天对话请求参数。
+ * 特定的 LLM 提供商集成可以扩展此接口，以添加提供商特定的参数。
  * Represents common chat request parameters supported by most LLM providers.
  * Specific LLM provider integrations can extend this interface to add provider-specific parameters.
  *

@@ -15,16 +15,43 @@ public class DefaultChatRequestParameters implements ChatRequestParameters {
     public static final ChatRequestParameters EMPTY =
             DefaultChatRequestParameters.builder().build();
 
+    /**
+     * 模型名称
+     */
     private final String modelName;
+    /**
+     * 温度
+     */
     private final Double temperature;
     private final Double topP;
+    /**
+     * 返回相似度最高的k个结果
+     */
     private final Integer topK;
+    /**
+     * 频率惩罚
+     */
     private final Double frequencyPenalty;
+    /**
+     * 存在惩罚
+     */
     private final Double presencePenalty;
+    /**
+     * 最大输出词元数
+     */
     private final Integer maxOutputTokens;
     private final List<String> stopSequences;
+    /**
+     * 工具规格列表
+     */
     private final List<ToolSpecification> toolSpecifications;
+    /**
+     * 工具选择机制
+     */
     private final ToolChoice toolChoice;
+    /**
+     * 响应格式
+     */
     private final ResponseFormat responseFormat;
 
     protected DefaultChatRequestParameters(Builder<?> builder) {
