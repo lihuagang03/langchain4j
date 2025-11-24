@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 提示模版，一个可以重复使用多次的提示模版。
+ * 模版通常包含一个或多个变量（占位符），定义为 {{变量名称}}，这些变量会被实际值替换以生成提示。
  * Represents a template of a prompt that can be reused multiple times.
  * A template typically contains one or more variables (placeholders) defined as {{variable_name}} that are
  * replaced with actual values to produce a Prompt.
@@ -22,6 +24,9 @@ import java.util.Map;
  */
 public class PromptTemplate {
 
+    /**
+     * 提示模版工厂
+     */
     private static final PromptTemplateFactory FACTORY = factory();
 
     private static PromptTemplateFactory factory() {
@@ -35,7 +40,13 @@ public class PromptTemplate {
     static final String CURRENT_TIME = "current_time";
     static final String CURRENT_DATE_TIME = "current_date_time";
 
+    /**
+     * 模版字符串
+     */
     private final String templateString;
+    /**
+     * 模版
+     */
     private final PromptTemplateFactory.Template template;
     private final Clock clock;
 

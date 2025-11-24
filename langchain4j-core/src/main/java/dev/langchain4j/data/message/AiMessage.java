@@ -39,7 +39,7 @@ public class AiMessage implements ChatMessage {
      */
     private final String thinking;
     /**
-     * 请求执行工具列表
+     * 工具执行请求列表
      */
     private final List<ToolExecutionRequest> toolExecutionRequests;
     private final Map<String, Object> attributes;

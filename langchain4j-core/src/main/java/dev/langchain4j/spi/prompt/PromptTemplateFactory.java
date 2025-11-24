@@ -5,6 +5,7 @@ import dev.langchain4j.Internal;
 import java.util.Map;
 
 /**
+ * 提示模版工厂
  * A factory for creating prompt templates.
  */
 @Internal
