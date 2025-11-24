@@ -8,6 +8,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
+ * 工具调用
+ * 使用 @Tool 注解的 Java 方法被视为语言模型可以执行/调用的工具/函数。
+ * 在幕后使用了工具/函数调用大语言模型的功能（例如，参见 OpenAI 函数调用文档）。
  * Java methods annotated with {@code @Tool} are considered tools/functions that language model can execute/call.
  * Tool/function calling LLM capability (e.g., see <a href="https://platform.openai.com/docs/guides/function-calling">OpenAI function calling documentation</a>)
  * is used under the hood.
@@ -24,6 +27,7 @@ import java.lang.annotation.Target;
 public @interface Tool {
 
     /**
+     * 工具名称
      * Name of the tool. If not provided, method name will be used.
      *
      * @return name of the tool.
@@ -31,6 +35,7 @@ public @interface Tool {
     String name() default "";
 
     /**
+     * 工具的描述
      * Description of the tool.
      * It should be clear and descriptive to allow language model to understand the tool's purpose and its intended use.
      *
@@ -39,6 +44,7 @@ public @interface Tool {
     String[] value() default "";
 
     /**
+     * 工具的返回行为
      * Return behavior of the tool.
      * - If {@link ReturnBehavior#TO_LLM} is used (default), the value returned by the tool is sent back to the LLM for further processing.
      * - If {@link ReturnBehavior#IMMEDIATE} is used, returns immediately to the caller the value returned by the tool without

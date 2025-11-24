@@ -23,6 +23,7 @@ import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
 /**
+ * 工具规格的实用方法
  * Utility methods for {@link ToolSpecification}s.
  */
 public class ToolSpecifications {
@@ -31,6 +32,7 @@ public class ToolSpecifications {
     }
 
     /**
+     * 返回指定类中所有用 @Tool 注解的方法的工具规格。
      * Returns {@link ToolSpecification}s for all methods annotated with @{@link Tool} within the specified class.
      *
      * @param classWithTools the class.
@@ -46,6 +48,7 @@ public class ToolSpecifications {
     }
 
     /**
+     * 返回指定对象类中所有用 @Tool 注解的方法的工具规格。
      * Returns {@link ToolSpecification}s for all methods annotated with @{@link Tool}
      * within the class of the specified object.
      *
@@ -57,6 +60,7 @@ public class ToolSpecifications {
     }
 
     /**
+     * 验证所有工具规格。验证会检查方法名称是否重复。
      * Validates all the {@link ToolSpecification}s. The validation checks for duplicate method names.
      * Throws {@link IllegalArgumentException} if validation fails
      *
@@ -74,6 +78,7 @@ public class ToolSpecifications {
     }
 
     /**
+     * 返回带有 @Tool 注解的给定方法的工具规范。
      * Returns the {@link ToolSpecification} for the given method annotated with @{@link Tool}.
      *
      * @param method the method.
@@ -81,15 +86,18 @@ public class ToolSpecifications {
      */
     public static ToolSpecification toolSpecificationFrom(Method method) {
 
+        // 工具调用的注解信息
         Tool annotation = method.getAnnotation(Tool.class);
 
         String name = isNullOrBlank(annotation.name()) ? method.getName() : annotation.name();
 
+        // 工具调用的描述信息
         String description = String.join("\n", annotation.value());
         if (description.isEmpty()) {
             description = null;
         }
 
+        // JSON对象模式的参数列表
         JsonObjectSchema parameters = parametersFrom(method.getParameters());
 
         return ToolSpecification.builder()

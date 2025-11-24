@@ -3,6 +3,8 @@ package dev.langchain4j.model.chat.request;
 import dev.langchain4j.model.chat.ChatModel;
 
 /**
+ * 工具选择机制
+ * 指定聊天对话模型应该如何使用工具。
  * Specifies how {@link ChatModel} should use tools.
  */
 public enum ToolChoice {

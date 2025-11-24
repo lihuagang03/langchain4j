@@ -7,14 +7,26 @@ import java.util.Objects;
 import static dev.langchain4j.internal.Utils.quoted;
 
 /**
+ * 工具规格
+ * 描述语言模型可以执行的工具。
  * Describes a tool that language model can execute.
  * <p>
+ * 可以使用带有 @Tool 注解的方法通过 ToolSpecifications 帮助程序自动生成。
  * Can be generated automatically from methods annotated with {@link Tool} using {@link ToolSpecifications} helper.
  */
 public class ToolSpecification {
 
+    /**
+     * 工具名称
+     */
     private final String name;
+    /**
+     * 工具的描述
+     */
     private final String description;
+    /**
+     * JSON对象模式的参数列表
+     */
     private final JsonObjectSchema parameters;
 
     /**
