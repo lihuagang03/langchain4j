@@ -48,6 +48,12 @@ public class DefaultContentInjector implements ContentInjector {
     /**
      * 默认的提示模版
      */
+    /*
+     * {{userMessage}}
+     *
+     * 请使用以下信息作答：
+     * {{contents}}
+     */
     public static final PromptTemplate DEFAULT_PROMPT_TEMPLATE = PromptTemplate.from(
             """
                     {{userMessage}}
