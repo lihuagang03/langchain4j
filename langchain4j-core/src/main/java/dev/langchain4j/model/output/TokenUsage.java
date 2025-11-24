@@ -5,12 +5,23 @@ import java.util.Objects;
 import static dev.langchain4j.internal.Utils.getOrDefault;
 
 /**
+ * 词元使用情况
+ * 表示一个响应的词元使用情况。
  * Represents the token usage of a response.
  */
 public class TokenUsage {
 
+    /**
+     * 输入词元数量
+     */
     private final Integer inputTokenCount;
+    /**
+     * 输出词元数量
+     */
     private final Integer outputTokenCount;
+    /**
+     * 总词元数量
+     */
     private final Integer totalTokenCount;
 
     /**

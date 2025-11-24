@@ -7,9 +7,18 @@ import dev.langchain4j.model.output.FinishReason;
 import dev.langchain4j.model.output.TokenUsage;
 import java.util.Objects;
 
+/**
+ * 聊天对话响应
+ */
 public class ChatResponse {
 
+    /**
+     * AI消息
+     */
     private final AiMessage aiMessage;
+    /**
+     * 聊天对话响应元数据
+     */
     private final ChatResponseMetadata metadata;
 
     protected ChatResponse(Builder builder) {

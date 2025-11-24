@@ -10,9 +10,18 @@ import dev.langchain4j.data.message.ChatMessage;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 聊天对话请求
+ */
 public class ChatRequest {
 
+    /**
+     * 聊天对话消息列表
+     */
     private final List<ChatMessage> messages;
+    /**
+     * 聊天对话请求参数
+     */
     private final ChatRequestParameters parameters;
 
     protected ChatRequest(Builder builder) {
