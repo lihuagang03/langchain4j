@@ -22,8 +22,10 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 /**
+ * 查询路由器，一个使用聊天对话模型来做出路由决策。
  * A {@link QueryRouter} that utilizes a {@link ChatModel} to make a routing decision.
  * <br>
+ * 构造函数中提供的每个内容检索器都应附有描述，以帮助大型语言模型决定将查询路由到何处。
  * Each {@link ContentRetriever} provided in the constructor should be accompanied by a description which
  * should help the LLM to decide where to route a {@link Query}.
  * <br>
@@ -41,6 +43,15 @@ import static java.util.stream.Collectors.toList;
  */
 public class LanguageModelQueryRouter implements QueryRouter {
 
+    /**
+     * 默认的提示模版
+     */
+    /*
+     * 根据用户查询，从以下选项中确定最合适的数据源以检索相关信息：
+     * {{options}}
+     * 你的答案必须仅包含一个数字或多个用逗号分隔的数字，不能包含其他任何内容，这一点非常重要！
+     * 用户查询：{{query}}
+     */
     public static final PromptTemplate DEFAULT_PROMPT_TEMPLATE = PromptTemplate.from(
             """
                     Based on the user query, determine the most suitable data source(s) \
@@ -51,10 +62,25 @@ public class LanguageModelQueryRouter implements QueryRouter {
                     User query: {{query}}"""
     );
 
+    /**
+     * 聊天对话模型
+     */
     protected final ChatModel chatModel;
+    /**
+     * 提示模版
+     */
     protected final PromptTemplate promptTemplate;
+    /**
+     * ID到内容检索器描述的选项列表
+     */
     protected final String options;
+    /**
+     * ID到内容检索器的映射
+     */
     protected final Map<Integer, ContentRetriever> idToRetriever;
+    /**
+     * 回退策略
+     */
     protected final FallbackStrategy fallbackStrategy;
 
     public LanguageModelQueryRouter(ChatModel chatModel,
@@ -76,6 +102,7 @@ public class LanguageModelQueryRouter implements QueryRouter {
         for (Map.Entry<ContentRetriever, String> entry : retrieverToDescription.entrySet()) {
             idToRetriever.put(id, ensureNotNull(entry.getKey(), "ContentRetriever"));
 
+            // id: ContentRetriever description
             if (id > 1) {
                 optionsBuilder.append("\n");
             }
@@ -96,11 +123,15 @@ public class LanguageModelQueryRouter implements QueryRouter {
 
     @Override
     public Collection<ContentRetriever> route(Query query) {
+        // 提示
         Prompt prompt = createPrompt(query);
         try {
+            // 聊天对话模型
             String response = chatModel.chat(prompt.text());
+            // 解析响应内容
             return parse(response);
         } catch (Exception e) {
+            // 回退
             return fallback(query, e);
         }
     }
@@ -119,12 +150,15 @@ public class LanguageModelQueryRouter implements QueryRouter {
 
     protected Prompt createPrompt(Query query) {
         Map<String, Object> variables = new HashMap<>();
+        // 查询文本
         variables.put("query", query.text());
+        // ID到内容检索器描述的选项列表
         variables.put("options", options);
         return promptTemplate.apply(variables);
     }
 
     protected Collection<ContentRetriever> parse(String choices) {
+        // ID选择到内容检索器的映射
         return stream(choices.split(","))
                 .map(String::trim)
                 .map(Integer::parseInt)
@@ -133,6 +167,9 @@ public class LanguageModelQueryRouter implements QueryRouter {
     }
 
     /**
+     * 回退策略
+     * 如果调用大型语言模型失败或大型语言模型未返回有效响应时采用的策略。
+     * 这可能是因为格式不正确，或者不清楚应该发送到哪里。
      * Strategy applied if the call to the LLM fails of if LLM does not return a valid response.
      * It could be because it was formatted improperly, or it is unclear where to route.
      */
