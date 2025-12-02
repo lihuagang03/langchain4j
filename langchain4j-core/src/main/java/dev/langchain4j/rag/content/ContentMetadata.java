@@ -13,7 +13,7 @@ public enum ContentMetadata {
      */
     RERANKED_SCORE,
     /**
-     * 嵌入向量身份
+     * 嵌入身份
      */
     EMBEDDING_ID
 }

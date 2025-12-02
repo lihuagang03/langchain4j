@@ -7,7 +7,11 @@ import java.util.List;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
- * 嵌入向量，表示文本的密集向量嵌入。
+ * 嵌入(文本的向量表示)
+ * 表示文本的密集向量嵌入。
+ * 这个类封装了一个浮点数组，用于捕捉文本的“意义”或语义信息。
+ * 含义相似的文本在嵌入空间中的向量位置会彼此接近。
+ * 这些嵌入通常由嵌入模型创建。
  * Represents a dense vector embedding of a text.
  * This class encapsulates a float array that captures the "meaning" or semantic information of the text.
  * Texts with similar meanings will have their vectors located close to each other in the embedding space.
@@ -68,6 +72,7 @@ public class Embedding {
     }
 
     /**
+     * 向量的维度
      * Returns the dimension of the vector.
      * @return the dimension of the vector.
      */

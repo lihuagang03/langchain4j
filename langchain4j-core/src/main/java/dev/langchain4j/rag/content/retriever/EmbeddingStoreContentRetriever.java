@@ -25,7 +25,7 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 import static dev.langchain4j.spi.ServiceHelper.loadFactories;
 
 /**
- * 嵌入向量存储的内容检索器
+ * 嵌入存储的内容检索器
  * A {@link ContentRetriever} that retrieves from an {@link EmbeddingStore}.
  * <br>
  * By default, it retrieves the 3 most similar {@link Content}s to the provided {@link Query},
@@ -65,11 +65,11 @@ public class EmbeddingStoreContentRetriever implements ContentRetriever {
     public static final String DEFAULT_DISPLAY_NAME = "Default";
 
     /**
-     * 嵌入向量存储
+     * 嵌入存储
      */
     private final EmbeddingStore<TextSegment> embeddingStore;
     /**
-     * 嵌入向量模型
+     * 嵌入模型
      */
     private final EmbeddingModel embeddingModel;
 
@@ -232,7 +232,7 @@ public class EmbeddingStoreContentRetriever implements ContentRetriever {
     @Override
     public List<Content> retrieve(Query query) {
 
-        // 1.查询文本->嵌入向量
+        // 1.查询文本->嵌入
         Embedding embeddedQuery = embeddingModel.embed(query.text()).content();
 
         EmbeddingSearchRequest searchRequest = EmbeddingSearchRequest.builder()

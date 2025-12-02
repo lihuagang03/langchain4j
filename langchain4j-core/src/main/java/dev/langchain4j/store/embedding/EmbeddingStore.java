@@ -15,7 +15,8 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 import static java.util.Collections.singletonList;
 
 /**
- * 嵌入向量存储，向量数据库。
+ * 嵌入存储(向量数据库)
+ * 表示一个用于存储嵌入的存储库，也称为向量数据库。
  * Represents a store for embeddings, also known as a vector database.
  *
  * @param <Embedded> The class of the object that has been embedded. Typically, this is {@link dev.langchain4j.data.segment.TextSegment}.
