@@ -6,6 +6,9 @@ import java.util.List;
 
 import static dev.langchain4j.spi.ServiceHelper.loadFactories;
 
+/**
+ * 聊天消息序列化器
+ */
 public class ChatMessageSerializer {
 
     static final ChatMessageJsonCodec CODEC = loadCodec();

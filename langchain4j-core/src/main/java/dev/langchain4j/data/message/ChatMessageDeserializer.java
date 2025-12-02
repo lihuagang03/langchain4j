@@ -5,6 +5,8 @@ import java.util.List;
 import static dev.langchain4j.data.message.ChatMessageSerializer.CODEC;
 
 /**
+ * 聊天消息反序列化器
+ * 用于 ChatMessage 对象的反序列化器。
  * A deserializer for {@link ChatMessage} objects.
  */
 public class ChatMessageDeserializer {

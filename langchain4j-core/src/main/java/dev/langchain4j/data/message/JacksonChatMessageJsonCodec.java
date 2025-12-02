@@ -28,6 +28,9 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Jackson的聊天消息JSON编解码器
+ */
 @Internal
 public class JacksonChatMessageJsonCodec implements ChatMessageJsonCodec {
 
@@ -53,6 +56,9 @@ public class JacksonChatMessageJsonCodec implements ChatMessageJsonCodec {
                 .addMixIn(PdfFile.class, PdfFileMixin.class);
     }
 
+    /**
+     * 对象映射器
+     */
     private static final ObjectMapper OBJECT_MAPPER =
             chatMessageJsonMapperBuilder().build();
 

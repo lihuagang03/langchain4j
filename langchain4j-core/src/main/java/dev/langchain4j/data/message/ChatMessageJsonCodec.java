@@ -5,6 +5,8 @@ import dev.langchain4j.Internal;
 import java.util.List;
 
 /**
+ * 聊天消息JSON编解码器
+ * 一个用于将 ChatMessage 对象序列化和反序列化为 JSON 的编解码器。
  * A codec for serializing and deserializing {@link ChatMessage} objects to and from JSON.
  */
 @Internal
