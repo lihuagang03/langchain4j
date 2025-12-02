@@ -9,12 +9,15 @@ import java.util.Objects;
 
 /**
  * 文本片段转换器
+ * 定义用于转换文本片段的接口。
+ * 实现可以执行多种任务，例如转换、过滤、丰富等。
  * Defines the interface for transforming a {@link TextSegment}.
  * Implementations can perform a variety of tasks such as transforming, filtering, enriching, etc.
  */
 public interface TextSegmentTransformer {
 
     /**
+     * 转换提供的文本片段。
      * Transforms a provided segment.
      *
      * @param segment The segment to be transformed.
@@ -29,7 +32,10 @@ public interface TextSegmentTransformer {
      * @return A list of transformed segments. The length of this list may be shorter or longer than the original list. Returns an empty list if all segments were filtered out.
      */
     default List<TextSegment> transformAll(List<TextSegment> segments) {
-        return segments.stream().map(this::transform).filter(Objects::nonNull).collect(toList());
+        return segments.stream()
+                .map(this::transform)
+                .filter(Objects::nonNull)
+                .collect(toList());
     }
 
     /**
