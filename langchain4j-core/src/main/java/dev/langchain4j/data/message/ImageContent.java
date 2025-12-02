@@ -11,6 +11,8 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 图像内容
+ * 表示具有详细级别的图像。
  * Represents an image with a DetailLevel.
  */
 public class ImageContent implements Content {
@@ -34,6 +36,9 @@ public class ImageContent implements Content {
         AUTO
     }
 
+    /**
+     * 图像
+     */
     private final Image image;
     private final DetailLevel detailLevel;
 

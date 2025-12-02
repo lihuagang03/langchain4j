@@ -9,8 +9,14 @@ import static dev.langchain4j.data.message.ContentType.VIDEO;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
+/**
+ * 视频内容
+ */
 public class VideoContent implements Content {
 
+    /**
+     * 视频
+     */
     private final Video video;
 
     @Override

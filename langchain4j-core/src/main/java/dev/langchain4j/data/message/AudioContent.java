@@ -9,8 +9,14 @@ import static dev.langchain4j.data.message.ContentType.AUDIO;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
+/**
+ * 音频内容
+ */
 public class AudioContent implements Content {
 
+    /**
+     * 音频
+     */
     private final Audio audio;
 
     @Override

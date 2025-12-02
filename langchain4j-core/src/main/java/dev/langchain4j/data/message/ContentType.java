@@ -8,35 +8,38 @@ package dev.langchain4j.data.message;
 public enum ContentType {
 
     /**
-     * Text content.
      * 文本内容
+     * Text content.
      */
     TEXT(TextContent.class),
 
     /**
-     * Image content.
      * 图像内容
+     * Image content.
      */
     IMAGE(ImageContent.class),
 
     /**
-     * Audio content.
      * 音频内容
+     * Audio content.
      */
     AUDIO(AudioContent.class),
 
     /**
-     * Video content.
      * 视频内容
+     * Video content.
      */
     VIDEO(VideoContent.class),
 
     /**
+     * PDF文件内容
      * PDF file content.
-     * PDF 文件内容
      */
     PDF(PdfFileContent.class);
 
+    /**
+     * 内容类
+     */
     private final Class<? extends Content> contentClass;
 
     ContentType(Class<? extends Content> contentClass) {

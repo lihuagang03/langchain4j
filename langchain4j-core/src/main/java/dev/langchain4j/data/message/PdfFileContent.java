@@ -9,8 +9,14 @@ import static dev.langchain4j.data.message.ContentType.PDF;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
+/**
+ * PDF文件内容
+ */
 public class PdfFileContent implements Content {
 
+    /**
+     * PDF文件
+     */
     private final PdfFile pdfFile;
 
     @Override
