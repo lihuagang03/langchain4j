@@ -86,18 +86,19 @@ public class ToolSpecifications {
      */
     public static ToolSpecification toolSpecificationFrom(Method method) {
 
-        // 工具调用的注解信息
+        // 工具调用
         Tool annotation = method.getAnnotation(Tool.class);
 
+        // 工具名称
         String name = isNullOrBlank(annotation.name()) ? method.getName() : annotation.name();
 
-        // 工具调用的描述信息
+        // 工具的描述
         String description = String.join("\n", annotation.value());
         if (description.isEmpty()) {
             description = null;
         }
 
-        // JSON对象模式的参数列表
+        // 工具的参数列表
         JsonObjectSchema parameters = parametersFrom(method.getParameters());
 
         return ToolSpecification.builder()

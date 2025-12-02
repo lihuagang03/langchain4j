@@ -25,7 +25,8 @@ public class ToolSpecification {
      */
     private final String description;
     /**
-     * JSON对象模式的参数列表
+     * 工具的参数列表
+     * JSON对象模式
      */
     private final JsonObjectSchema parameters;
 

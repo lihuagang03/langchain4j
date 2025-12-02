@@ -28,6 +28,7 @@ public @interface Tool {
 
     /**
      * 工具名称
+     * 如果未提供，将使用方法名称。
      * Name of the tool. If not provided, method name will be used.
      *
      * @return name of the tool.
@@ -36,6 +37,7 @@ public @interface Tool {
 
     /**
      * 工具的描述
+     * 它应该清晰且具有描述性，以便语言模型能够理解该工具的用途及其预期使用方式。
      * Description of the tool.
      * It should be clear and descriptive to allow language model to understand the tool's purpose and its intended use.
      *

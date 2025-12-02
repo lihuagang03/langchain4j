@@ -5,13 +5,14 @@ import java.util.Objects;
 import static dev.langchain4j.internal.Utils.quoted;
 
 /**
- * 工具执行请求，表示一个由大型语言模型生成的执行工具的请求。
+ * 工具执行请求
+ * 表示一个由大型语言模型生成的执行工具的请求。
  * Represents an LLM-generated request to execute a tool.
  */
 public class ToolExecutionRequest {
 
     /**
-     * 工具身份ID
+     * 请求ID
      */
     private final String id;
     /**
@@ -19,7 +20,7 @@ public class ToolExecutionRequest {
      */
     private final String name;
     /**
-     * 工具参数列表
+     * 工具的参数列表
      */
     private final String arguments;
 
