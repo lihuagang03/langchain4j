@@ -9,6 +9,9 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 import static java.lang.String.format;
 
+/**
+ * 腾讯COS文档来源
+ */
 public class TencentCosSource implements DocumentSource {
 
     public static final String SOURCE = "source";

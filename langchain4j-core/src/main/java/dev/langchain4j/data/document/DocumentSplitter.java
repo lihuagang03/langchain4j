@@ -9,7 +9,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 文档拆分器，将文档拆分为文本片段。
+ * 文档拆分器
+ * 将文档拆分为文本片段。
  * 这是必要的，因为大语言模型的上下文窗口有限，无法一次性发送整个文档。
  * 因此，文档应首先被分成若干段落，并且只应将相关段落发送给大型语言模型（LLM）。
  * Defines the interface for splitting a document into text segments.
@@ -21,7 +22,7 @@ import java.util.List;
 public interface DocumentSplitter {
 
     /**
-     * 将单个文档拆分为文本片段对象的列表。
+     * 将单个文档拆分为文本片段对象列表。
      * Splits a single Document into a list of TextSegment objects.
      * The metadata is typically copied from the document and enriched with segment-specific information,
      * such as position in the document, page number, etc.

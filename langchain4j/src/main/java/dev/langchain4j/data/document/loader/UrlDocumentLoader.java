@@ -8,6 +8,9 @@ import dev.langchain4j.data.document.source.UrlSource;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * 网址文档加载器
+ */
 public class UrlDocumentLoader {
 
     /**

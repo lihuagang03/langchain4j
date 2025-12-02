@@ -8,6 +8,7 @@ import dev.langchain4j.model.TokenCountEstimator;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 按正则拆分文档
  * Splits the provided {@link Document} into parts using the provided {@code regex} and attempts to fit as many parts
  * as possible into a single {@link TextSegment}, adhering to the limit set by {@code maxSegmentSize}.
  * <p>

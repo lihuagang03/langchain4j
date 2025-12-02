@@ -9,6 +9,9 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 import static java.lang.String.format;
 
+/**
+ * 亚马逊S3文档来源
+ */
 public class AmazonS3Source implements DocumentSource {
 
     public static final String SOURCE = "source";

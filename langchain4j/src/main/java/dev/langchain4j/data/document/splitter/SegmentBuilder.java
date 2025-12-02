@@ -8,6 +8,7 @@ import static dev.langchain4j.internal.ValidationUtils.ensureGreaterThanZero;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 用于分层文档拆分器的片段构建器。
  * Segment builder utility class for HierarchicalDocumentSplitter.
  */
 @Internal

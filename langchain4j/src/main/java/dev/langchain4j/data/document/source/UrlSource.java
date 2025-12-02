@@ -13,6 +13,9 @@ import java.net.URLConnection;
 
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
+/**
+ * 网址文档来源
+ */
 public class UrlSource implements DocumentSource {
 
     private final URL url;

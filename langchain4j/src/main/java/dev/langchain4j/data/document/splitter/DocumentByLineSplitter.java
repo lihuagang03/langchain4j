@@ -6,6 +6,7 @@ import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.TokenCountEstimator;
 
 /**
+ * 按行拆分文档
  * Splits the provided {@link Document} into lines and attempts to fit as many lines as possible
  * into a single {@link TextSegment}, adhering to the limit set by {@code maxSegmentSize}.
  * <p>

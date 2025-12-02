@@ -12,6 +12,7 @@ import java.io.InputStream;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 按句拆分文档
  * Splits the provided {@link Document} into sentences and attempts to fit as many sentences as possible
  * into a single {@link TextSegment}, adhering to the limit set by {@code maxSegmentSize}.
  * <p>

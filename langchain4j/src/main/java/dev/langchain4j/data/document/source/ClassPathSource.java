@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.net.URL;
 
 /**
+ * 类路径文档来源
+ * 文档来源的一种特殊化，它知道如何从类路径读取。
  * Specialization of a {@link DocumentSource} that knows how to read from the classpath.
  * <p>
  *   Use {@link dev.langchain4j.data.document.loader.ClassPathDocumentLoader} to load

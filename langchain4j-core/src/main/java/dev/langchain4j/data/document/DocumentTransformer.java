@@ -6,7 +6,8 @@ import java.util.Objects;
 import static java.util.stream.Collectors.toList;
 
 /**
- * 文档转换器，用于转换文档。
+ * 文档转换器
+ * 用于转换文档。
  * 实现可以执行各种任务，例如转换、筛选、丰富等。
  * Defines the interface for transforming a {@link Document}.
  * Implementations can perform a variety of tasks such as transforming, filtering, enriching, etc.

@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 类路径文档加载器
  * {@link DocumentLoader} implementation for loading documents using a {@link ClassPathSource}
  * @author Eric Deandrea
  */

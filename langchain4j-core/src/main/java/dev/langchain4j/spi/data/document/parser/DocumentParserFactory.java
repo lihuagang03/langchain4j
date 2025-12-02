@@ -4,6 +4,8 @@ import dev.langchain4j.Internal;
 import dev.langchain4j.data.document.DocumentParser;
 
 /**
+ * 文档解析器工厂
+ * 用于通过 SPI 创建 DocumentParser 实例的工厂。
  * A factory for creating {@link DocumentParser} instances through SPI.
  * <br>
  * Available implementations: {@code ApacheTikaDocumentParserFactory}

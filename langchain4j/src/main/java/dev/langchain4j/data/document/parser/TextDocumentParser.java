@@ -10,6 +10,9 @@ import java.nio.charset.Charset;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+/**
+ * 文本文档解析器
+ */
 public class TextDocumentParser implements DocumentParser {
 
     private final Charset charset;

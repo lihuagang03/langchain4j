@@ -21,6 +21,7 @@ import static org.jsoup.internal.StringUtil.in;
 import static org.jsoup.select.NodeTraversor.traverse;
 
 /**
+ * 从给定的 HTML 文档中提取纯文本。
  * Extracts plain text from a given HTML document.
  * A CSS selector can be specified to extract text only from desired HTML element(s).
  * Also, multiple CSS selectors can be specified to extract metadata from desired HTML elements.

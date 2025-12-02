@@ -18,12 +18,18 @@ import static dev.langchain4j.internal.ValidationUtils.ensureGreaterThanZero;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 分层文档拆分器
  * Base class for hierarchical document splitters.
  *
- * <p>Extends {@link DocumentSplitter} and provides machinery for sub-splitting documents
+ * <p>
+ * 扩展了 DocumentSplitter，并提供了在单个段落过长时进行子拆分文档的机制。
+ * Extends {@link DocumentSplitter} and provides machinery for sub-splitting documents
  * when a single segment is too long.
  */
 public abstract class HierarchicalDocumentSplitter implements DocumentSplitter {
+    /**
+     * 重叠句子拆分器
+     */
     private HierarchicalDocumentSplitter overlapSentenceSplitter;
 
     private HierarchicalDocumentSplitter getOverlapSentenceSplitter() {

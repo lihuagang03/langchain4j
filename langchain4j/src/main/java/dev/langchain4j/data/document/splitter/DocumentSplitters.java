@@ -3,9 +3,14 @@ package dev.langchain4j.data.document.splitter;
 import dev.langchain4j.data.document.DocumentSplitter;
 import dev.langchain4j.model.TokenCountEstimator;
 
+/**
+ * 文档拆分器的工具类
+ */
 public class DocumentSplitters {
 
     /**
+     * 这是一个推荐用于通用文本的文档拆分器。
+     * 它会先尝试将文档拆分为段落，并尽可能将多个段落放入单个文本片段中。
      * This is a recommended {@link DocumentSplitter} for generic text.
      * It tries to split the document into paragraphs first and fits
      * as many paragraphs into a single {@link dev.langchain4j.data.segment.TextSegment} as possible.
@@ -21,9 +26,13 @@ public class DocumentSplitters {
     public static DocumentSplitter recursive(int maxSegmentSizeInTokens,
                                              int maxOverlapSizeInTokens,
                                              TokenCountEstimator tokenCountEstimator) {
+        // 段落
         return new DocumentByParagraphSplitter(maxSegmentSizeInTokens, maxOverlapSizeInTokens, tokenCountEstimator,
+                // 行
                 new DocumentByLineSplitter(maxSegmentSizeInTokens, maxOverlapSizeInTokens, tokenCountEstimator,
+                        // 句
                         new DocumentBySentenceSplitter(maxSegmentSizeInTokens, maxOverlapSizeInTokens, tokenCountEstimator,
+                                // 单词
                                 new DocumentByWordSplitter(maxSegmentSizeInTokens, maxOverlapSizeInTokens, tokenCountEstimator)
                         )
                 )

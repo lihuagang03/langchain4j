@@ -6,6 +6,9 @@ import dev.langchain4j.Internal;
 import dev.langchain4j.data.document.DocumentParser;
 import dev.langchain4j.spi.data.document.parser.DocumentParserFactory;
 
+/**
+ * 文档解析器加载器
+ */
 @Internal
 class DocumentParserLoader {
     static DocumentParser loadDocumentParser() {

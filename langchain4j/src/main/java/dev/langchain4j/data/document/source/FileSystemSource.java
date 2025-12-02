@@ -14,6 +14,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * 文件系统文档来源
+ */
 public class FileSystemSource implements DocumentSource {
 
     private final Path path;

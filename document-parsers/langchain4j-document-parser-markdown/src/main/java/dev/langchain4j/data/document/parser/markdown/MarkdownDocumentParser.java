@@ -13,6 +13,8 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.text.TextContentRenderer;
 
 /**
+ * Markdown文档解析器
+ * 将 Markdown 文件解析为文档。
  * Parses Markdown file into a {@link Document}.
  * please refer to the <a href="https://www.markdownguide.org/">official Markdown website</a>.
  */

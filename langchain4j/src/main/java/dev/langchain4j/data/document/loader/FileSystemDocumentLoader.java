@@ -23,6 +23,9 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 文件系统文档加载器
+ */
 public class FileSystemDocumentLoader {
 
     private static final Logger log = LoggerFactory.getLogger(FileSystemDocumentLoader.class);

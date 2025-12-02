@@ -9,6 +9,9 @@ import java.io.InputStream;
 
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
+/**
+ * GitHub文档来源
+ */
 public class GitHubSource implements DocumentSource {
 
     private final InputStream inputStream;

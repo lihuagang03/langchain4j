@@ -4,6 +4,7 @@ import java.io.InputStream;
 
 /**
  * 文档加载器
+ * 用于加载文档。
  * Utility class for loading documents.
  */
 public class DocumentLoader {
@@ -24,6 +25,7 @@ public class DocumentLoader {
      */
     public static Document load(DocumentSource source, DocumentParser parser) {
         try (InputStream inputStream = source.inputStream()) {
+            // 将给定的输入流解析为文档
             Document document = parser.parse(inputStream);
             document.metadata().putAll(source.metadata().toMap());
             return document;

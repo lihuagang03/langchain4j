@@ -20,12 +20,16 @@ import org.jspecify.annotations.Nullable;
  * 文档或文本片段的元数据
  * Represents metadata of a {@link Document} or a {@link TextSegment}.
  * <br>
+ * 对于文档，其元数据可以存储诸如来源、创建日期、所有者或其他相关信息等内容。
  * For a {@link Document}, the metadata could store information such as the source, creation date,
  * owner, or any other relevant details.
  * <br>
+ * 对于一个文本段落，除了继承自文档的元数据外，它还可以包含特定于该段落的信息，例如页码、段落在文档中的位置、章节等。
  * For a {@link TextSegment}, in addition to metadata inherited from a {@link Document}, it can also include
  * segment-specific information, such as the page number, the position of the segment within the document, chapter, etc.
  * <br>
+ * 元数据以键值映射的形式存储，其中键是字符串，值可以是以下之一：
+ * 字符串、UUID、整数、长整数、浮点数、双精度浮点数。
  * The metadata is stored as a key-value map, where the key is a {@link String} and the value can be one of:
  * {@link String}, {@link UUID}, {@link Integer}, {@link Long}, {@link Float}, {@link Double}.
  * If you require additional types, please <a href="https://github.com/langchain4j/langchain4j/issues/new/choose">open an issue</a>.
