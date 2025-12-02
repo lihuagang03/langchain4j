@@ -1,5 +1,8 @@
 package dev.langchain4j.exception;
 
+/**
+ * LangChain4j异常
+ */
 public class LangChain4jException extends RuntimeException {
 
     public LangChain4jException(String message) {

@@ -1,5 +1,8 @@
 package dev.langchain4j.exception;
 
+/**
+ * 无效请求异常
+ */
 public class InvalidRequestException extends NonRetriableException {
     public InvalidRequestException(String message) {
         super(message);

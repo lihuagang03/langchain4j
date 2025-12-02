@@ -1,5 +1,8 @@
 package dev.langchain4j.exception;
 
+/**
+ * 内部服务器异常
+ */
 public class InternalServerException extends RetriableException {
     public InternalServerException(String message) {
         super(message);

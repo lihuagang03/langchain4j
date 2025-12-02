@@ -1,6 +1,9 @@
 package dev.langchain4j.exception;
 
 /**
+ * 工具参数异常
+ * 表示工具参数有问题。
+ * 例如，JSON无法解析，或参数类型错误。
  * Indicates that something is wrong with the tool arguments.
  * For example, the JSON cannot be parsed, or an argument is of the wrong type.
  *

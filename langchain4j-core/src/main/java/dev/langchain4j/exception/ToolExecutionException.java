@@ -1,6 +1,8 @@
 package dev.langchain4j.exception;
 
 /**
+ * 工具执行异常
+ * 表示在执行该工具时出现了问题。
  * Indicates that something went wrong while executing the tool.
  *
  * @since 1.4.0

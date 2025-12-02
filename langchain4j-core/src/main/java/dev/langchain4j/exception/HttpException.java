@@ -1,5 +1,8 @@
 package dev.langchain4j.exception;
 
+/**
+ * HTTP异常
+ */
 public class HttpException extends LangChain4jException {
 
     private final int statusCode;

@@ -1,5 +1,8 @@
 package dev.langchain4j.exception;
 
+/**
+ * 超时异常
+ */
 public class TimeoutException extends RetriableException {
     public TimeoutException(String message) {
         super(message);

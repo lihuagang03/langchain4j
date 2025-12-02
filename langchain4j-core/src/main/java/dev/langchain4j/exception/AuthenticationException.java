@@ -1,5 +1,8 @@
 package dev.langchain4j.exception;
 
+/**
+ * 身份验证异常
+ */
 public class AuthenticationException extends NonRetriableException {
     public AuthenticationException(String message) {
         super(message);
