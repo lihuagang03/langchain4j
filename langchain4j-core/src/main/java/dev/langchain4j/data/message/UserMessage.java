@@ -17,27 +17,33 @@ import dev.langchain4j.Experimental;
 import dev.langchain4j.memory.ChatMemory;
 
 /**
- * 用户消息，通常是应用程序的最终用户。
+ * 用户消息
+ * 表示来自用户的消息，通常是应用程序的最终用户。
  * Represents a message from a user, typically an end user of the application.
  * <br>
  * <br>
+ * 根据模型支持的模式（文本、图像、音频、视频等），用户消息可以包含单个文本（一个字符串）或多个内容，
  * Depending on the supported modalities (text, image, audio, video, etc.) of the model,
  * user messages can contain either a single text (a {@code String}) or multiple {@link Content}s,
  * which can be either {@link TextContent}, {@link ImageContent}, {@link AudioContent},
  * {@link VideoContent}, or {@link PdfFileContent}.
  * <br>
  * <br>
+ * 可选地，用户消息可以包含用户的姓名。
+ * 请注意，并非所有模型都支持在用户消息中使用姓名。
  * Optionally, user message can contain a {@link #name} of the user.
  * Be aware that not all models support names in {@code UserMessage}.
  * <br>
  * <br>
+ * 可选地，用户消息可以包含由可变 Map 表示的自定义属性。
+ * 属性不会发送到模型，但会存储在聊天记忆中。
  * Optionally, user message can contain custom attributes represented by a mutable {@link Map}.
  * Attributes are not sent to the model, but they are stored in the {@link ChatMemory}.
  */
 public class UserMessage implements ChatMessage {
 
     /**
-     * 用户名称
+     * 用户姓名
      */
     private final String name;
     /**

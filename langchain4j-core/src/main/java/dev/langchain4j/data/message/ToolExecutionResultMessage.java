@@ -9,7 +9,9 @@ import static dev.langchain4j.internal.Utils.quoted;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 
 /**
- * 工具执行结果消息，表示工具执行响应请求的结果。
+ * 工具执行结果消息
+ * 表示针对 ToolExecutionRequest 执行工具后的结果。
+ * ToolExecutionRequest 来源于之前的 AiMessage.toolExecutionRequests()。
  * Represents the result of a tool execution in response to a {@link ToolExecutionRequest}.
  * {@link ToolExecutionRequest}s come from a previous {@link AiMessage#toolExecutionRequests()}.
  */

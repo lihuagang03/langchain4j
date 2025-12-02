@@ -9,7 +9,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * 系统消息，通常由开发者定义。
+ * 系统消息
+ * 表示一个系统消息，通常由开发者定义。
  * 这种类型的信息通常提供关于人工智能行为的指示，例如其行为方式或应答风格。
  * Represents a system message, typically defined by a developer.
  * This type of message usually provides instructions regarding the AI's actions, such as its behavior or response style.
