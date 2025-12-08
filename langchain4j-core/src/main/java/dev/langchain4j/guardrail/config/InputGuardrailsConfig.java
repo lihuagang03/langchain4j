@@ -4,6 +4,8 @@ import dev.langchain4j.spi.guardrail.config.InputGuardrailsConfigBuilderFactory;
 import java.util.ServiceLoader;
 
 /**
+ * 输入护栏配置
+ * 专门用于输入防护措施的配置。
  * Configuration specifically for input guardrails.
  * <p>
  *     Frameworks that extend this library (like Quarkus or Spring) may provide their own implementations of this configuration.

@@ -4,6 +4,8 @@ import dev.langchain4j.spi.guardrail.config.OutputGuardrailsConfigBuilderFactory
 import java.util.ServiceLoader;
 
 /**
+ * 输出护栏配置
+ * 专门用于输出防护措施的配置。
  * Configuration specifically for output guardrails.
  * <p>
  *     Frameworks that extend this library (like Quarkus or Spring) may provide their own implementations of this configuration.
