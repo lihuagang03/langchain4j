@@ -34,35 +34,92 @@ import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * 代理构建者
+ */
 public class AgentBuilder<T> {
+    /**
+     * 代理服务类
+     */
     private final Class<T> agentServiceClass;
 
+    /**
+     * 代理名称
+     */
     String name;
+    /**
+     * 唯一名称
+     */
     String uniqueName;
+    /**
+     * 代理的描述
+     */
     String description;
+    /**
+     * 输出的键
+     */
     String outputKey;
+    /**
+     * 是否异步执行
+     */
     boolean async;
 
     Consumer<AgentRequest> beforeListener = request -> {};
     Consumer<AgentResponse> afterListener = response -> {};
 
+    /**
+     * 聊天模型
+     */
     private ChatModel model;
+    /**
+     * 聊天记忆
+     */
     private ChatMemory chatMemory;
+    /**
+     * 聊天记忆提供者
+     */
     private ChatMemoryProvider chatMemoryProvider;
+    /**
+     * 上下文提供者
+     */
     private Function<AgenticScope, String> contextProvider;
+    /**
+     * 上下文提供的代理列表
+     */
     private String[] contextProvidingAgents;
+    /**
+     * 内容检索器
+     */
     private ContentRetriever contentRetriever;
+    /**
+     * 检索增强器
+     */
     private RetrievalAugmentor retrievalAugmentor;
+    /**
+     * 系统消息提供者
+     */
     private Function<Object, String> systemMessageProvider;
 
+    /**
+     * 输入护栏配置
+     */
     private InputGuardrailsConfig inputGuardrailsConfig;
+    /**
+     * 输出护栏配置
+     */
     private OutputGuardrailsConfig outputGuardrailsConfig;
     private Class<? extends InputGuardrail>[] inputGuardrailClasses;
     private Class<? extends OutputGuardrail>[] outputGuardrailClasses;
     private InputGuardrail[] inputGuardrails;
     private OutputGuardrail[] outputGuardrails;
 
+    /**
+     * 工具对象列表
+     */
     private Object[] objectsWithTools;
+    /**
+     * 工具提供者
+     */
     private ToolProvider toolProvider;
     private Integer maxSequentialToolsInvocations;
     private Function<ToolExecutionRequest, ToolExecutionResultMessage> hallucinatedToolNameStrategy;
