@@ -11,12 +11,19 @@ import dev.langchain4j.data.message.UserMessage;
 import java.util.Objects;
 
 /**
+ * MCP提示消息
  * The 'PromptMessage' object from the MCP protocol schema.
  * This can be directly translated to a ChatMessage object from the LangChain4j API.
  */
 public class McpPromptMessage {
 
+    /**
+     * 角色
+     */
     private final McpRole role;
+    /**
+     * 提示内容
+     */
     private final McpPromptContent content;
 
     @JsonCreator

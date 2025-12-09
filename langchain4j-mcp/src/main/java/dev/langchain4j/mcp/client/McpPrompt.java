@@ -7,14 +7,24 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * MCP提示
  * The 'Prompt' object from the MCP protocol schema.
  * It describes a declaration of a prompt, not its actual contents.
  * It contains a name, description and a list of arguments relevant for rendering an instance of the prompt.
  */
 public class McpPrompt {
 
+    /**
+     * 提示名称
+     */
     private final String name;
+    /**
+     * 提示描述
+     */
     private final String description;
+    /**
+     * MCP提示参数列表
+     */
     private final List<McpPromptArgument> arguments;
 
     @JsonCreator

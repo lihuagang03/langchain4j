@@ -7,6 +7,7 @@ import dev.langchain4j.data.message.Content;
 import java.util.Locale;
 
 /**
+ * MCP提示内容
  * A holder for one of ['McpTextContent', 'McpImageContent', 'McpEmbeddedResource'] objects from the MCP protocol schema.
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")

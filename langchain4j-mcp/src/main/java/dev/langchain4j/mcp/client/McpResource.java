@@ -6,6 +6,7 @@ import dev.langchain4j.internal.Utils;
 import java.util.Objects;
 
 /**
+ * MCP资源
  * The 'Resource' object from the MCP protocol schema.
  */
 public class McpResource {

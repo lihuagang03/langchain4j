@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * MCP提示结果
  * The 'GetPromptResult' object from the MCP protocol schema.
  */
 public class McpGetPromptResult {

@@ -6,12 +6,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
 /**
+ * MCP提示参数
  * The 'PromptArgument' object from the MCP protocol schema.
  */
 public class McpPromptArgument {
 
+    /**
+     * 参数名称
+     */
     private final String name;
+    /**
+     * 参数描述
+     */
     private final String description;
+    /**
+     * 是否为必填参数
+     */
     private final boolean required;
 
     @JsonCreator

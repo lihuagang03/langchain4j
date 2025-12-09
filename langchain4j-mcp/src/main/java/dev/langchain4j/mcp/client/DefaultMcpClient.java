@@ -50,39 +50,87 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * MCP客户端的默认实现
+ */
 public class DefaultMcpClient implements McpClient {
 
     private static final Logger log = LoggerFactory.getLogger(DefaultMcpClient.class);
+    /**
+     * 用于生成唯一ID的原子长整型
+     */
     private final AtomicLong idGenerator = new AtomicLong(0);
+    /**
+     * MCP传输
+     */
     private final McpTransport transport;
     static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    /**
+     * 唯一键，身份
+     */
     private final String key;
+    /**
+     * 客户端名称
+     */
     private final String clientName;
+    /**
+     * 客户端版本
+     */
     private final String clientVersion;
+    /**
+     * MCP协议版本
+     */
     private final String protocolVersion;
     private final Duration initializationTimeout;
+    /**
+     * 工具执行的超时时间
+     */
     private final Duration toolExecutionTimeout;
     private final Duration resourcesTimeout;
     private final Duration promptsTimeout;
     private final Duration pingTimeout;
     private final JsonNode RESULT_TIMEOUT;
     private final String toolExecutionTimeoutErrorMessage;
+    /**
+     * 追加操作
+     */
     private final Map<Long, CompletableFuture<JsonNode>> pendingOperations = new ConcurrentHashMap<>();
+    /**
+     * 消息处理器
+     */
     private final McpOperationHandler messageHandler;
     private final McpLogMessageHandler logHandler;
     private final AtomicReference<List<McpResource>> resourceRefs = new AtomicReference<>();
     private final AtomicReference<List<McpResourceTemplate>> resourceTemplateRefs = new AtomicReference<>();
     private final AtomicReference<List<McpPrompt>> promptRefs = new AtomicReference<>();
+    /**
+     * 工具列表
+     */
     private final AtomicReference<List<ToolSpecification>> toolListRefs = new AtomicReference<>();
     private final AtomicBoolean toolListOutOfDate = new AtomicBoolean(true);
     private final AtomicReference<CompletableFuture<Void>> toolListUpdateInProgress = new AtomicReference<>(null);
+    /**
+     * 重连的间隔时间
+     */
     private final Duration reconnectInterval;
     private volatile boolean closed = false;
+    /**
+     * 自动健康检查的开关
+     */
     private final Boolean autoHealthCheck;
+    /**
+     * 自动健康检查的间隔
+     */
     private final Duration autoHealthCheckInterval;
+    /**
+     * 健康检查调度器
+     */
     private final ScheduledExecutorService healthCheckScheduler;
     private final ReentrantLock initializationLock = new ReentrantLock();
     private final AtomicReference<List<McpRoot>> mcpRoots;
+    /**
+     * 是否缓存工具列表
+     */
     private final Boolean cacheToolList;
 
     public DefaultMcpClient(Builder builder) {

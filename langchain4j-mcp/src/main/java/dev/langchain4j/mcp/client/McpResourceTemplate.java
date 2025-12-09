@@ -6,6 +6,7 @@ import dev.langchain4j.internal.Utils;
 import java.util.Objects;
 
 /**
+ * MCP资源模板（动态资源）
  * The 'ResourceTemplate' object from the MCP protocol schema.
  */
 public class McpResourceTemplate {

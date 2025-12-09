@@ -14,6 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * MCP操作处理器
+ * 处理来自 MCP 服务器的传入消息。
+ * 传输实现应在接收到的每条消息上调用“handle”方法。
+ * 传输在启动需要响应的操作之前，还必须调用“startOperation”，以便在待处理操作的映射中注册其 ID。
  * Handles incoming messages from the MCP server. Transport implementations
  * should call the "handle" method on each received message. A transport also has
  * to call "startOperation" when before starting an operation that requires a response
@@ -21,8 +25,14 @@ import org.slf4j.LoggerFactory;
  */
 public class McpOperationHandler {
 
+    /**
+     * 追加操作
+     */
     private final Map<Long, CompletableFuture<JsonNode>> pendingOperations;
     private static final Logger log = LoggerFactory.getLogger(McpOperationHandler.class);
+    /**
+     * MCP传输
+     */
     private final McpTransport transport;
     private final Consumer<McpLogMessage> logMessageConsumer;
     private final Runnable onToolListUpdate;
@@ -43,6 +53,7 @@ public class McpOperationHandler {
 
     public void handle(JsonNode message) {
         if (message.has("id")) {
+            // 消息ID
             long messageId = message.get("id").asLong();
             if (message.has("result") || message.has("error")) {
                 // if there is a result or error, we assume that this is related to a client-initiated operation

@@ -3,10 +3,17 @@ package dev.langchain4j.mcp.client;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 /**
+ * MCP角色
  * The 'Role' object from the MCP protocol schema.
  */
 public enum McpRole {
+    /**
+     * 助手
+     */
     ASSISTANT,
+    /**
+     * 用户
+     */
     USER;
 
     // to allow case-insensitive deserialization
