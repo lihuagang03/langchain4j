@@ -9,6 +9,10 @@ import java.util.UUID;
 import org.jspecify.annotations.NonNull;
 
 /**
+ * AI服务调用的上下文
+ * 表示单次 AI 服务调用的上下文。
+ * 每次调用 AI 服务方法时都会创建一个新的实例，并且它会一直存在直到 AI 服务调用结束，
+ * 可能会跨越对 ChatModel 的多次调用。
  * Represents the context of a single AI Service invocation.
  * A new instance is created each time an AI Service method is invoked,
  * and it exists until the end of the AI Service invocation,
@@ -19,11 +23,13 @@ import org.jspecify.annotations.NonNull;
 public interface InvocationContext {
 
     /**
+     * 整个 AI 服务调用的唯一标识符
      * Unique identifier for an entire AI Service invocation
      */
     UUID invocationId();
 
     /**
+     * 发起调用的 AI 服务接口的完全限定名称
      * The fully-qualified name of the AI Service interface where the invocation was initiated from
      *
      * @see #methodName()
@@ -31,26 +37,31 @@ public interface InvocationContext {
     String interfaceName();
 
     /**
+     * 调用发起自 interfaceName() 的方法名称
      * The method name on {@link #interfaceName()} where the invocation was initiated from
      */
     String methodName();
 
     /**
+     * 传递给 AI 服务方法的参数
      * The arguments passed into the AI Service method
      */
     List<Object> methodArguments();
 
     /**
+     * 该方法的聊天记忆ID
      * The chat memory id parameter of the method
      */
     Object chatMemoryId();
 
     /**
+     * 调用参数
      * The invocation parameters
      */
     InvocationParameters invocationParameters();
 
     /**
+     * LangChain4j 管理的参数
      * LangChain4j managed parameters
      * @since 1.8.0
      */
@@ -59,6 +70,7 @@ public interface InvocationContext {
     }
 
     /**
+     * 获取调用发生的时间点。
      * Retrieves the point in time when the invocation occurred.
      */
     Instant timestamp();

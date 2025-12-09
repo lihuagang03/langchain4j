@@ -4,6 +4,7 @@ import java.util.Map;
 import dev.langchain4j.Internal;
 
 /**
+ * 一个用于由 LangChain4j 框架管理的组件的标记接口。
  * A marker interface for components that are managed by LangChain4j framework.
  * <p>
  * Implementing this interface indicates that the component is internally managed by LangChain4j,
