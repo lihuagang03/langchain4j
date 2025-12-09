@@ -7,12 +7,14 @@ import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.service.MemoryId;
 
 /**
+ * 工具执行器/处理器
  * A low-level executor/handler of a {@link ToolExecutionRequest}.
  */
 @FunctionalInterface
 public interface ToolExecutor {
 
     /**
+     * 执行工具请求。
      * Executes a tool request.
      *
      * @param request  The tool execution request. Contains tool name and arguments.
@@ -34,8 +36,10 @@ public interface ToolExecutor {
      * @return The result of the tool execution that will be sent to the LLM.
      */
     default ToolExecutionResult executeWithContext(ToolExecutionRequest request, InvocationContext context) {
+        // 聊天记忆ID
         Object memoryId = context == null ? null : context.chatMemoryId();
 
+        // 工具执行结果文本
         String result = execute(request, memoryId);
 
         return ToolExecutionResult.builder()

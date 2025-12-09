@@ -5,14 +5,25 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 import java.util.Objects;
 
 /**
+ * 工具执行结果
+ * 表示工具执行的结果。
  * Represents the result of a tool execution.
  *
  * @since 1.6.0
  */
 public class ToolExecutionResult {
 
+    /**
+     * 错误标志
+     */
     private final boolean isError;
+    /**
+     * 执行结果
+     */
     private final Object result;
+    /**
+     * 执行结果文本
+     */
     private final String resultText;
 
     public ToolExecutionResult(Builder builder) {

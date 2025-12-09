@@ -6,11 +6,19 @@ import dev.langchain4j.agent.tool.ToolExecutionRequest;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 工具执行
+ * 表示工具的执行，包括请求和结果。
  * Represents the execution of a tool, including the request and the result.
  */
 public class ToolExecution {
 
+    /**
+     * 工具执行请求
+     */
     private final ToolExecutionRequest request;
+    /**
+     * 工具执行结果
+     */
     private final ToolExecutionResult result;
 
     private ToolExecution(Builder builder) {
