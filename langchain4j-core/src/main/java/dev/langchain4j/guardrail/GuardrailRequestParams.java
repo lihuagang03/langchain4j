@@ -10,17 +10,36 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
+ * 护栏请求参数
  * Represents the common parameters shared across guardrail checks when validating interactions
  * between a user and a language model. This class encapsulates the chat memory, user message
  * template, and additional variables required for guardrail processing.
  */
 public final class GuardrailRequestParams {
 
+    /**
+     * 聊天记忆
+     */
     private final ChatMemory chatMemory;
+    /**
+     * 增强结果
+     */
     private final AugmentationResult augmentationResult;
+    /**
+     * 用户消息模版
+     */
     private final String userMessageTemplate;
+    /**
+     * 变量映射表
+     */
     private final Map<String, Object> variables;
+    /**
+     * 调用上下文
+     */
     private final InvocationContext invocationContext;
+    /**
+     * AI服务监视器的注册器
+     */
     private final AiServiceListenerRegistrar aiServiceListenerRegistrar;
 
     private GuardrailRequestParams(Builder builder) {

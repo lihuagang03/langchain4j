@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
+ * 防护结果
+ * 用户与大型语言模型（LLM）之间交互的验证结果。
  * The result of the validation of an interaction between a user and the LLM.
  *
  * @param <GR>

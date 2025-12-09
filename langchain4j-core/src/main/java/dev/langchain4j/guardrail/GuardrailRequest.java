@@ -1,6 +1,7 @@
 package dev.langchain4j.guardrail;
 
 /**
+ * 护栏请求
  * Represents the parameter passed to {@link Guardrail#validate(GuardrailRequest)}} in order to validate an interaction
  * between a user and the LLM.
  */
