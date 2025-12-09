@@ -22,17 +22,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * MCP工具提供者
+ * 由一个或多个MCP客户支持的工具提供商。
  * A tool provider backed by one or more MCP clients.
  */
 public class McpToolProvider implements ToolProvider {
 
+    /**
+     * MCP客户端列表
+     */
     private final CopyOnWriteArrayList<McpClient> mcpClients;
     private final boolean failIfOneServerFails;
+    /**
+     * MCP客户端到工具规格的映射
+     */
     private final AtomicReference<BiPredicate<McpClient, ToolSpecification>> mcpToolsFilter;
+    /**
+     * 工具执行器/处理器
+     */
     private final Function<ToolExecutor, ToolExecutor> toolWrapper;
     private static final Logger log = LoggerFactory.getLogger(McpToolProvider.class);
     private final McpResourcesAsToolsPresenter resourcesAsToolsPresenter;
+    /**
+     * MCP客户端到工具名称的映射
+     */
     private final AtomicReference<BiFunction<McpClient, ToolSpecification, String>> toolNameMapper;
+    /**
+     * MCP客户端到工具规格的映射
+     */
     private final AtomicReference<BiFunction<McpClient, ToolSpecification, ToolSpecification>> toolSpecificationMapper;
 
     private McpToolProvider(Builder builder) {

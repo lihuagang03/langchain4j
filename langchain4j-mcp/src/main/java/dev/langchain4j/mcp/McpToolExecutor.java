@@ -10,10 +10,14 @@ import dev.langchain4j.service.tool.ToolExecutor;
 import java.util.Optional;
 
 /**
+ * MCP工具执行器/处理器
  * @since 1.4.0
  */
 public class McpToolExecutor implements ToolExecutor {
 
+    /**
+     * MCP客户端
+     */
     private final McpClient mcpClient;
 
     // if this name is set, it overrides the name in the execution request - in other words,
