@@ -43,6 +43,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 
+/**
+ * 工具服务
+ */
 @Internal
 public class ToolService {
 
@@ -58,13 +61,34 @@ public class ToolService {
         return ToolErrorHandlerResult.text(errorMessage);
     };
 
+    /**
+     * 工具规格列表
+     */
     private final List<ToolSpecification> toolSpecifications = new ArrayList<>();
+    /**
+     * 工具名称到工具执行器/处理器的映射表
+     */
     private final Map<String, ToolExecutor> toolExecutors = new HashMap<>();
+    /**
+     * 即时返回的工具列表
+     */
     private final Set<String> immediateReturnTools = new HashSet<>();
+    /**
+     * 工具提供者
+     */
     private ToolProvider toolProvider;
+    /**
+     * 工具执行器
+     */
     private Executor executor;
     private int maxSequentialToolsInvocations = 100;
+    /**
+     * 工具参数错误处理器
+     */
     private ToolArgumentsErrorHandler argumentsErrorHandler;
+    /**
+     * 工具执行错误处理器
+     */
     private ToolExecutionErrorHandler executionErrorHandler;
     private Function<ToolExecutionRequest, ToolExecutionResultMessage> toolHallucinationStrategy =
             HallucinatedToolNameStrategy.THROW_EXCEPTION;

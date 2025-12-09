@@ -3,11 +3,13 @@ package dev.langchain4j.service.tool;
 import dev.langchain4j.Internal;
 import dev.langchain4j.agent.tool.ToolSpecification;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * 工具服务上下文
+ */
 @Internal
 public class ToolServiceContext {
 

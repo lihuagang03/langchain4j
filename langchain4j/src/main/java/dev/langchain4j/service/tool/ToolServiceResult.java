@@ -9,13 +9,31 @@ import dev.langchain4j.Internal;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.output.TokenUsage;
 
+/**
+ * 工具服务结果
+ */
 @Internal
 public class ToolServiceResult {
 
+    /**
+     * 中间的聊天响应列表
+     */
     private final List<ChatResponse> intermediateResponses;
+    /**
+     * 最终的聊天响应
+     */
     private final ChatResponse finalResponse;
+    /**
+     * 工具执行列表
+     */
     private final List<ToolExecution> toolExecutions;
+    /**
+     * 聚合的词元使用量
+     */
     private final TokenUsage aggregateTokenUsage;
+    /**
+     * 中间的工具返回标志
+     */
     private final boolean immediateToolReturn;
 
     /**
