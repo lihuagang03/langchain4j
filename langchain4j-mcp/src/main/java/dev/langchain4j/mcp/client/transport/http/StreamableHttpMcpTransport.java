@@ -27,20 +27,50 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * MCP传输的Streamable-HTTP实现
+ */
 public class StreamableHttpMcpTransport implements McpTransport {
 
     private static final Logger DEFAULT_TRAFFIC_LOG = LoggerFactory.getLogger("MCP");
     private static final Logger LOG = LoggerFactory.getLogger(StreamableHttpMcpTransport.class);
+    /**
+     * MCP服务器地址
+     */
     private final String url;
+    /**
+     * 自定义的头信息
+     */
     private final Map<String, String> customHeaders;
+    /**
+     * 是否记录响应内容
+     */
     private final boolean logResponses;
+    /**
+     * 是否记录请求参数
+     */
     private final boolean logRequests;
+    /**
+     * 流量日志记录器
+     */
     private final Logger trafficLog;
     static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private final AtomicReference<CompletableFuture<JsonNode>> initializeInProgress = new AtomicReference<>(null);
+    /**
+     * 操作处理器
+     */
     private volatile McpOperationHandler operationHandler;
+    /**
+     * HTTP客户端
+     */
     private final HttpClient httpClient;
+    /**
+     * 初始化请求
+     */
     private McpInitializeRequest initializeRequest;
+    /**
+     * 会话ID
+     */
     private final AtomicReference<String> mcpSessionId = new AtomicReference<>();
 
     public StreamableHttpMcpTransport(StreamableHttpMcpTransport.Builder builder) {
@@ -83,8 +113,10 @@ public class StreamableHttpMcpTransport implements McpTransport {
             trafficLog.info("Request: {}", body);
         }
         final HttpRequest.Builder builder = HttpRequest.newBuilder();
+        // 会话ID
         String sessionId = mcpSessionId.get();
         if (sessionId != null && !(message instanceof McpInitializeRequest)) {
+            // MCP会话ID的头信息
             builder.header("Mcp-Session-Id", sessionId);
         }
         customHeaders.forEach(builder::header);
@@ -161,6 +193,7 @@ public class StreamableHttpMcpTransport implements McpTransport {
                         return HttpResponse.BodySubscribers.discarding();
                     } else {
                         Optional<String> contentType = responseInfo.headers().firstValue("Content-Type");
+                        // MCP会话ID的头信息
                         Optional<String> mcpSessionId = responseInfo.headers().firstValue("Mcp-Session-Id");
                         if (mcpSessionId.isPresent()) {
                             LOG.debug("Assigned MCP session ID: {}", mcpSessionId);
@@ -217,9 +250,15 @@ public class StreamableHttpMcpTransport implements McpTransport {
 
     public static class Builder {
 
+        /**
+         * HTTP客户端的执行器
+         */
         private Executor executor;
         private String url;
         private Map<String, String> customHeaders;
+        /**
+         * 连接超时时间
+         */
         private Duration timeout;
         private boolean logRequests = false;
         private boolean logResponses = false;

@@ -57,7 +57,7 @@ public class DefaultMcpClient implements McpClient {
 
     private static final Logger log = LoggerFactory.getLogger(DefaultMcpClient.class);
     /**
-     * 用于生成唯一ID的原子长整型
+     * 用于生成消息的唯一ID
      */
     private final AtomicLong idGenerator = new AtomicLong(0);
     /**
