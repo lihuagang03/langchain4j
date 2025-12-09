@@ -8,9 +8,18 @@ import java.util.Map;
 
 import static dev.langchain4j.internal.Utils.copy;
 
+/**
+ * 工具提供者的结果
+ */
 public class ToolProviderResult {
 
+    /**
+     * 工具规格到工具执行器的映射表
+     */
     private final Map<ToolSpecification, ToolExecutor> tools;
+    /**
+     * 工具名称到工具规格的映射表
+     */
     private final Map<String, ToolSpecification> toolsByName;
 
     public ToolProviderResult(Map<ToolSpecification, ToolExecutor> tools) {

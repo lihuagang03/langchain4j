@@ -6,6 +6,8 @@ import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.service.MemoryId;
 
 /**
+ * 工具提供者
+ * 每次调用 AI 服务时都会调用它，并为该特定调用提供工具。
  * A tool provider. It is called each time the AI service is called and supplies tools for that specific call.
  * <p>
  * Tools returned in {@link ToolProviderResult} will be included in the request to the LLM.

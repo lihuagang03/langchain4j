@@ -6,9 +6,18 @@ import dev.langchain4j.invocation.InvocationContext;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.invocation.InvocationParameters;
 
+/**
+ * 工具提供者的请求
+ */
 public class ToolProviderRequest {
 
+    /**
+     * AI服务调用的上下文
+     */
     private final InvocationContext invocationContext;
+    /**
+     * 用户消息
+     */
     private final UserMessage userMessage;
 
     /**
