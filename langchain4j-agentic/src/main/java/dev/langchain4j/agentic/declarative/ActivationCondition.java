@@ -7,6 +7,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
+ * 激活条件
+ * 将方法标记为条件代理的一个或多个子代理的激活条件。
+ * 该方法必须是静态的，并返回一个布尔值，指示子代理是否应被激活。
  * Marks a method as an activation condition for one or more sub-agents of a conditional agent.
  * The method must be static and return a boolean indicating whether the sub-agent(s) should be activated.
  * <p>
