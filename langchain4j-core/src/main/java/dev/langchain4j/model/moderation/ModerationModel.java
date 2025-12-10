@@ -8,11 +8,14 @@ import dev.langchain4j.model.output.Response;
 import java.util.List;
 
 /**
+ * 审查模型
+ * 表示一个可以审查文本的模型。
  * Represents a model that can moderate text.
  */
 public interface ModerationModel {
 
     /**
+     * 审核给定的文本。
      * Moderates the given text.
      * @param text the text to moderate.
      * @return the moderation {@code Response}.
@@ -20,6 +23,7 @@ public interface ModerationModel {
     Response<Moderation> moderate(String text);
 
     /**
+     * 对给定的提示进行审核。
      * Moderates the given prompt.
      * @param prompt the prompt to moderate.
      * @return the moderation {@code Response}.
@@ -38,6 +42,7 @@ public interface ModerationModel {
     }
 
     /**
+     * 审核给定的聊天消息列表。
      * Moderates the given list of chat messages.
      * @param messages the list of chat messages to moderate.
      * @return the moderation {@code Response}.
@@ -45,6 +50,7 @@ public interface ModerationModel {
     Response<Moderation> moderate(List<ChatMessage> messages);
 
     /**
+     * 审核给定的文本段落。
      * Moderates the given text segment.
      * @param textSegment the text segment to moderate.
      * @return the moderation {@code Response}.

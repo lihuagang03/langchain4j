@@ -7,6 +7,7 @@ import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 
 /**
+ * 审核状态
  * Represents moderation status.
  */
 public class Moderation implements Serializable {
