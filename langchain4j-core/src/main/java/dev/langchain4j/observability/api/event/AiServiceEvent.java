@@ -2,14 +2,19 @@ package dev.langchain4j.observability.api.event;
 
 import dev.langchain4j.invocation.InvocationContext;
 
+/**
+ * AI服务事件
+ */
 public interface AiServiceEvent {
     /**
+     * 检索AI服务调用的上下文，包含有关调用来源和方式的一般信息。
      * Retrieves the invocation context, containing general information
      * about where and how the invocation originated.
      */
     InvocationContext invocationContext();
 
     /**
+     * 获取事件的类类型，表示 AI 服务调用事件的具体类别。
      * Retrieves the class type of the event, representing the specific category
      * of the AI Service invocation event.
      */
@@ -32,6 +37,9 @@ public interface AiServiceEvent {
      * @param <T> the specific type of {@link AiServiceEvent} being built
      */
     abstract class Builder<T extends AiServiceEvent> {
+        /**
+         * AI服务调用的上下文
+         */
         private InvocationContext invocationContext;
 
         protected Builder() {}

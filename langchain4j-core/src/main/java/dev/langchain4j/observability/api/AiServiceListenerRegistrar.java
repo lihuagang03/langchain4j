@@ -7,10 +7,12 @@ import java.util.Arrays;
 import java.util.ServiceLoader;
 
 /**
+ * AI服务监视器的注册器
  * A registrar for registering {@link AiServiceListener}s.
  */
 public interface AiServiceListenerRegistrar {
     /**
+     * 注册一个监听器以接收 AiServiceEvent 通知。
      * Registers a listener to receive {@link AiServiceEvent} notifications.
      */
     <T extends AiServiceEvent> void register(AiServiceListener<T> listener);
@@ -91,6 +93,7 @@ public interface AiServiceListenerRegistrar {
      * instance provided by {@link DefaultAiServiceListenerRegistrar#newInstance()} is returned.
      */
     static AiServiceListenerRegistrar newInstance() {
+        // SPI
         return ServiceLoader.load(AiServiceListenerRegistrarFactory.class)
                 .findFirst()
                 .map(AiServiceListenerRegistrarFactory::get)
