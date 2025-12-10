@@ -9,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
+ * 响应
  * Represents the response from various types of models, including language, chat, embedding, and moderation models.
  * This class encapsulates the generated content, token usage statistics, finish reason, and response metadata.
  *

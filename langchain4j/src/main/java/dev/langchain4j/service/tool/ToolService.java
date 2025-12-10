@@ -83,11 +83,11 @@ public class ToolService {
     private Executor executor;
     private int maxSequentialToolsInvocations = 100;
     /**
-     * 工具参数错误处理器
+     * 工具参数错误处理程序
      */
     private ToolArgumentsErrorHandler argumentsErrorHandler;
     /**
-     * 工具执行错误处理器
+     * 工具执行错误处理程序
      */
     private ToolExecutionErrorHandler executionErrorHandler;
     private Function<ToolExecutionRequest, ToolExecutionResultMessage> toolHallucinationStrategy =

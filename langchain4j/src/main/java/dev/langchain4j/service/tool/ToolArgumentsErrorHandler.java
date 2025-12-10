@@ -5,6 +5,7 @@ import dev.langchain4j.exception.ToolArgumentsException;
 import dev.langchain4j.service.AiServices;
 
 /**
+ * 工具参数错误处理程序
  * Handler for {@link ToolArgumentsException}s thrown by a {@link ToolExecutor}.
  * <p>
  * Currently, there are two ways to handle errors:

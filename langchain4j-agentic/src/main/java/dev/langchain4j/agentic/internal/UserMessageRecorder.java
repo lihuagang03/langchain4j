@@ -6,8 +6,14 @@ import dev.langchain4j.model.chat.request.ChatRequest;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
+/**
+ * 用户消息记录者
+ */
 public class UserMessageRecorder implements UnaryOperator<ChatRequest> {
 
+    /**
+     * 最近的用户消息
+     */
     private UserMessage lastUserMessage;
 
     @Override

@@ -16,6 +16,7 @@ import dev.langchain4j.service.MemoryId;
 public interface ToolProvider {
 
     /**
+     * 提供用于向大语言模型请求的工具。
      * Provides tools for the request to the LLM.
      *
      * @param request the {@link ToolProviderRequest}, contains {@link UserMessage},
