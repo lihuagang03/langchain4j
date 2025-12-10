@@ -4,7 +4,8 @@ import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.rag.content.Content;
 
 /**
- * 检索增强器，使用检索到的内容增强提供的聊天对话消息。
+ * 检索增强器
+ * 使用检索到的内容增强提供的聊天对话消息。
  * Augments the provided {@link ChatMessage} with retrieved {@link Content}s.
  * <br>
  * 这个作为进入 LangChain4j 中 RAG 流程的入口。

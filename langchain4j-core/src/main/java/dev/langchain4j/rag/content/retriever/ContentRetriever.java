@@ -6,7 +6,8 @@ import dev.langchain4j.rag.query.Query;
 import java.util.List;
 
 /**
- * 内容检索器，使用给定的查询从底层数据源检索内容。
+ * 内容检索器
+ * 使用给定的查询从底层数据源检索内容。
  * Retrieves {@link Content}s from an underlying data source using a given {@link Query}.
  * <br>
  * 目标是仅检索与给定查询相关的内容。

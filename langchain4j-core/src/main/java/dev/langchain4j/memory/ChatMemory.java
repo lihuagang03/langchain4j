@@ -32,7 +32,7 @@ public interface ChatMemory {
     void add(ChatMessage message);
 
     /**
-     * Adds messages to the chat memory
+     * Adds messages to the chat memory.
      * @param messages The {@link ChatMessage}s to add
      */
     default void add(ChatMessage... messages) {
@@ -42,7 +42,8 @@ public interface ChatMemory {
     }
 
     /**
-     * Adds messages to the chat memory
+     * 将消息列表添加到聊天记录。
+     * Adds messages to the chat memory.
      * @param messages The {@link ChatMessage}s to add
      */
     default void add(Iterable<ChatMessage> messages) {
@@ -52,6 +53,7 @@ public interface ChatMemory {
     }
 
     /**
+     * 从聊天记录中检索消息列表。
      * Retrieves messages from the chat memory.
      * Depending on the implementation, it may not return all previously added messages,
      * but rather a subset, a summary, or a combination thereof.
@@ -61,6 +63,7 @@ public interface ChatMemory {
     List<ChatMessage> messages();
 
     /**
+     * 清除聊天记录。
      * Clears the chat memory.
      */
     void clear();

@@ -10,13 +10,25 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
+/**
+ * 聊天记忆服务
+ */
 @Internal
 public class ChatMemoryService {
 
     public static final String DEFAULT = "default";
 
+    /**
+     * 默认的聊天记忆
+     */
     private ChatMemory defaultChatMemory;
+    /**
+     * 聊天记忆ID到聊天记忆的映射表
+     */
     private Map<Object, ChatMemory> chatMemories;
+    /**
+     * 聊天记忆提供者
+     */
     private ChatMemoryProvider chatMemoryProvider;
 
     public ChatMemoryService(ChatMemoryProvider chatMemoryProvider) {
