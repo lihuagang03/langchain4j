@@ -20,30 +20,69 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+/**
+ * AI服务上下文
+ */
 @Internal
 public class AiServiceContext {
 
     private static final Function<Object, Optional<String>> DEFAULT_MESSAGE_PROVIDER = x -> Optional.empty();
 
+    /**
+     * AI服务类
+     */
     public final Class<?> aiServiceClass;
+    /**
+     * AI服务监视器的注册器
+     */
     public final AiServiceListenerRegistrar eventListenerRegistrar = AiServiceListenerRegistrar.newInstance();
 
+    /**
+     * 聊天模型
+     */
     public ChatModel chatModel;
+    /**
+     * 流式聊天模型
+     */
     public StreamingChatModel streamingChatModel;
 
+    /**
+     * 聊天记忆服务
+     */
     public ChatMemoryService chatMemoryService;
 
+    /**
+     * 工具服务
+     */
     public ToolService toolService = new ToolService();
 
+    /**
+     * 护栏服务构建者
+     */
     public final GuardrailService.Builder guardrailServiceBuilder;
+    /**
+     * 护栏服务的引用
+     */
     private final AtomicReference<GuardrailService> guardrailService = new AtomicReference<>();
 
+    /**
+     * 审查模型
+     */
     public ModerationModel moderationModel;
 
+    /**
+     * 检索增强器
+     */
     public RetrievalAugmentor retrievalAugmentor;
 
+    /**
+     * 系统提示提供者
+     */
     public Function<Object, Optional<String>> systemMessageProvider = DEFAULT_MESSAGE_PROVIDER;
 
+    /**
+     * 聊天请求转换器
+     */
     public BiFunction<ChatRequest, Object, ChatRequest> chatRequestTransformer = (req, memId) -> req;
 
     protected AiServiceContext(Class<?> aiServiceClass) {

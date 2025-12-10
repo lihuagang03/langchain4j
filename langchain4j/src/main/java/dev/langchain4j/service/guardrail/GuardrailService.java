@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 
 /**
+ * 护栏服务
  * Defines a service for executing guardrails associated with methods in an AI service.
  * Guardrails are constraints or validations applied either to input or output of a method.
  */
