@@ -1,9 +1,25 @@
 package dev.langchain4j.agentic.agent;
 
+/**
+ * 错误恢复结果
+ * @param type 类型
+ * @param result 结果
+ */
 public record ErrorRecoveryResult(Type type, Object result) {
 
     public enum Type {
-        THROW_EXCEPTION, RETURN_RESULT, RETRY
+        /**
+         * 抛出异常
+         */
+        THROW_EXCEPTION,
+        /**
+         * 返回结果
+         */
+        RETURN_RESULT,
+        /**
+         * 重试
+         */
+        RETRY
     }
 
     public static ErrorRecoveryResult throwException() {

@@ -9,6 +9,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
+ * 错误处理程序
+ * 将一个方法标记为工作流代理的错误处理程序。
  * Marks a method as an error handler for a workflow agent.
  * The annotated method must be static, an {@link ErrorContext} as argument and return an instance of {@link ErrorRecoveryResult}.
  * It will be invoked when an error occurs during the agent's operation, allowing for custom error handling logic.
