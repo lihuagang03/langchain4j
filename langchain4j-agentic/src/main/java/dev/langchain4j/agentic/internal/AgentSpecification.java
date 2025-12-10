@@ -13,6 +13,9 @@ public interface AgentSpecification {
      */
     String name();
 
+    /**
+     * 唯一的代理名称
+     */
     String uniqueName();
 
     /**
@@ -30,7 +33,15 @@ public interface AgentSpecification {
      */
     boolean async();
 
+    /**
+     * 调用前
+     * @param request 代理请求
+     */
     void beforeInvocation(AgentRequest request);
 
+    /**
+     * 调用后
+     * @param response 代理响应
+     */
     void afterInvocation(AgentResponse response);
 }
