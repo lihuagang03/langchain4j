@@ -20,6 +20,7 @@ public class AgenticScopeRegistry {
 
     /**
      * 智能体ID
+     * 智能体服务的类名
      */
     private final String agentId;
     /**
@@ -49,6 +50,7 @@ public class AgenticScopeRegistry {
 
     public DefaultAgenticScope get(Object memoryId) {
         AgenticScopeKey key = new AgenticScopeKey(agentId, memoryId);
+        // 智能体自主范围
         DefaultAgenticScope agenticScope = inMemoryAgenticScope.get(key);
         if (agenticScope == null && hasStore()) {
             // 从存储动态地加载
@@ -71,12 +73,19 @@ public class AgenticScopeRegistry {
         return agenticScope;
     }
 
+    /**
+     * 创建临时的智能体自主范围
+     */
     public DefaultAgenticScope createEphemeralAgenticScope() {
         DefaultAgenticScope agenticScope = new DefaultAgenticScope(DefaultAgenticScope.Kind.EPHEMERAL);
         register(agenticScope);
         return agenticScope;
     }
 
+    /**
+     * 注册智能体自主范围
+     * @param agenticScope 智能体自主范围
+     */
     private void register(DefaultAgenticScope agenticScope) {
         inMemoryAgenticScope.put(new AgenticScopeKey(agentId, agenticScope.memoryId()), agenticScope);
         update(agenticScope);

@@ -9,12 +9,30 @@ import dev.langchain4j.service.memory.ChatMemoryAccess;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+/**
+ * 智能体调用处理程序
+ */
 public class AgentInvocationHandler implements InvocationHandler {
 
+    /**
+     * AI服务上下文
+     */
     private final AiServiceContext context;
+    /**
+     * 智能体构建者
+     */
     private final AgentBuilder<?> builder;
+    /**
+     * 智能体对象
+     */
     private final Object agent;
+    /**
+     * 用户消息记录者
+     */
     private final UserMessageRecorder messageRecorder;
+    /**
+     * 是否依赖于智能体自主范围
+     */
     private final boolean agenticScopeDependent;
 
     AgentInvocationHandler(
@@ -32,6 +50,7 @@ public class AgentInvocationHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Exception {
+        // 聊天消息访问
         if (method.getDeclaringClass() == ChatMessagesAccess.class) {
             return switch (method.getName()) {
                 case "lastUserMessage" -> messageRecorder.lastUserMessage();
@@ -41,6 +60,7 @@ public class AgentInvocationHandler implements InvocationHandler {
             };
         }
 
+        // 智能体自主范围的持有者
         if (method.getDeclaringClass() == AgenticScopeOwner.class) {
             return switch (method.getName()) {
                 case "withAgenticScope" ->
@@ -56,6 +76,7 @@ public class AgentInvocationHandler implements InvocationHandler {
             };
         }
 
+        // 聊天记忆访问
         if (method.getDeclaringClass() == ChatMemoryAccess.class) {
             return switch (method.getName()) {
                 case "getChatMemory" ->
@@ -68,6 +89,7 @@ public class AgentInvocationHandler implements InvocationHandler {
             };
         }
 
+        // 智能体规范
         if (method.getDeclaringClass() == AgentSpecification.class) {
             return switch (method.getName()) {
                 case "name" -> builder.name;
@@ -89,6 +111,7 @@ public class AgentInvocationHandler implements InvocationHandler {
             };
         }
 
+        // 调用智能体的方法
         return method.invoke(agent, args);
     }
 }

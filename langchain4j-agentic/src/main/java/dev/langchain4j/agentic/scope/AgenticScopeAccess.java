@@ -1,11 +1,14 @@
 package dev.langchain4j.agentic.scope;
 
 /**
+ * 智能体自主范围的访问
  * Allow to access the {@link AgenticScope} of any agent extending it.
  */
 public interface AgenticScopeAccess {
 
     /**
+     * 返回具有给定 id 的 AgenticScope，用于此 AI 服务，
+     * 如果此类内存不存在，则返回 null。
      * Returns the {@link AgenticScope} with the given id for this AI service or null if such memory doesn't exist.
      *
      * @param memoryId The id of the {@link AgenticScope}.

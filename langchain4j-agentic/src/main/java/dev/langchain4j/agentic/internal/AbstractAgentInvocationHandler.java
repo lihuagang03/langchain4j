@@ -23,23 +23,59 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * 智能体调用处理程序的抽象实现
+ */
 public abstract class AbstractAgentInvocationHandler implements InvocationHandler {
+    /**
+     * 智能体名称
+     */
     protected final String name;
+    /**
+     * 唯一的智能体名称
+     */
     protected final String uniqueName;
+    /**
+     * 智能体的描述
+     */
     protected final String description;
+    /**
+     * 输出变量的键
+     */
     protected final String outputKey;
 
+    /**
+     * 在调用之前的监视器
+     */
     protected final Consumer<AgentRequest> beforeListener;
+    /**
+     * 在调用完成之后的监视器
+     */
     protected final Consumer<AgentResponse> afterListener;
 
+    /**
+     * 智能体服务类
+     */
     private final Class<?> agentServiceClass;
 
+    /**
+     * 在调用之前的回调
+     */
     private final Consumer<AgenticScope> beforeCall;
 
+    /**
+     * 智能体自主范围
+     */
     private final DefaultAgenticScope agenticScope;
 
+    /**
+     * 错误处理程序
+     */
     private final Function<ErrorContext, ErrorRecoveryResult> errorHandler;
 
+    /**
+     * 智能体自主范围的注册表
+     */
     private final AtomicReference<AgenticScopeRegistry> agenticScopeRegistry = new AtomicReference<>();
 
     protected AbstractAgentInvocationHandler(AbstractService<?, ?> workflowService) {
@@ -63,12 +99,15 @@ public abstract class AbstractAgentInvocationHandler implements InvocationHandle
         return (AgenticScopeOwner) Proxy.newProxyInstance(
                 agentServiceClass.getClassLoader(),
                 new Class<?>[] {agentServiceClass, AgentSpecification.class, AgenticScopeOwner.class},
+                // 创建子智能体
                 createSubAgentWithAgenticScope(agenticScope));
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
+        // 智能体自主范围的注册表
         AgenticScopeRegistry registry = agenticScopeRegistry();
+        // 智能体自主范围的所有者
         if (method.getDeclaringClass() == AgenticScopeOwner.class) {
             return switch (method.getName()) {
                 case "withAgenticScope" -> withAgenticScope((DefaultAgenticScope) args[0]);
@@ -79,6 +118,7 @@ public abstract class AbstractAgentInvocationHandler implements InvocationHandle
             };
         }
 
+        // 智能体自主范围的访问
         if (method.getDeclaringClass() == AgenticScopeAccess.class) {
             return switch (method.getName()) {
                 case "getAgenticScope" -> registry.get(args[0]);
@@ -89,6 +129,7 @@ public abstract class AbstractAgentInvocationHandler implements InvocationHandle
             };
         }
 
+        // 智能体规范
         if (method.getDeclaringClass() == AgentSpecification.class) {
             return switch (method.getName()) {
                 case "name" -> name;
@@ -110,15 +151,19 @@ public abstract class AbstractAgentInvocationHandler implements InvocationHandle
             };
         }
 
+        // 聊天记忆访问
         if (method.getDeclaringClass() == ChatMemoryAccess.class) {
             return accessChatMemory(method.getName(), args[0]);
         }
 
+        // 智能体自主范围
+        // 执行智能体的方法
         return executeAgentMethod(currentAgenticScope(registry, method, args), registry, method, args);
     }
 
     private AgenticScopeRegistry agenticScopeRegistry() {
         if (isRootCall()) {
+            // 智能体自主范围的注册表
             agenticScopeRegistry.compareAndSet(null, new AgenticScopeRegistry(this.agentServiceClass.getName()));
         }
         return agenticScopeRegistry.get();
@@ -132,11 +177,13 @@ public abstract class AbstractAgentInvocationHandler implements InvocationHandle
         if (isRootCall()) {
             agenticScope.rootCallStarted(registry);
         }
+        // 执行智能体操作
         Object result = doAgentAction(agenticScope);
         if (isRootCall()) {
             agenticScope.rootCallEnded(registry);
         }
 
+        // 输出结果
         Object output = outputKey != null ? agenticScope.readState(outputKey) : result;
         return method.getReturnType().equals(ResultWithAgenticScope.class)
                 ? new ResultWithAgenticScope<>(agenticScope, output)
@@ -165,7 +212,9 @@ public abstract class AbstractAgentInvocationHandler implements InvocationHandle
             return agenticScope;
         }
 
+        // 聊天记忆ID
         Object memoryId = memoryId(method, args);
+        // 创建智能体自主范围
         DefaultAgenticScope newAgenticScope =
                 memoryId != null ? registry.getOrCreate(memoryId) : registry.createEphemeralAgenticScope();
         return newAgenticScope.withErrorHandler(errorHandler);
@@ -174,6 +223,7 @@ public abstract class AbstractAgentInvocationHandler implements InvocationHandle
     private Object memoryId(Method method, Object[] args) {
         Parameter[] parameters = method.getParameters();
         for (int i = 0; i < parameters.length; i++) {
+            // @聊天记忆ID
             if (parameters[i].getAnnotation(MemoryId.class) != null) {
                 return args[i];
             }
@@ -184,9 +234,11 @@ public abstract class AbstractAgentInvocationHandler implements InvocationHandle
     protected Object result(DefaultAgenticScope agenticScope, Object result) {
         if (outputKey != null) {
             if (result != null) {
+                // 写入输出结果
                 agenticScope.writeState(outputKey, result);
                 return result;
             } else {
+                // 读取输出结果
                 return agenticScope.readState(outputKey);
             }
         }
@@ -197,7 +249,15 @@ public abstract class AbstractAgentInvocationHandler implements InvocationHandle
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * 执行智能体操作
+     * @param agenticScope 智能体自主范围
+     */
     protected abstract Object doAgentAction(DefaultAgenticScope agenticScope);
 
+    /**
+     * 创建子智能体
+     * @param agenticScope 智能体自主范围
+     */
     protected abstract InvocationHandler createSubAgentWithAgenticScope(DefaultAgenticScope agenticScope);
 }
