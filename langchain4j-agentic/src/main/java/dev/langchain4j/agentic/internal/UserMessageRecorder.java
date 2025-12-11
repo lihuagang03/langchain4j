@@ -12,7 +12,7 @@ import java.util.function.UnaryOperator;
 public class UserMessageRecorder implements UnaryOperator<ChatRequest> {
 
     /**
-     * 最近的用户消息
+     * 最新的用户消息
      */
     private UserMessage lastUserMessage;
 

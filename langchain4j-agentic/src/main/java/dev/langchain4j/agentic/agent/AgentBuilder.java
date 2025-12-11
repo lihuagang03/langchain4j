@@ -35,24 +35,24 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * 代理构建者
+ * 智能体构建者
  */
 public class AgentBuilder<T> {
     /**
-     * 代理服务类
+     * 智能体服务类
      */
     private final Class<T> agentServiceClass;
 
     /**
-     * 代理名称
+     * 智能体名称
      */
     String name;
     /**
-     * 唯一名称
+     * 唯一的智能体名称
      */
     String uniqueName;
     /**
-     * 代理的描述
+     * 智能体的描述
      */
     String description;
     /**
@@ -60,11 +60,17 @@ public class AgentBuilder<T> {
      */
     String outputKey;
     /**
-     * 是否异步执行
+     * 是否异步调用
      */
     boolean async;
 
+    /**
+     * 在调用之前的请求监视器
+     */
     Consumer<AgentRequest> beforeListener = request -> {};
+    /**
+     * 在调用完成之后的响应监视器
+     */
     Consumer<AgentResponse> afterListener = response -> {};
 
     /**
@@ -123,19 +129,34 @@ public class AgentBuilder<T> {
     private ToolProvider toolProvider;
     private Integer maxSequentialToolsInvocations;
     private Function<ToolExecutionRequest, ToolExecutionResultMessage> hallucinatedToolNameStrategy;
+    /**
+     * 是否并发地调用工具
+     */
     private boolean executeToolsConcurrently;
+    /**
+     * 并发的工具执行器
+     */
     private Executor concurrentToolsExecutor;
+    /**
+     * 工具参数错误处理程序
+     */
     private ToolArgumentsErrorHandler toolArgumentsErrorHandler;
+    /**
+     * 工具执行错误处理程序
+     */
     private ToolExecutionErrorHandler toolExecutionErrorHandler;
 
     public AgentBuilder(Class<T> agentServiceClass, Method agenticMethod) {
+        // 智能体服务类
         this.agentServiceClass = agentServiceClass;
 
+        // @智能体
         Agent agent = agenticMethod.getAnnotation(Agent.class);
         if (agent == null) {
             throw new IllegalArgumentException("Method " + agenticMethod + " is not annotated with @Agent");
         }
 
+        // 配置智能体
         configureAgent(agentServiceClass, this);
 
         this.name = !isNullOrBlank(agent.name()) ? agent.name() : agenticMethod.getName();
@@ -157,7 +178,9 @@ public class AgentBuilder<T> {
     }
 
     T build(DefaultAgenticScope agenticScope) {
+        // AI服务上下文
         AiServiceContext context = AiServiceContext.create(agentServiceClass);
+        // AI服务
         AiServices<T> aiServices = AiServices.builder(context);
         if (model != null) {
             aiServices.chatModel(model);
@@ -179,6 +202,7 @@ public class AgentBuilder<T> {
         }
 
         setupGuardrails(aiServices);
+        // 设置工具列表
         setupTools(aiServices);
 
         UserMessageRecorder messageRecorder = new UserMessageRecorder();
@@ -197,6 +221,7 @@ public class AgentBuilder<T> {
             aiServices.chatRequestTransformer(messageRecorder);
         }
 
+        // 智能体的代理实例
         return (T) Proxy.newProxyInstance(
                 agentServiceClass.getClassLoader(),
                 new Class<?>[] {
@@ -206,6 +231,7 @@ public class AgentBuilder<T> {
                     AgenticScopeOwner.class,
                     ChatMessagesAccess.class
                 },
+                // 智能体调用处理程序
                 new AgentInvocationHandler(context, aiServices.build(), this, messageRecorder, agenticScopeDependent));
     }
 
@@ -258,6 +284,10 @@ public class AgentBuilder<T> {
         }
     }
 
+    /**
+     * 智能体ID
+     * 智能体服务类的完整限定性名称
+     */
     String agentId() {
         return agentServiceClass.getName();
     }

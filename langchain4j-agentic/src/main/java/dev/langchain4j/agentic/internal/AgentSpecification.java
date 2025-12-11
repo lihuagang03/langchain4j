@@ -14,7 +14,7 @@ public interface AgentSpecification {
     String name();
 
     /**
-     * 唯一的名称
+     * 唯一的智能体名称
      */
     String uniqueName();
 
@@ -40,7 +40,7 @@ public interface AgentSpecification {
     void beforeInvocation(AgentRequest request);
 
     /**
-     * 在调用之后
+     * 在调用完成之后
      * @param response 智能体响应
      */
     void afterInvocation(AgentResponse response);

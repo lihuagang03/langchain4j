@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 /**
  * 智能体规范实现
  * @param name 智能体名称
- * @param uniqueName 唯一的名称
+ * @param uniqueName 唯一的智能体名称
  * @param description 智能体的描述
  * @param outputKey 输出的键
  * @param async 是否异步调用
