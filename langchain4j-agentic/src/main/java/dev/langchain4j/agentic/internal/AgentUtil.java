@@ -20,18 +20,42 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
+/**
+ * 智能体辅助操作
+ */
 public class AgentUtil {
 
+    /**
+     * 聊天记忆ID
+     */
     public static final String MEMORY_ID_ARG_NAME = "@MemoryId";
+    /**
+     * 智能体自主范围
+     */
     public static final String AGENTIC_SCOPE_ARG_NAME = "@AgenticScope";
+    /**
+     * 循环计数器
+     */
     public static final String LOOP_COUNTER_ARG_NAME = "@LoopCounter";
 
+    /**
+     * 智能体的计数器
+     */
     private static final AtomicInteger AGENT_COUNTER = new AtomicInteger(0);
 
     private AgentUtil() {}
 
+    /**
+     * 智能体参数
+     * @param type 智能体的实现类
+     * @param name 智能体的名称
+     */
     public record AgentArgument(Class<?> type, String name) {}
 
+    /**
+     * 唯一的智能体名称
+     * @param agentName 智能体名称
+     */
     public static String uniqueAgentName(String agentName) {
         return agentName + "$" + AGENT_COUNTER.incrementAndGet();
     }
@@ -40,6 +64,10 @@ public class AgentUtil {
         return Stream.of(agents).map(AgentUtil::agentToExecutor).toList();
     }
 
+    /**
+     * 智能体执行器
+     * @param agent 智能体对象
+     */
     public static AgentExecutor agentToExecutor(Object agent) {
         if (agent instanceof Class c) {
             agent = AgenticServices.agentBuilder(c).build();
@@ -50,11 +78,17 @@ public class AgentUtil {
     }
 
     private static AgentExecutor nonAiAgentToExecutor(Object agent) {
+        // 自主智能体的方法
         Method agenticMethod = validateAgentClass(agent.getClass());
+        // @智能体
         Agent annotation = agenticMethod.getAnnotation(Agent.class);
+        // 智能体名称
         String name = isNullOrBlank(annotation.name()) ? agenticMethod.getName() : annotation.name();
+        // 唯一的智能体名称
         String uniqueName = uniqueAgentName(name);
+        // 智能体的描述
         String description = isNullOrBlank(annotation.description()) ? annotation.value() : annotation.description();
+        // 智能体调用者
         AgentInvoker agentInvoker = agent instanceof AgentSpecsProvider spec
                 ? new MethodAgentInvoker(
                         agenticMethod,
@@ -71,11 +105,13 @@ public class AgentUtil {
                                 x -> {},
                                 x -> {}),
                         agenticMethod);
+        // 智能体执行器
         return new AgentExecutor(agentInvoker, agent);
     }
 
     public static AgentExecutor agentToExecutor(AgentSpecification agent) {
         for (Method method : agent.getClass().getMethods()) {
+            // A2A服务
             Optional<AgentExecutor> executor = A2AService.get().isPresent()
                     ? A2AService.get().methodToAgentExecutor(agent, method)
                     : methodToAgentExecutor(agent, method);
@@ -93,6 +129,7 @@ public class AgentUtil {
     }
 
     private static Optional<AgentExecutor> methodToAgentExecutor(AgentSpecification agent, Method method) {
+        // @智能体 注解的方法
         return getAnnotatedMethod(method, Agent.class)
                 .map(agentMethod -> new AgentExecutor(AgentInvoker.fromMethod(agent, agentMethod), agent));
     }
@@ -103,6 +140,10 @@ public class AgentUtil {
                 .toList();
     }
 
+    /**
+     * 参数名称
+     * @param p 参数对象
+     */
     private static String parameterName(Parameter p) {
         if (p.getAnnotation(MemoryId.class) != null) {
             return MEMORY_ID_ARG_NAME;

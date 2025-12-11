@@ -4,11 +4,15 @@ import dev.langchain4j.internal.DefaultExecutorProvider;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
+/**
+ * 异步响应
+ */
 public class AsyncResponse<T> {
 
     private final CompletableFuture<T> futureResponse;
 
     public AsyncResponse(Supplier<T> responseSupplier) {
+        // 异步执行响应
         this.futureResponse = CompletableFuture.supplyAsync(responseSupplier, DefaultExecutorProvider.getDefaultExecutorService());
     }
 

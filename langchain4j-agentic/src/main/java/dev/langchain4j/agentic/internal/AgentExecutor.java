@@ -6,6 +6,11 @@ import dev.langchain4j.agentic.scope.DefaultAgenticScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 智能体执行器
+ * @param agentInvoker 智能体调用者
+ * @param agent 智能体对象
+ */
 public record AgentExecutor(AgentInvoker agentInvoker, Object agent) {
 
     private static final Logger LOG = LoggerFactory.getLogger(AgentExecutor.class);
@@ -22,6 +27,7 @@ public record AgentExecutor(AgentInvoker agentInvoker, Object agent) {
     }
 
     private Object execute(DefaultAgenticScope agenticScope, boolean async) {
+        // 调用的智能体对象
         Object invokedAgent = (agent instanceof AgenticScopeOwner co ? co.withAgenticScope(agenticScope) : agent);
         return internalExecute(agenticScope, invokedAgent, async);
     }
@@ -38,7 +44,9 @@ public record AgentExecutor(AgentInvoker agentInvoker, Object agent) {
 
     private Object internalExecute(DefaultAgenticScope agenticScope, Object invokedAgent, boolean async) {
         try {
+            // 智能体调用参数列表
             AgentInvocationArguments args = agentInvoker.toInvocationArguments(agenticScope);
+            // 调用智能体
             Object response = async
                     ? new AsyncResponse<>(() -> {
                         try {
@@ -48,10 +56,13 @@ public record AgentExecutor(AgentInvoker agentInvoker, Object agent) {
                         }
                     })
                     : agentInvoker.invoke(agenticScope, invokedAgent, args);
+            // 输出变量的键
             String outputKey = agentInvoker.outputKey();
             if (outputKey != null && !outputKey.isBlank()) {
+                // 响应结果写入状态
                 agenticScope.writeState(outputKey, response);
             }
+            // 注册智能体调用
             agenticScope.registerAgentCall(agentInvoker, invokedAgent, args, response);
             return response;
         } catch (AgentInvocationException e) {

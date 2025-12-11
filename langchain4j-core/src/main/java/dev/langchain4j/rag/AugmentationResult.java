@@ -15,13 +15,13 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 public class AugmentationResult {
 
     /**
-     * 增强的聊天对话消息。
+     * 增强的聊天消息。
      * The augmented chat message.
      */
     private final ChatMessage chatMessage;
 
     /**
-     * 用于增强原始聊天对话消息的内容列表。
+     * 用于增强原始聊天消息的内容列表。
      * A list of content used to augment the original chat message.
      */
     private final List<Content> contents;

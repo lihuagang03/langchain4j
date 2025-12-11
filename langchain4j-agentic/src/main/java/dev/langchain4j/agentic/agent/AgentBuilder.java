@@ -56,7 +56,7 @@ public class AgentBuilder<T> {
      */
     String description;
     /**
-     * 输出的键
+     * 输出变量的键
      */
     String outputKey;
     /**

@@ -9,7 +9,7 @@ import java.util.function.Consumer;
  * @param name 智能体名称
  * @param uniqueName 唯一的智能体名称
  * @param description 智能体的描述
- * @param outputKey 输出的键
+ * @param outputKey 输出变量的键
  * @param async 是否异步调用
  * @param invocationListener 调用监视器
  * @param completionListener 完成监视器

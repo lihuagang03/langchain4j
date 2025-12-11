@@ -3,7 +3,7 @@ package dev.langchain4j.agentic.internal;
 import java.util.Map;
 
 /**
- * 智能体调用参数列表
+ * 智能体调用参数
  * @param namedArgs 命名参数
  * @param positionalArgs 位置参数
  */
