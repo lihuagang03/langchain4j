@@ -7,6 +7,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.Set;
 
 /**
+ * 智能体自主范围的注册表
+ * 用于管理 AgenticScope 实例的单例注册表。
+ * 提供用于注册、检索和管理 AgenticScope 对象的方法。
+ * 通过可插拔存储支持持久化。
  * Singleton registry for managing AgenticScope instances.
  * Provides methods to register, retrieve, and manage AgenticScope objects.
  * Supports persistence through a pluggable store.
@@ -14,9 +18,18 @@ import java.util.Set;
 @Internal
 public class AgenticScopeRegistry {
 
+    /**
+     * 智能体ID
+     */
     private final String agentId;
+    /**
+     * 智能体自主范围的存储
+     */
     private final AgenticScopeStore store;
 
+    /**
+     * 智能体自主范围的键到智能体自主范围的映射表
+     */
     private final Map<AgenticScopeKey, DefaultAgenticScope> inMemoryAgenticScope = new ConcurrentHashMap<>();
 
     public AgenticScopeRegistry(String agentId) {
@@ -38,6 +51,7 @@ public class AgenticScopeRegistry {
         AgenticScopeKey key = new AgenticScopeKey(agentId, memoryId);
         DefaultAgenticScope agenticScope = inMemoryAgenticScope.get(key);
         if (agenticScope == null && hasStore()) {
+            // 从存储动态地加载
             agenticScope = store.load(key)
                     .map(loaded -> {
                         inMemoryAgenticScope.put(key, loaded);
@@ -51,6 +65,7 @@ public class AgenticScopeRegistry {
         DefaultAgenticScope agenticScope = get(memoryId);
         if (agenticScope == null) {
             agenticScope = new DefaultAgenticScope(memoryId, hasStore() ? DefaultAgenticScope.Kind.PERSISTENT : DefaultAgenticScope.Kind.REGISTERED);
+            // 注册
             register(agenticScope);
         }
         return agenticScope;
