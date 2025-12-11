@@ -4,9 +4,9 @@ import dev.langchain4j.agentic.scope.AgenticScope;
 import java.util.Map;
 
 /**
- * 代理响应
- * @param agenticScope 代理范围
- * @param agentName 代理名称
+ * 智能体响应
+ * @param agenticScope 智能体自主范围
+ * @param agentName 智能体名称
  * @param inputs 输入参数
  * @param output 输出结果
  */
