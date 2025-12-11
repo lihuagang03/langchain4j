@@ -47,8 +47,8 @@ public class AgentUtil {
 
     /**
      * 智能体参数
-     * @param type 智能体的实现类
-     * @param name 智能体的名称
+     * @param type 参数类型
+     * @param name 参数名称
      */
     public record AgentArgument(Class<?> type, String name) {}
 
@@ -159,6 +159,7 @@ public class AgentUtil {
 
     public static AgentInvocationArguments agentInvocationArguments(
             AgenticScope agenticScope, List<AgentArgument> agentArguments) throws MissingArgumentException {
+        // 智能体调用参数
         return agentInvocationArguments(agenticScope, agentArguments, Map.of());
     }
 
@@ -170,11 +171,14 @@ public class AgentUtil {
 
         int i = 0;
         for (AgentArgument arg : agentArguments) {
+            // 参数名称
             String argName = arg.name();
+            // 聊天记忆ID
             if (argName.equals(MEMORY_ID_ARG_NAME)) {
                 positionalArgs[i++] = agenticScope.memoryId();
                 continue;
             }
+            // 智能体自主范围
             if (argName.equals(AGENTIC_SCOPE_ARG_NAME)) {
                 positionalArgs[i++] = agenticScope;
                 continue;

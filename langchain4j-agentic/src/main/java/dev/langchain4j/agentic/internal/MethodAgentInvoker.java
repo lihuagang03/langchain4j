@@ -7,6 +7,12 @@ import dev.langchain4j.agentic.scope.AgenticScope;
 import java.lang.reflect.Method;
 import java.util.List;
 
+/**
+ * 方法智能体调用者
+ * @param method 智能体的方法
+ * @param agentSpecification 智能体规范
+ * @param arguments 智能体参数列表
+ */
 public record MethodAgentInvoker(
         Method method, AgentSpecification agentSpecification, List<AgentUtil.AgentArgument> arguments)
         implements AgentInvoker {
@@ -48,10 +54,12 @@ public record MethodAgentInvoker(
 
     @Override
     public String toCard() {
+        // 参数名称列表
         List<String> agentArguments = arguments.stream()
                 .map(AgentUtil.AgentArgument::name)
                 .filter(a -> !a.equals("@MemoryId"))
                 .toList();
+        // 智能体的唯一名称: 描述, 参数名称列表
         return "{" + uniqueName() + ": " + description() + ", " + agentArguments + "}";
     }
 

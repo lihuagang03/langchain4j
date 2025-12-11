@@ -15,14 +15,32 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+/**
+ * A2A客户端的智能体调用者
+ */
 public class A2AClientAgentInvoker implements AgentInvoker {
 
+    /**
+     * 唯一名称
+     */
     private final String uniqueName;
+    /**
+     * 输入变量的键的列表
+     */
     private final String[] inputKeys;
 
+    /**
+     * A2A客户端规范
+     */
     private final A2AClientSpecification a2AClientInstance;
 
+    /**
+     * 智能体卡片
+     */
     private final AgentCard agentCard;
+    /**
+     * 智能体的方法
+     */
     private final Method method;
 
     public A2AClientAgentInvoker(A2AClientSpecification a2AClientInstance, Method method) {
@@ -34,6 +52,7 @@ public class A2AClientAgentInvoker implements AgentInvoker {
     }
 
     private String[] inputKeys(A2AClientSpecification a2AClientInstance) {
+        // 方法参数名称列表
         return isUntyped()
                 ? a2AClientInstance.inputKeys()
                 : Stream.of(method.getParameters())
@@ -83,6 +102,7 @@ public class A2AClientAgentInvoker implements AgentInvoker {
 
     @Override
     public String toCard() {
+        // 智能体的唯一名称: 描述, 参数名称列表
         return "{" + uniqueName() + ": " + description() + ", " + Arrays.toString(inputKeys) + "}";
     }
 

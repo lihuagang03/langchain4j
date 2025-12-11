@@ -5,6 +5,11 @@ import dev.langchain4j.agentic.agent.AgentResponse;
 import dev.langchain4j.agentic.scope.AgenticScope;
 import java.lang.reflect.Method;
 
+/**
+ * 无类型的智能体调用者
+ * @param method 智能体的方法
+ * @param agentSpecification 智能体规范
+ */
 public record UntypedAgentInvoker(Method method, AgentSpecification agentSpecification) implements AgentInvoker {
 
     @Override
@@ -44,11 +49,13 @@ public record UntypedAgentInvoker(Method method, AgentSpecification agentSpecifi
 
     @Override
     public String toCard() {
+        // 智能体的唯一名称和描述
         return "{" + uniqueName() + ": " + description() + "}";
     }
 
     @Override
     public AgentInvocationArguments toInvocationArguments(AgenticScope agenticScope) {
+        // 智能体自主范围的状态映射表
         return new AgentInvocationArguments(agenticScope.state(), new Object[] {agenticScope.state()});
     }
 }
