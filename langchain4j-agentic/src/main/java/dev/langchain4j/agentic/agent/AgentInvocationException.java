@@ -3,7 +3,7 @@ package dev.langchain4j.agentic.agent;
 import dev.langchain4j.exception.LangChain4jException;
 
 /**
- * 代理调用异常
+ * 智能体调用异常
  */
 public class AgentInvocationException extends LangChain4jException {
 
