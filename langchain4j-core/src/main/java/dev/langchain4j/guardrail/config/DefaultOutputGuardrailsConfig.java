@@ -3,9 +3,13 @@ package dev.langchain4j.guardrail.config;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 输出护栏配置的默认实现
  * The default implementation of {@link OutputGuardrailsConfig} for this library if no other libraries provide their own implementations.
  */
 final class DefaultOutputGuardrailsConfig implements OutputGuardrailsConfig {
+    /**
+     * 护栏的最大重试次数
+     */
     private final int maxRetries;
 
     DefaultOutputGuardrailsConfig(Builder builder) {

@@ -3,6 +3,7 @@ package dev.langchain4j.guardrail.config;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 输入护栏配置的默认实现
  * The default implementation of {@link InputGuardrailsConfig} for this library if no other libraries provide their own implementations.
  */
 final class DefaultInputGuardrailsConfig implements InputGuardrailsConfig {

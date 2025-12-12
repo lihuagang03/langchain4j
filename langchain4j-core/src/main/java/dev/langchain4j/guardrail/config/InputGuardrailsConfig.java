@@ -17,6 +17,7 @@ public interface InputGuardrailsConfig extends GuardrailsConfig {
      * @return A {@link InputGuardrailsConfigBuilder} for building {@link InputGuardrailsConfig} instances.
      */
     static InputGuardrailsConfigBuilder builder() {
+        // 输入护栏配置构建者工厂
         return ServiceLoader.load(InputGuardrailsConfigBuilderFactory.class)
                 .findFirst()
                 .map(InputGuardrailsConfigBuilderFactory::get)

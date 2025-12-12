@@ -13,6 +13,7 @@ import java.util.ServiceLoader;
  */
 public interface OutputGuardrailsConfig extends GuardrailsConfig {
     /**
+     * 护栏的默认最大重试次数
      * Default maximum number of retries for the guardrail.
      */
     int MAX_RETRIES_DEFAULT = 2;
@@ -31,6 +32,7 @@ public interface OutputGuardrailsConfig extends GuardrailsConfig {
      * @return A {@link OutputGuardrailsConfigBuilder} for building {@link OutputGuardrailsConfig} instances.
      */
     static OutputGuardrailsConfigBuilder builder() {
+        // 输出护栏配置构建者工厂
         return ServiceLoader.load(OutputGuardrailsConfigBuilderFactory.class)
                 .findFirst()
                 .map(OutputGuardrailsConfigBuilderFactory::get)
