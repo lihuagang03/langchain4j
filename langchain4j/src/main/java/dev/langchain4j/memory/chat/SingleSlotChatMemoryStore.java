@@ -9,15 +9,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 单槽的聊天记忆存储
+ * ChatMemoryStore 的实现，它将 ChatMemory（聊天记忆）的状态存储在内存中。
  * Implementation of {@link ChatMemoryStore} that stores state of {@link ChatMemory} (chat messages) in-memory.
  * <p>
+ * 这种存储机制是临时的，无法在应用重启后保留数据。
  * This storage mechanism is transient and does not persist data across application restarts.
  */
 @Internal
 class SingleSlotChatMemoryStore implements ChatMemoryStore {
 
+    /**
+     * 聊天消息列表
+     */
     private List<ChatMessage> messages = new ArrayList<>();
 
+    /**
+     * 聊天记忆ID
+     */
     private final Object memoryId;
 
     public SingleSlotChatMemoryStore(final Object memoryId) {

@@ -17,6 +17,7 @@ import dev.langchain4j.service.memory.ChatMemoryService;
 import dev.langchain4j.store.memory.chat.ChatMemoryStore;
 
 /**
+ * 词元窗口的聊天记忆
  * This chat memory operates as a sliding window of {@link #maxTokens} tokens.
  * It retains as many of the most recent messages as can fit into the window.
  * If there isn't enough space for a new message, the oldest one (or multiple) is evicted.
@@ -36,9 +37,21 @@ import dev.langchain4j.store.memory.chat.ChatMemoryStore;
  */
 public class TokenWindowChatMemory implements ChatMemory {
 
+    /**
+     * 聊天记忆ID
+     */
     private final Object id;
+    /**
+     * 最大词元数量
+     */
     private final Integer maxTokens;
+    /**
+     * 词元计数估算器
+     */
     private final TokenCountEstimator tokenCountEstimator;
+    /**
+     * 聊天记忆存储
+     */
     private final ChatMemoryStore store;
 
     private TokenWindowChatMemory(Builder builder) {
@@ -55,8 +68,10 @@ public class TokenWindowChatMemory implements ChatMemory {
 
     @Override
     public void add(ChatMessage message) {
+        // 聊天消息列表
         List<ChatMessage> messages = messages();
         if (message instanceof SystemMessage) {
+            // 系统消息
             Optional<SystemMessage> maybeSystemMessage = SystemMessage.findFirst(messages);
             if (maybeSystemMessage.isPresent()) {
                 if (maybeSystemMessage.get().equals(message)) {
@@ -67,6 +82,7 @@ public class TokenWindowChatMemory implements ChatMemory {
             }
         }
         messages.add(message);
+        // 确保容量
         ensureCapacity(messages, maxTokens, tokenCountEstimator);
         store.updateMessages(id, messages);
     }
@@ -74,6 +90,7 @@ public class TokenWindowChatMemory implements ChatMemory {
     @Override
     public List<ChatMessage> messages() {
         List<ChatMessage> messages = new LinkedList<>(store.getMessages(id));
+        // 确保容量
         ensureCapacity(messages, maxTokens, tokenCountEstimator);
         return messages;
     }
@@ -84,6 +101,7 @@ public class TokenWindowChatMemory implements ChatMemory {
             return;
         }
 
+        // 估算消息中的词元数量
         int currentTokenCount = estimator.estimateTokenCountInMessages(messages);
         while (currentTokenCount > maxTokens && !messages.isEmpty()) {
 
@@ -100,6 +118,7 @@ public class TokenWindowChatMemory implements ChatMemory {
             currentTokenCount -= tokenCountOfEvictedMessage;
 
             if (evictedMessage instanceof AiMessage aiMessage && aiMessage.hasToolExecutionRequests()) {
+                // AI消息、工具执行请求
                 while (messages.size() > messageToEvictIndex
                         && messages.get(messageToEvictIndex) instanceof ToolExecutionResultMessage) {
                     // Some LLMs (e.g. OpenAI) prohibit ToolExecutionResultMessage(s) without corresponding AiMessage,
