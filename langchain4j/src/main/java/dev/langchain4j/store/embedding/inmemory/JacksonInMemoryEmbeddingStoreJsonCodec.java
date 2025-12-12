@@ -14,9 +14,15 @@ import dev.langchain4j.data.segment.TextSegment;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
 
+/**
+ * Jackson 内存嵌入存储的 JSON 编解码器
+ */
 @Internal
 class JacksonInMemoryEmbeddingStoreJsonCodec implements InMemoryEmbeddingStoreJsonCodec {
 
+    /**
+     * 对象映射器
+     */
     private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builder()
             .visibility(FIELD, ANY)
             .addMixIn(InMemoryEmbeddingStore.Entry.class, EntryMixIn.class)

@@ -37,12 +37,17 @@ import static java.util.Comparator.comparingDouble;
 import static java.util.stream.Collectors.toList;
 
 /**
+ * 内存嵌入存储
+ * 一个将嵌入存储在内存中的嵌入存储器。
  * An {@link EmbeddingStore} that stores embeddings in memory.
  * <p>
+ * 使用暴力方法，通过迭代所有嵌入来找到最佳匹配。
  * Uses a brute force approach by iterating over all embeddings to find the best matches.
  * <p>
+ * 这个存储器可以通过 serializeToJson() 和 serializeToFile(Path) 方法进行持久化。
  * This store can be persisted using the {@link #serializeToJson()} and {@link #serializeToFile(Path)} methods.
  * <p>
+ * 它也可以通过 fromJson(String) 和 fromFile(Path) 方法从 JSON 或文件中重新创建。
  * It can also be recreated from JSON or a file using the {@link #fromJson(String)} and {@link #fromFile(Path)} methods.
  *
  * @param <Embedded> The class of the object that has been embedded.
@@ -50,6 +55,9 @@ import static java.util.stream.Collectors.toList;
  */
 public class InMemoryEmbeddingStore<Embedded> implements EmbeddingStore<Embedded> {
 
+    /**
+     * 嵌入存储的条目
+     */
     final CopyOnWriteArrayList<Entry<Embedded>> entries;
 
     public InMemoryEmbeddingStore() {
@@ -62,6 +70,7 @@ public class InMemoryEmbeddingStore<Embedded> implements EmbeddingStore<Embedded
 
     @Override
     public String add(Embedding embedding) {
+        // 嵌入ID
         String id = randomUUID();
         add(id, embedding);
         return id;
@@ -235,8 +244,17 @@ public class InMemoryEmbeddingStore<Embedded> implements EmbeddingStore<Embedded
 
     static class Entry<Embedded> {
 
+        /**
+         * 嵌入ID
+         */
         String id;
+        /**
+         * 嵌入向量
+         */
         Embedding embedding;
+        /**
+         * 嵌入存储
+         */
         Embedded embedded;
 
         Entry(String id, Embedding embedding) {
