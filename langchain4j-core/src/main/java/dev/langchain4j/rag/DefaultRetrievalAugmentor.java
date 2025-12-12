@@ -37,7 +37,8 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toMap;
 
 /**
- * 检索增强器的默认实现，旨在适用于大多数使用场景。
+ * 检索增强器的默认实现
+ * 旨在适用于大多数使用场景。
  * The default implementation of {@link RetrievalAugmentor} intended to be suitable for the majority of use cases.
  * <br>
  * <br>
@@ -141,6 +142,7 @@ public class DefaultRetrievalAugmentor implements RetrievalAugmentor {
     }
 
     private static ExecutorService createDefaultExecutor() {
+        // 无界的同步队列
         return new ThreadPoolExecutor(
             0, Integer.MAX_VALUE,
             1, SECONDS,
@@ -155,7 +157,7 @@ public class DefaultRetrievalAugmentor implements RetrievalAugmentor {
         ChatMessage chatMessage = augmentationRequest.chatMessage();
         String queryText;
         if (chatMessage instanceof UserMessage userMessage) {
-            // 用户消息的文本
+            // 用户消息的单条文本
             queryText = userMessage.singleText();
         } else {
             throw new IllegalArgumentException("Unsupported message type: " + chatMessage.type());
@@ -175,6 +177,7 @@ public class DefaultRetrievalAugmentor implements RetrievalAugmentor {
         // 内容注入器
         ChatMessage augmentedChatMessage = contentInjector.inject(contents, chatMessage);
 
+        // 增强结果
         return AugmentationResult.builder()
             .chatMessage(augmentedChatMessage)
             .contents(contents)
@@ -206,6 +209,7 @@ public class DefaultRetrievalAugmentor implements RetrievalAugmentor {
                                 .thenCompose(retrievers -> retrieveFromAll(retrievers, query));
                 queryToFutureContents.put(query, futureContents);
             });
+            // 聚合
             return join(queryToFutureContents);
         } else {
             return emptyMap();

@@ -17,6 +17,7 @@ import static dev.langchain4j.internal.Utils.getOrDefault;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 对话检索的链步骤
  * A chain for conversing with a specified {@link ChatModel}
  * based on the information retrieved by a specified {@link ContentRetriever}.
  * Includes a default {@link ChatMemory} (a message window with maximum 10 messages), which can be overridden.
@@ -27,13 +28,23 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
  */
 public class ConversationalRetrievalChain implements Chain<String, String> {
 
+    /**
+     * 聊天模型
+     */
     private final ChatModel chatModel;
+    /**
+     * 聊天记忆
+     */
     private final ChatMemory chatMemory;
+    /**
+     * 检索增强器
+     */
     private final RetrievalAugmentor retrievalAugmentor;
 
     public ConversationalRetrievalChain(ChatModel chatModel,
                                         ChatMemory chatMemory,
                                         ContentRetriever contentRetriever) {
+        // 检索增强器的默认实现
         this(
                 chatModel,
                 chatMemory,
@@ -47,6 +58,7 @@ public class ConversationalRetrievalChain implements Chain<String, String> {
                                         ChatMemory chatMemory,
                                         RetrievalAugmentor retrievalAugmentor) {
         this.chatModel = ensureNotNull(chatModel, "chatModel");
+        // 默认是 消息窗口的聊天记忆
         this.chatMemory = getOrDefault(chatMemory, () -> MessageWindowChatMemory.withMaxMessages(10));
         this.retrievalAugmentor = ensureNotNull(retrievalAugmentor, "retrievalAugmentor");
     }
@@ -54,23 +66,38 @@ public class ConversationalRetrievalChain implements Chain<String, String> {
     @Override
     public String execute(String query) {
 
+        // 用户消息
         UserMessage userMessage = UserMessage.from(query);
+        // 检索增强
         userMessage = augment(userMessage);
+        // 添加用户消息到聊天记忆
         chatMemory.add(userMessage);
 
+        // 与 AI 聊天
         AiMessage aiMessage = chatModel.chat(chatMemory.messages()).aiMessage();
 
+        // 添加AI消息到聊天记忆
         chatMemory.add(aiMessage);
+
         return aiMessage.text();
     }
 
+    /**
+     * 检索增强用户消息
+     * @param userMessage 用户消息
+     * @return 增强的聊天消息
+     */
     private UserMessage augment(UserMessage userMessage) {
+        // 元数据
         Metadata metadata = Metadata.from(userMessage, chatMemory.id(), chatMemory.messages());
 
+        // 增强请求
         AugmentationRequest augmentationRequest = new AugmentationRequest(userMessage, metadata);
 
+        // 使用检索到的内容增强增强请求中提供的聊天对话消息
         AugmentationResult augmentationResult = retrievalAugmentor.augment(augmentationRequest);
 
+        // 增强的聊天消息
         return (UserMessage) augmentationResult.chatMessage();
     }
 

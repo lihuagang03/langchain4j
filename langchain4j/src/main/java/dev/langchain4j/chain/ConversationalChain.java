@@ -11,6 +11,7 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * 对话的链步骤
  * A chain for conversing with a specified {@link ChatModel} while maintaining a memory of the conversation.
  * Includes a default {@link ChatMemory} (a message window with maximum 10 messages), which can be overridden.
  * <br>
@@ -18,11 +19,18 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
  */
 public class ConversationalChain implements Chain<String, String> {
 
+    /**
+     * 聊天模型
+     */
     private final ChatModel chatModel;
+    /**
+     * 聊天记忆
+     */
     private final ChatMemory chatMemory;
 
     private ConversationalChain(ChatModel chatModel, ChatMemory chatMemory) {
         this.chatModel = ensureNotNull(chatModel, "chatModel");
+        // 默认是 消息窗口的聊天记忆
         this.chatMemory = chatMemory == null ? MessageWindowChatMemory.withMaxMessages(10) : chatMemory;
     }
 
@@ -30,13 +38,19 @@ public class ConversationalChain implements Chain<String, String> {
         return new ConversationalChainBuilder();
     }
 
+    /**
+     * 执行链步骤。
+     */
     @Override
     public String execute(String userMessage) {
 
+        // 添加用户消息到聊天记忆
         chatMemory.add(userMessage(ensureNotBlank(userMessage, "userMessage")));
 
+        // 与 AI 聊天
         AiMessage aiMessage = chatModel.chat(chatMemory.messages()).aiMessage();
 
+        // 添加AI消息到聊天记忆
         chatMemory.add(aiMessage);
 
         return aiMessage.text();

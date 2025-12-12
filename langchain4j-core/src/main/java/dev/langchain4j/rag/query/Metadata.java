@@ -20,7 +20,7 @@ import dev.langchain4j.rag.RetrievalAugmentor;
 public class Metadata {
 
     /**
-     * 聊天对话消息
+     * 聊天消息
      */
     private final ChatMessage chatMessage;
     /**
@@ -28,7 +28,7 @@ public class Metadata {
      */
     private final List<ChatMessage> chatMemory;
     /**
-     * 调用上下文
+     * AI服务调用的上下文
      */
     private final InvocationContext invocationContext;
 
