@@ -5,7 +5,7 @@ import dev.langchain4j.service.AiServiceContext;
 import dev.langchain4j.service.AiServices;
 
 /**
- * AI服务工厂
+ * AI服务的工厂
  */
 @Internal
 public interface AiServicesFactory {
