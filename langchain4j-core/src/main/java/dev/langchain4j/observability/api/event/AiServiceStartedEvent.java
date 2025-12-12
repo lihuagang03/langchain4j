@@ -8,10 +8,14 @@ import java.util.Optional;
 import org.jspecify.annotations.Nullable;
 
 /**
+ * AI服务已启动事件
+ * 在 LLM 调用开始时触发。
  * Called when an LLM invocation has started.
  */
 public interface AiServiceStartedEvent extends AiServiceEvent {
     /**
+     * 检索与调用相关的可选的系统消息。
+     * 系统消息通常提供有关 AI 行为、操作或响应风格的指导。
      * Retrieves an optional system message associated with the invocation.
      * A system message typically provides instructions regarding the AI's
      * behavior, actions, or response style.
@@ -19,6 +23,8 @@ public interface AiServiceStartedEvent extends AiServiceEvent {
     Optional<SystemMessage> systemMessage();
 
     /**
+     * 检索与调用相关的用户消息。
+     * 用户消息表示在 AI 服务调用期间用户提供的内容或输入。
      * Retrieves the user message associated with the invocation.
      * The user message represents the content or input provided by the user
      * during the AI Service invocation.
@@ -46,7 +52,13 @@ public interface AiServiceStartedEvent extends AiServiceEvent {
      * Builder for {@link DefaultAiServiceStartedEvent} instances.
      */
     class AiServiceStartedEventBuilder extends Builder<AiServiceStartedEvent> {
+        /**
+         * 与调用相关的可选的系统消息
+         */
         private @Nullable SystemMessage systemMessage;
+        /**
+         * 与调用相关的用户消息
+         */
         private UserMessage userMessage;
 
         protected AiServiceStartedEventBuilder() {}

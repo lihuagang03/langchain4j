@@ -36,7 +36,7 @@ public class AiMessage implements ChatMessage {
      */
     private final String text;
     /**
-     * 思考/推理
+     * 思考/推理内容
      */
     private final String thinking;
     /**
@@ -44,7 +44,7 @@ public class AiMessage implements ChatMessage {
      */
     private final List<ToolExecutionRequest> toolExecutionRequests;
     /**
-     * 属性映射表
+     * 属性的映射表
      */
     private final Map<String, Object> attributes;
 

@@ -4,6 +4,9 @@ import dev.langchain4j.invocation.InvocationContext;
 import dev.langchain4j.observability.event.DefaultAiServiceErrorEvent;
 
 /**
+ * AI服务错误事件
+ * 表示当 AI 服务调用失败时发生的事件。
+ * 它包含有关导致失败的错误的附加信息。
  * Represents an event that occurs when an AI Service invocation fails.
  * This interface extends {@link AiServiceEvent} to include additional information
  * about the error that caused the failure.
@@ -13,6 +16,7 @@ import dev.langchain4j.observability.event.DefaultAiServiceErrorEvent;
  */
 public interface AiServiceErrorEvent extends AiServiceEvent {
     /**
+     * 获取表示与 AI 服务调用失败相关的错误的 Throwable。
      * Retrieves the {@link Throwable} representing the error associated with the AI Service invocation failure.
      */
     Throwable error();
@@ -35,6 +39,9 @@ public interface AiServiceErrorEvent extends AiServiceEvent {
      * Builder for {@link DefaultAiServiceErrorEvent} instances.
      */
     class AiServiceErrorEventBuilder extends Builder<AiServiceErrorEvent> {
+        /**
+         * AI 服务调用失败相关的错误的异常
+         */
         private Throwable error;
 
         protected AiServiceErrorEventBuilder() {}

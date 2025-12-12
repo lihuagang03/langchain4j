@@ -3,7 +3,7 @@ package dev.langchain4j.observability.api.listener;
 import dev.langchain4j.observability.api.event.AiServiceEvent;
 
 /**
- * AI服务监视器
+ * AI服务监听器
  * A {@link AiServiceEvent} listener that listens for
  * @param <T> The type of {@link AiServiceEvent} this listener listens for
  */

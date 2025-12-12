@@ -6,11 +6,18 @@ import dev.langchain4j.agent.tool.ToolExecutionRequest;
 import dev.langchain4j.observability.api.event.ToolExecutedEvent;
 
 /**
+ * 工具执行事件的默认实现
  * Default implementation of {@link ToolExecutedEvent}.
  */
 public class DefaultToolExecutedEvent extends AbstractAiServiceEvent implements ToolExecutedEvent {
 
+    /**
+     * 工具执行请求
+     */
     private final ToolExecutionRequest request;
+    /**
+     * 工具执行的结果文本
+     */
     private final String resultText;
 
     public DefaultToolExecutedEvent(ToolExecutedEventBuilder builder) {

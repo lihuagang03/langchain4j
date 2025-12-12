@@ -99,7 +99,7 @@ public interface InvocationContext {
         private UUID invocationId;
         private String interfaceName;
         private String methodName;
-        private List<@NonNull Object> methodArguments = new ArrayList<>();
+        private final List<@NonNull Object> methodArguments = new ArrayList<>();
         private Object chatMemoryId;
         private InvocationParameters invocationParameters;
         private Map<Class<? extends LangChain4jManaged>, LangChain4jManaged> managedParameters;

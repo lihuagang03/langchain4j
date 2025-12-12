@@ -22,7 +22,7 @@ public class ToolExecutionResult {
      */
     private final Object result;
     /**
-     * 执行结果文本
+     * 执行的结果文本
      */
     private final String resultText;
 

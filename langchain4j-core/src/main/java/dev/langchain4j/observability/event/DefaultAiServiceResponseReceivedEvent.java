@@ -11,6 +11,9 @@ import dev.langchain4j.observability.api.event.AiServiceResponseReceivedEvent;
 public class DefaultAiServiceResponseReceivedEvent extends AbstractAiServiceEvent
         implements AiServiceResponseReceivedEvent {
 
+    /**
+     * 聊天响应
+     */
     private final ChatResponse response;
 
     public DefaultAiServiceResponseReceivedEvent(AiServiceResponseReceivedEventBuilder builder) {

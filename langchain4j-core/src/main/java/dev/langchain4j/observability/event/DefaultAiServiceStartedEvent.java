@@ -9,11 +9,18 @@ import java.util.Optional;
 import org.jspecify.annotations.Nullable;
 
 /**
+ * AI服务已启动事件的默认实现
  * Default implementation of {@link AiServiceStartedEvent}.
  */
 public class DefaultAiServiceStartedEvent extends AbstractAiServiceEvent implements AiServiceStartedEvent {
 
+    /**
+     * 与调用相关的可选的系统消息
+     */
     private final @Nullable SystemMessage systemMessage;
+    /**
+     * 与调用相关的用户消息
+     */
     private final UserMessage userMessage;
 
     public DefaultAiServiceStartedEvent(AiServiceStartedEventBuilder builder) {

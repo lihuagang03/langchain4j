@@ -6,6 +6,8 @@ import dev.langchain4j.guardrail.GuardrailResult;
 import dev.langchain4j.invocation.InvocationContext;
 
 /**
+ * 护栏执行事件
+ * 表示在护栏验证发生时执行的事件。
  * Represents an event that is executed when a guardrail validation occurs.
  * This interface serves as a marker for events that contain both parameters
  * and results associated with guardrail validation.
@@ -19,6 +21,7 @@ public interface GuardrailExecutedEvent<
         extends AiServiceEvent {
 
     /**
+     * 检索用于输入防护验证的请求。
      * Retrieves the request used for input guardrail validation.
      *
      * @return the parameters containing user message, memory, augmentation result, user message template,
@@ -27,6 +30,7 @@ public interface GuardrailExecutedEvent<
     P request();
 
     /**
+     * 检索输入护栏验证过程的结果。
      * Retrieves the result of the input guardrail validation process.
      *
      * @return the result of the input guardrail validation, including the validation outcome
@@ -35,6 +39,7 @@ public interface GuardrailExecutedEvent<
     R result();
 
     /**
+     * 检索与验证过程相关的护栏类。
      * Retrieves the guardrail class associated with the validation process.
      *
      * @return the guardrail class that implements the logic for validating

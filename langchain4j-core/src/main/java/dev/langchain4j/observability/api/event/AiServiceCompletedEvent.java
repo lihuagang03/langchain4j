@@ -6,6 +6,9 @@ import java.util.Optional;
 import org.jspecify.annotations.Nullable;
 
 /**
+ * AI服务完成事件
+ * 表示在调用完成时发生的事件。
+ * 此接口扩展了 AiServiceEvent，以包含有关调用结果的附加信息。
  * Represents an event that occurs upon the completion of an invocation.
  * This interface extends {@link AiServiceEvent}
  * to include additional information about the result of the invocation.
@@ -18,6 +21,8 @@ import org.jspecify.annotations.Nullable;
  */
 public interface AiServiceCompletedEvent extends AiServiceEvent {
     /**
+     * 获取调用的结果。
+     * 结果可以是调用的返回值、处理后的值，如果没有结果则为 null。
      * Retrieves the result of the invocation. The result could be the outcome
      * of the invocation, a processed value, or {@code null} if no result exists.
      */
@@ -41,6 +46,9 @@ public interface AiServiceCompletedEvent extends AiServiceEvent {
      * Builder for {@link DefaultAiServiceCompletedEvent} instances.
      */
     class AiServiceCompletedEventBuilder extends Builder<AiServiceCompletedEvent> {
+        /**
+         * 调用的结果
+         */
         private @Nullable Object result;
 
         protected AiServiceCompletedEventBuilder() {}
