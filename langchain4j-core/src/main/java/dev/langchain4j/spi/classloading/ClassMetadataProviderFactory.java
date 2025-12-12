@@ -4,6 +4,9 @@ import java.lang.annotation.Annotation;
 import java.util.Optional;
 
 /**
+ * 类元数据提供者工厂
+ * 用于提供类元数据访问的工厂接口。
+ * 旨在由下游框架实现。
  * A factory interface for providing access to class metadata. Intended to be implemented by downstream frameworks.
  * <p>
  *     {@code dev.langchain4j.classinstance.ReflectionBasedClassMetadataProviderFactory}
@@ -15,6 +18,7 @@ import java.util.Optional;
  */
 public interface ClassMetadataProviderFactory<MethodKey> {
     /**
+     * 从给定的方法中检索指定类型的注解。
      * Retrieves an annotation of the specified type from the given method.
      *
      * @param <T> The type of the annotation to locate, which must extend {@link Annotation}.
@@ -26,6 +30,7 @@ public interface ClassMetadataProviderFactory<MethodKey> {
     <T extends Annotation> Optional<T> getAnnotation(MethodKey method, Class<T> annotationClass);
 
     /**
+     * 从给定类中检索指定类型的注解。
      * Retrieves an annotation of the specified type from the given class.
      *
      * @param <T> The type of the annotation to locate, which must extend {@link Annotation}.
@@ -37,6 +42,7 @@ public interface ClassMetadataProviderFactory<MethodKey> {
     <T extends Annotation> Optional<T> getAnnotation(Class<?> clazz, Class<T> annotationClass);
 
     /**
+     * 检索一个可迭代对象，该对象包含指定类中定义的所有非静态方法的键。
      * Retrieves an iterable containing method keys for all non-static methods defined in the specified class.
      *
      * @param clazz The class from which to retrieve methods.

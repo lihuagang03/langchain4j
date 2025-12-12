@@ -8,6 +8,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
+ * 基于反射的类元数据提供者工厂
+ * 使用 Java 反射实现 ClassMetadataProviderFactory 接口。
+ * 该类提供通过基于反射的机制从类中获取注解和方法元数据的方法。
  * Implementation of the {@link ClassMetadataProviderFactory} interface using Java Reflection.
  * This class provides methods to retrieve annotations and method metadata from classes
  * via reflection-based mechanisms.
