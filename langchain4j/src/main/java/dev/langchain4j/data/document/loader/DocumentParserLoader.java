@@ -7,11 +7,16 @@ import dev.langchain4j.data.document.DocumentParser;
 import dev.langchain4j.spi.data.document.parser.DocumentParserFactory;
 
 /**
- * 文档解析器加载器
+ * 文档解析器的加载器
  */
 @Internal
 class DocumentParserLoader {
+    /**
+     * 加载文档解析器
+     * @return 文档解析器
+     */
     static DocumentParser loadDocumentParser() {
+        // 加载 文档解析器工厂
         var factories = loadFactories(DocumentParserFactory.class);
 
         if (factories.size() > 1) {
@@ -20,6 +25,7 @@ class DocumentParserLoader {
         }
 
         for (DocumentParserFactory factory : factories) {
+            // 创建 文档解析器
             return factory.create();
         }
 

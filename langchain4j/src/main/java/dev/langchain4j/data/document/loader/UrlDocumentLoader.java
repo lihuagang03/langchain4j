@@ -14,6 +14,7 @@ import java.net.URL;
 public class UrlDocumentLoader {
 
     /**
+     * 从指定的 URL 加载文档。
      * Loads a document from the specified URL.
      *
      * @param url            The URL of the file.
@@ -21,6 +22,7 @@ public class UrlDocumentLoader {
      * @return document
      */
     public static Document load(URL url, DocumentParser documentParser) {
+        // 使用指定的文档解析器从给定的源加载文档
         return DocumentLoader.load(UrlSource.from(url), documentParser);
     }
 
@@ -37,6 +39,7 @@ public class UrlDocumentLoader {
     }
 
     /**
+     * 从指定的字符串创建一个 URL。
      * Creates a URL from the specified string.
      *
      * @param url The URL string.

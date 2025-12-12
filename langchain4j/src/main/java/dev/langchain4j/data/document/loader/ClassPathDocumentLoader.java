@@ -28,18 +28,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 类路径文档加载器
+ * 类路径的文档加载器
+ * 用于使用 ClassPathSource 加载文档的 DocumentLoader 实现。
  * {@link DocumentLoader} implementation for loading documents using a {@link ClassPathSource}
  * @author Eric Deandrea
  */
 public class ClassPathDocumentLoader {
     private static final Logger LOG = LoggerFactory.getLogger(ClassPathDocumentLoader.class);
+    /**
+     * 默认的文档解析器
+     */
     private static final DocumentParser DEFAULT_DOCUMENT_PARSER =
             getOrDefault(DocumentParserLoader.loadDocumentParser(), TextDocumentParser::new);
 
     private ClassPathDocumentLoader() {}
 
     /**
+     * 从指定的文件路径加载文档。
      * Loads a {@link Document} from the specified file path.
      * <br>
      * The file is parsed using the default {@link DocumentParser}.
@@ -91,6 +96,7 @@ public class ClassPathDocumentLoader {
     }
 
     /**
+     * 使用指定的类加载器从指定的文件路径加载文档。
      * Loads a {@link Document} from the specified file path using a given class loader.
      * <br>
      * The file is parsed using the specified {@link DocumentParser}.
@@ -112,9 +118,11 @@ public class ClassPathDocumentLoader {
 
             if (classPathSource.isInsideArchive()) {
                 try (var fs = FileSystems.newFileSystem(uri, Map.of("create", "true"))) {
+                    // 加载文档
                     return loadDocument(classPathSource, fs.getPath(pathOnClasspath), documentParser);
                 }
             } else {
+                // 加载文档
                 return loadDocument(classPathSource, Path.of(uri), documentParser);
             }
         } catch (URISyntaxException | IOException e) {
@@ -122,11 +130,19 @@ public class ClassPathDocumentLoader {
         }
     }
 
+    /**
+     * 加载文档
+     * @param classPathSource 类路径文档来源
+     * @param path 路径
+     * @param documentParser 文档解析器
+     * @return 文档
+     */
     private static Document loadDocument(ClassPathSource classPathSource, Path path, DocumentParser documentParser) {
         if (!isRegularFile(path)) {
             throw illegalArgument("'%s' is not a file", path);
         }
 
+        // 使用指定的文档解析器从给定的源加载文档
         return DocumentLoader.load(classPathSource, documentParser);
     }
 
@@ -375,6 +391,7 @@ public class ClassPathDocumentLoader {
                     try {
                         var relativePath = getRelativePath(directoryOnClasspath, rootDirectoryClassPathSource, p);
 
+                        // 加载文档
                         return loadDocument(
                                 ClassPathSource.from(relativePath, rootDirectoryClassPathSource.classLoader()),
                                 p,

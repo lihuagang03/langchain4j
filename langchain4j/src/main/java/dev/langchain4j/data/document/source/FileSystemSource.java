@@ -19,6 +19,9 @@ import java.nio.file.Paths;
  */
 public class FileSystemSource implements DocumentSource {
 
+    /**
+     * 文件路径
+     */
     private final Path path;
 
     public FileSystemSource(Path path) {
@@ -27,6 +30,7 @@ public class FileSystemSource implements DocumentSource {
 
     @Override
     public InputStream inputStream() throws IOException {
+        // 文件输入流
         return Files.newInputStream(path);
     }
 

@@ -14,12 +14,12 @@ import dev.langchain4j.data.segment.TextSegment;
 public interface Document {
 
     /**
-     * 文件的名称
+     * 文件名称
      * Common metadata key for the name of the file from which the document was loaded.
      */
     String FILE_NAME = "file_name";
     /**
-     * 目录的绝对路径
+     * 绝对的目录路径
      * Common metadata key for the absolute path of the directory from which the document was loaded.
      */
     String ABSOLUTE_DIRECTORY_PATH = "absolute_directory_path";

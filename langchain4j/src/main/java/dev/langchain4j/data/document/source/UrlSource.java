@@ -18,6 +18,9 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
  */
 public class UrlSource implements DocumentSource {
 
+    /**
+     * 网址
+     */
     private final URL url;
 
     public UrlSource(URL url) {
@@ -26,6 +29,7 @@ public class UrlSource implements DocumentSource {
 
     @Override
     public InputStream inputStream() throws IOException {
+        // 网址连接
         URLConnection connection = url.openConnection();
         return connection.getInputStream();
     }

@@ -24,18 +24,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 文件系统文档加载器
+ * 文件系统的文档加载器
  */
 public class FileSystemDocumentLoader {
 
     private static final Logger log = LoggerFactory.getLogger(FileSystemDocumentLoader.class);
 
+    /**
+     * 默认的文档解析器
+     */
     private static final DocumentParser DEFAULT_DOCUMENT_PARSER =
             getOrDefault(DocumentParserLoader.loadDocumentParser(), TextDocumentParser::new);
 
     private FileSystemDocumentLoader() {}
 
     /**
+     * 从指定的文件路径加载文档。
      * Loads a {@link Document} from the specified file {@link Path}.
      * <br>
      * The file is parsed using the specified {@link DocumentParser}.
@@ -53,6 +57,7 @@ public class FileSystemDocumentLoader {
             throw illegalArgument("'%s' is not a file", filePath);
         }
 
+        // 使用指定的文档解析器从给定的源加载文档
         return DocumentLoader.load(from(filePath), documentParser);
     }
 
@@ -499,6 +504,7 @@ public class FileSystemDocumentLoader {
                 .map(pathMatcherRoot::resolve)
                 .forEach(file -> {
                     try {
+                        // 从指定的文件路径加载文档
                         Document document = loadDocument(file, documentParser);
                         documents.add(document);
                     } catch (BlankDocumentException ignored) {

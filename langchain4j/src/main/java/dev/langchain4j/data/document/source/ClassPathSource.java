@@ -21,8 +21,17 @@ import java.net.URL;
  * </p>
  */
 public class ClassPathSource implements DocumentSource {
+    /**
+     * 类路径地址
+     */
     private final URL url;
+    /**
+     * 类加载器
+     */
     private final ClassLoader classLoader;
+    /**
+     * 元数据
+     */
     private final Metadata metadata = new Metadata();
 
     protected ClassPathSource(URL url, ClassLoader classLoader) {

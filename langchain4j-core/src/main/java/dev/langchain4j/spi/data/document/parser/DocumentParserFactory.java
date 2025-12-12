@@ -15,5 +15,8 @@ import dev.langchain4j.data.document.DocumentParser;
 @Internal
 public interface DocumentParserFactory {
 
+    /**
+     * @return 文档解析器
+     */
     DocumentParser create();
 }

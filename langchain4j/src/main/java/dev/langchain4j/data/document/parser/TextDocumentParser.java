@@ -15,6 +15,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 public class TextDocumentParser implements DocumentParser {
 
+    /**
+     * 字符集
+     */
     private final Charset charset;
 
     public TextDocumentParser() {
@@ -28,10 +31,12 @@ public class TextDocumentParser implements DocumentParser {
     @Override
     public Document parse(InputStream inputStream) {
         try {
+            // 读取所有字节，并转换为文本字符串
             String text = new String(inputStream.readAllBytes(), charset);
             if (text.isBlank()) {
                 throw new BlankDocumentException();
             }
+            // 创建 文本文档
             return Document.from(text);
         } catch (BlankDocumentException e) {
             throw e;
