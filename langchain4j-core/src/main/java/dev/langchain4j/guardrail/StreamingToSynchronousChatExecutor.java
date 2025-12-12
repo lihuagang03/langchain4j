@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 流式到同步的聊天执行器
  * A concrete implementation of the {@link ChatExecutor} interface that executes
  * chat requests using a specified {@link StreamingChatModel}. It then executes the requests as if it were
  * synchronous, essentially transforming a streaming request to a synchronous request
@@ -27,7 +28,13 @@ import org.slf4j.LoggerFactory;
  */
 @Internal
 final class StreamingToSynchronousChatExecutor extends AbstractChatExecutor {
+    /**
+     * 流式聊天模型
+     */
     private final StreamingChatModel streamingChatModel;
+    /**
+     * 错误异常的处理器
+     */
     private final Consumer<Throwable> errorHandler;
 
     protected StreamingToSynchronousChatExecutor(StreamingToSynchronousBuilder builder) {
@@ -39,16 +46,27 @@ final class StreamingToSynchronousChatExecutor extends AbstractChatExecutor {
 
     @Override
     protected ChatResponse execute(ChatRequest chatRequest) {
+        // 聊天模型的响应处理器
         var responseHandler = new StreamingToSyncResponseHandler(this.errorHandler);
+        // 这是与聊天模型交互的主要 API
         this.streamingChatModel.chat(chatRequest, responseHandler);
 
         return Optional.ofNullable(responseHandler.getResponse()).orElseGet(ChatResponse.builder()::build);
     }
 
+    /**
+     * 流式到同步的聊天模型的响应处理器
+     */
     private static class StreamingToSyncResponseHandler implements StreamingChatResponseHandler {
         private static final Logger LOG = LoggerFactory.getLogger(StreamingToSyncResponseHandler.class);
         private final Consumer<Throwable> errorHandler;
+        /**
+         * 倒计时锁
+         */
         private final CountDownLatch latch = new CountDownLatch(1);
+        /**
+         * 聊天响应的引用
+         */
         private AtomicReference<ChatResponse> response = new AtomicReference<>();
 
         StreamingToSyncResponseHandler(Consumer<Throwable> errorHandler) {

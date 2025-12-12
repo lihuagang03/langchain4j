@@ -11,17 +11,21 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
+ * 聊天执行器
+ * 定义聊天交互的通用执行器接口
  * Generic executor interface that defines a chat interaction
  */
 public interface ChatExecutor {
 
     /**
+     * 执行聊天请求
      * Execute a chat request
      * @return The response
      */
     ChatResponse execute();
 
     /**
+     * 使用提供的聊天消息执行聊天请求
      * Executes a chat request using the provided chat messages
      * @param chatMessages The chat messages containing the context of the conversation.
      *                     It provides the history of messages required for proper interaction with the chat model
@@ -30,6 +34,7 @@ public interface ChatExecutor {
     ChatResponse execute(List<ChatMessage> chatMessages);
 
     /**
+     * 创建一个新的 ChatExecutor.SynchronousBuilder 实例，用于构建执行同步聊天请求的 ChatExecutor 对象。
      * Creates a new {@link SynchronousBuilder} instance for constructing {@link ChatExecutor} objects
      * that perform synchronous chat requests.
      *
@@ -40,6 +45,7 @@ public interface ChatExecutor {
     }
 
     /**
+     * 创建一个新的 ChatExecutor.StreamingToSynchronousBuilder 实例，用于构建执行流式聊天请求的 ChatExecutor 对象。
      * Creates a new {@link StreamingToSynchronousBuilder} instance for constructing {@link ChatExecutor} objects
      * that perform streaming chat requests.
      *
@@ -60,6 +66,9 @@ public interface ChatExecutor {
      * @param <T> the type of the builder subclass for enabling fluent method chaining
      */
     abstract class AbstractBuilder<T extends AbstractBuilder<T>> {
+        /**
+         * 聊天请求
+         */
         protected ChatRequest chatRequest;
 
         protected AbstractBuilder() {}
@@ -88,12 +97,17 @@ public interface ChatExecutor {
     }
 
     /**
+     * SynchronousBuilder 用于构建 ChatExecutor 的实例。
+     * 这个 SynchronousBuilder 提供了一个流畅的 API，用于设置所需的组件，如 ChatRequest，并用于构建 ChatExecutor 实例。
      * SynchronousBuilder for constructing instances of {@link ChatExecutor}.
      *
      * This synchronousBuilder provides a fluent API for setting required components
      * like {@link ChatRequest}, and for building an instance of the {@link ChatExecutor}.
      */
     class SynchronousBuilder extends AbstractBuilder<SynchronousBuilder> {
+        /**
+         * 聊天模型
+         */
         protected final ChatModel chatModel;
 
         protected SynchronousBuilder(ChatModel chatModel) {
@@ -113,6 +127,8 @@ public interface ChatExecutor {
     }
 
     /**
+     * StreamingToSynchronousBuilder 用于构建 ChatExecutor 实例。
+     * 这个流式构建提供了一个流畅的 API，用于设置必需的组件，如 ChatRequest，并用于构建一个模拟流式的 ChatExecutor 实例。
      * StreamingToSynchronousBuilder for constructing instances of {@link ChatExecutor}.
      *
      * This streaming build provides a fluent API for setting required components
@@ -120,7 +136,13 @@ public interface ChatExecutor {
      * that simulates streaming.
      */
     class StreamingToSynchronousBuilder extends AbstractBuilder<StreamingToSynchronousBuilder> {
+        /**
+         * 流式聊天模型
+         */
         protected final StreamingChatModel streamingChatModel;
+        /**
+         * 错误异常的处理器
+         */
         protected Consumer<Throwable> errorHandler;
 
         protected StreamingToSynchronousBuilder(StreamingChatModel streamingChatModel) {
