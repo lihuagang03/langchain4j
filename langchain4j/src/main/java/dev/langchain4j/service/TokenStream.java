@@ -16,6 +16,9 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
+ * 词元流
+ * 表示来自模型的词元流，您可以订阅该流并在出现新的部分响应（通常是单个词元）、模型完成流式传输或流式传输过程中发生错误时接收更新。
+ * 它旨在用作 AI 服务中的返回类型。
  * Represents a token stream from the model to which you can subscribe and receive updates
  * when a new partial response (usually a single token) is available,
  *  when the model finishes streaming, or when an error occurs during streaming.
@@ -164,6 +167,7 @@ public interface TokenStream {
     TokenStream ignoreErrors();
 
     /**
+     * 完成当前词元流的构建并开始处理。
      * Completes the current token stream building and starts processing.
      * <p>
      * Will send a request to LLM and start response streaming.

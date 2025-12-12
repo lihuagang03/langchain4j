@@ -53,6 +53,7 @@ public interface StreamingChatModel {
         List<ChatModelListener> listeners = listeners();
         Map<Object, Object> attributes = new ConcurrentHashMap<>();
 
+        // 流式聊天模型的响应处理器
         StreamingChatResponseHandler observingHandler = new StreamingChatResponseHandler() {
 
             @Override
@@ -104,10 +105,12 @@ public interface StreamingChatModel {
         };
 
         onRequest(finalChatRequest, provider(), attributes, listeners);
+        // 进行聊天
         doChat(finalChatRequest, observingHandler);
     }
 
     default void doChat(ChatRequest chatRequest, StreamingChatResponseHandler handler) {
+        // 进行聊天
         throw new RuntimeException("Not implemented");
     }
 
@@ -125,16 +128,20 @@ public interface StreamingChatModel {
 
     default void chat(String userMessage, StreamingChatResponseHandler handler) {
 
+        // 聊天请求
         ChatRequest chatRequest =
                 ChatRequest.builder().messages(UserMessage.from(userMessage)).build();
 
+        // 这是与聊天模型交互的主要 API
         chat(chatRequest, handler);
     }
 
     default void chat(List<ChatMessage> messages, StreamingChatResponseHandler handler) {
 
+        // 聊天请求
         ChatRequest chatRequest = ChatRequest.builder().messages(messages).build();
 
+        // 这是与聊天模型交互的主要 API
         chat(chatRequest, handler);
     }
 

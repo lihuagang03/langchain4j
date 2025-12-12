@@ -39,7 +39,7 @@ public interface ToolExecutor {
         // 聊天记忆ID
         Object memoryId = context == null ? null : context.chatMemoryId();
 
-        // 工具执行结果文本
+        // 工具执行的结果文本
         String result = execute(request, memoryId);
 
         return ToolExecutionResult.builder()
