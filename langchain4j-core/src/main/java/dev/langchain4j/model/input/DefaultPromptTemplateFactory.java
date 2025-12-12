@@ -11,17 +11,25 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 提示模版工厂的默认实现
+ */
 @Internal
 class DefaultPromptTemplateFactory implements PromptTemplateFactory {
 
     @Override
     public DefaultTemplate create(PromptTemplateFactory.Input input) {
+        // 默认提示模板
         return new DefaultTemplate(input.getTemplate());
     }
 
+    /**
+     * 默认提示模板
+     */
     static class DefaultTemplate implements Template {
 
         /**
+         * 变量模式
          * A regular expression pattern for identifying variable placeholders within double curly braces in a template string.
          * Variables are denoted as <code>{{variable_name}}</code> or <code>{{ variable_name }}</code>,
          * where spaces around the variable name are allowed.
@@ -32,7 +40,13 @@ class DefaultPromptTemplateFactory implements PromptTemplateFactory {
         @SuppressWarnings({"RegExpRedundantEscape"})
         private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\{\\{\\s*(.+?)\\s*\\}\\}");
 
+        /**
+         * 模板字符串
+         */
         private final String template;
+        /**
+         * 所有变量
+         */
         private final Set<String> allVariables;
 
         public DefaultTemplate(String template) {
@@ -41,6 +55,7 @@ class DefaultPromptTemplateFactory implements PromptTemplateFactory {
         }
 
         private static Set<String> extractVariables(String template) {
+            // 抽取模版变量列表
             Set<String> variables = new HashSet<>();
             Matcher matcher = VARIABLE_PATTERN.matcher(template);
             while (matcher.find()) {
@@ -49,11 +64,14 @@ class DefaultPromptTemplateFactory implements PromptTemplateFactory {
             return variables;
         }
 
+        @Override
         public String render(Map<String, Object> variables) {
+            // 渲染模版
             ensureAllVariablesProvided(variables);
 
             String result = template;
             for (Map.Entry<String, Object> entry : variables.entrySet()) {
+                // 替换所有变量
                 result = replaceAll(result, entry.getKey(), entry.getValue());
             }
 
@@ -76,6 +94,7 @@ class DefaultPromptTemplateFactory implements PromptTemplateFactory {
         }
 
         private static String inDoubleCurlyBrackets(String variable) {
+            // 双大括号的变量的占位符
             return "{{" + variable + "}}";
         }
     }

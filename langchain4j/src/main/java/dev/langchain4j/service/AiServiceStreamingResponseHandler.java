@@ -503,6 +503,7 @@ class AiServiceStreamingResponseHandler implements StreamingChatResponseHandler 
 
     private void handleAfterTool(ToolExecutionRequest request, ToolExecutionResult result) {
         if (toolExecutionHandler != null) {
+            // 工具执行
             ToolExecution toolExecution =
                     ToolExecution.builder().request(request).result(result).build();
             toolExecutionHandler.accept(toolExecution);
@@ -534,7 +535,9 @@ class AiServiceStreamingResponseHandler implements StreamingChatResponseHandler 
                 fireErrorReceived(error);
                 errorHandler.accept(error);
             } catch (Exception e) {
+                // 处理以下错误时
                 LOG.error("While handling the following error...", error);
+                // 发生了以下错误
                 LOG.error("...the following error happened", e);
             }
         } else {

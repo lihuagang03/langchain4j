@@ -8,12 +8,19 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * 审核状态
+ * 表示审核状态。
  * Represents moderation status.
  */
 public class Moderation implements Serializable {
 
+    /**
+     * 已标记
+     */
     private final boolean flagged;
 
+    /**
+     * 标记的文本
+     */
     @Nullable
     private final String flaggedText;
 

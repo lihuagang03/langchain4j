@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 内部反射变量解析器
  * Utility class responsible for resolving variable names and values for prompt templates
  * by leveraging method parameters and their annotations.
  * <p>
@@ -51,6 +52,7 @@ public class InternalReflectionVariableResolver {
     }
 
     private static String getVariableName(Parameter parameter) {
+        // 提示模板变量
         V annotation = parameter.getAnnotation(V.class);
         if (annotation != null) {
             return annotation.value();
@@ -63,6 +65,7 @@ public class InternalReflectionVariableResolver {
         if (args != null) {
             if (args.length == 1) {
                 Parameter parameter = parameters[0];
+                // 聊天记忆ID、用户消息、用户名称、提示模板变量
                 if (!parameter.isAnnotationPresent(MemoryId.class)
                         && !parameter.isAnnotationPresent(UserMessage.class)
                         && !parameter.isAnnotationPresent(UserName.class)
@@ -78,6 +81,7 @@ public class InternalReflectionVariableResolver {
             }
         }
 
+        // 错误：无法找到提示模板的值
         throw illegalConfiguration("Error: cannot find the value of the prompt template variable \"{{it}}\".");
     }
 

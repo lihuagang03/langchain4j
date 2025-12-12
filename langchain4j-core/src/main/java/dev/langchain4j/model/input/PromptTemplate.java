@@ -14,7 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 提示模版，一个可以重复使用多次的提示模版。
+ * 提示模版
+ * 一个可以重复使用多次的提示模版。
  * 模版通常包含一个或多个变量（占位符），定义为 {{变量名称}}，这些变量会被实际值替换以生成提示。
  * Represents a template of a prompt that can be reused multiple times.
  * A template typically contains one or more variables (placeholders) defined as {{variable_name}} that are
@@ -30,14 +31,25 @@ public class PromptTemplate {
     private static final PromptTemplateFactory FACTORY = factory();
 
     private static PromptTemplateFactory factory() {
+        // 加载提示模版工厂
         for (PromptTemplateFactory factory : loadFactories(PromptTemplateFactory.class)) {
             return factory;
         }
+        // 提示模版工厂的默认实现
         return new DefaultPromptTemplateFactory();
     }
 
+    /**
+     * 当前日期
+     */
     static final String CURRENT_DATE = "current_date";
+    /**
+     * 当前时间
+     */
     static final String CURRENT_TIME = "current_time";
+    /**
+     * 当前日期时间
+     */
     static final String CURRENT_DATE_TIME = "current_date_time";
 
     /**
@@ -45,9 +57,12 @@ public class PromptTemplate {
      */
     private final String templateString;
     /**
-     * 模版
+     * 提示模板
      */
     private final PromptTemplateFactory.Template template;
+    /**
+     * 时钟
+     */
     private final Clock clock;
 
     /**
@@ -62,6 +77,7 @@ public class PromptTemplate {
     }
 
     /**
+     * 创建一个新的提示模板。
      * Create a new PromptTemplate.
      *
      * @param template the template string of the prompt.
@@ -108,6 +124,7 @@ public class PromptTemplate {
      * @return a copy of the map with the variables injected.
      */
     private Map<String, Object> injectDateTimeVariables(Map<String, Object> variables) {
+        // 注入日期时间的变量
         Map<String, Object> variablesCopy = new HashMap<>(variables);
         variablesCopy.put(CURRENT_DATE, LocalDate.now(clock));
         variablesCopy.put(CURRENT_TIME, LocalTime.now(clock));

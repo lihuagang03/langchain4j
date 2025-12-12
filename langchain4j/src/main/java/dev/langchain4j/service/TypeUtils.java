@@ -15,6 +15,9 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotEmpty;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 import static java.util.stream.Collectors.toList;
 
+/**
+ * 类型的工具类
+ */
 @Internal
 public class TypeUtils {
 
