@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * 智能体调用处理程序的抽象实现
+ * 智能体调用处理程序的抽象基类
  */
 public abstract class AbstractAgentInvocationHandler implements InvocationHandler {
     /**

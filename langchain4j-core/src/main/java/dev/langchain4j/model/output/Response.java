@@ -9,7 +9,9 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
- * 响应
+ * 模型响应
+ * 表示来自各种类型模型的响应，包括语言模型、聊天模型、嵌入模型和审核模型。
+ * 该类封装了生成的内容、词元使用统计、完成原因和响应元数据。
  * Represents the response from various types of models, including language, chat, embedding, and moderation models.
  * This class encapsulates the generated content, token usage statistics, finish reason, and response metadata.
  *
@@ -18,14 +20,26 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class Response<T> {
 
+    /**
+     * 响应的内容
+     */
     private final T content;
 
+    /**
+     * 词元使用情况
+     */
     @Nullable
     private final TokenUsage tokenUsage;
 
+    /**
+     * 完成原因
+     */
     @Nullable
     private final FinishReason finishReason;
 
+    /**
+     * 元数据
+     */
     private final Map<String, Object> metadata;
 
     /**

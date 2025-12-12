@@ -6,7 +6,7 @@ import dev.langchain4j.invocation.InvocationContext;
 import dev.langchain4j.observability.api.event.AiServiceEvent;
 
 /**
- * AI服务事件的抽象实现
+ * AI服务事件的抽象基类
  */
 public abstract class AbstractAiServiceEvent implements AiServiceEvent {
     /**

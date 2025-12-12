@@ -31,32 +31,95 @@ import dev.langchain4j.service.tool.ToolExecution;
 import dev.langchain4j.service.tool.ToolExecutionErrorHandler;
 import dev.langchain4j.service.tool.ToolExecutor;
 
+/**
+ * AI服务的词元流
+ */
 @Internal
 public class AiServiceTokenStream implements TokenStream {
 
+    /**
+     * 聊天消息列表
+     */
     private final List<ChatMessage> messages;
 
+    /**
+     * 工具规格列表
+     */
     private final List<ToolSpecification> toolSpecifications;
+    /**
+     * 工具名称到工具执行器的映射表
+     */
     private final Map<String, ToolExecutor> toolExecutors;
+    /**
+     * 工具参数错误处理程序
+     */
     private final ToolArgumentsErrorHandler toolArgumentsErrorHandler;
+    /**
+     * 工具执行错误处理程序
+     */
     private final ToolExecutionErrorHandler toolExecutionErrorHandler;
+    /**
+     * 工具执行器
+     */
     private final Executor toolExecutor;
 
+    /**
+     * 接收到的内容列表
+     */
     private final List<Content> retrievedContents;
+    /**
+     * AI服务的上下文
+     */
     private final AiServiceContext context;
+    /**
+     * AI服务调用的上下文
+     */
     private final InvocationContext invocationContext;
     private final GuardrailRequestParams commonGuardrailParams;
+    /**
+     * 方法的键
+     */
     private final Object methodKey;
 
+    /**
+     * 部分响应的处理器
+     */
     private Consumer<String> partialResponseHandler;
+    /**
+     * 部分响应及其上下文的处理器
+     */
     private BiConsumer<PartialResponse, PartialResponseContext> partialResponseWithContextHandler;
+    /**
+     * 部分思考的处理器
+     */
     private Consumer<PartialThinking> partialThinkingHandler;
+    /**
+     * 部分思考及其上下文的处理器
+     */
     private BiConsumer<PartialThinking, PartialThinkingContext> partialThinkingWithContextHandler;
+    /**
+     * 内容列表的处理器
+     */
     private Consumer<List<Content>> contentsHandler;
+    /**
+     * 中间聊天响应的处理器
+     */
     private Consumer<ChatResponse> intermediateResponseHandler;
+    /**
+     * 工具执行前的处理器
+     */
     private Consumer<BeforeToolExecution> beforeToolExecutionHandler;
+    /**
+     * 工具执行的处理器
+     */
     private Consumer<ToolExecution> toolExecutionHandler;
+    /**
+     * 完成聊天响应的处理器
+     */
     private Consumer<ChatResponse> completeResponseHandler;
+    /**
+     * 错误异常的处理器
+     */
     private Consumer<Throwable> errorHandler;
 
     private int onPartialResponseInvoked;
@@ -171,8 +234,10 @@ public class AiServiceTokenStream implements TokenStream {
 
     @Override
     public void start() {
+        // 验证配置
         validateConfiguration();
 
+        // 聊天请求
         ChatRequest chatRequest = context.chatRequestTransformer.apply(
                 ChatRequest.builder()
                         .messages(messages)
@@ -180,11 +245,13 @@ public class AiServiceTokenStream implements TokenStream {
                         .build(),
                 invocationContext.chatMemoryId());
 
+        // 聊天执行器
         ChatExecutor chatExecutor = ChatExecutor.builder(context.streamingChatModel)
                 .errorHandler(errorHandler)
                 .chatRequest(chatRequest)
                 .build();
 
+        // AI服务的流式聊天模型的响应处理器
         var handler = new AiServiceStreamingResponseHandler(
                 chatExecutor,
                 context,
@@ -212,6 +279,7 @@ public class AiServiceTokenStream implements TokenStream {
             contentsHandler.accept(retrievedContents);
         }
 
+        // 这是与聊天模型交互的主要 API
         context.streamingChatModel.chat(chatRequest, handler);
     }
 
@@ -247,6 +315,7 @@ public class AiServiceTokenStream implements TokenStream {
     }
 
     private ChatMemory initTemporaryMemory(AiServiceContext context, List<ChatMessage> messagesToSend) {
+        // 聊天记忆
         var chatMemory = MessageWindowChatMemory.withMaxMessages(Integer.MAX_VALUE);
 
         if (!context.hasChatMemory()) {

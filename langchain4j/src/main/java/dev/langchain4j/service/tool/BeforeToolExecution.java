@@ -7,11 +7,16 @@ import dev.langchain4j.Experimental;
 import dev.langchain4j.agent.tool.ToolExecutionRequest;
 
 /**
+ * 工具执行前
+ *
  * @since 1.2.0
  */
 @Experimental
 public class BeforeToolExecution {
 
+    /**
+     * 工具执行请求
+     */
     private final ToolExecutionRequest request;
 
     private BeforeToolExecution(Builder builder) {
