@@ -8,6 +8,9 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * 用户消息
+ * 指定每次调用 AI 服务时要使用的完整用户消息或用户消息模板。
+ * 用户消息可以包含模板变量，这些变量将通过使用 @V 注解的方法参数的值来解析。
  * Specifies either a complete user message or a user message template to be used each time an AI service is invoked.
  * The user message can contain template variables,
  * which will be resolved with values from method parameters annotated with @{@link V}.
@@ -38,6 +41,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface UserMessage {
 
     /**
+     * 提示模板可以用一行或多行来定义。
      * Prompt template can be defined in one line or multiple lines.
      * If the template is defined in multiple lines, the lines will be joined with a delimiter defined below.
      */

@@ -8,7 +8,7 @@ import dev.langchain4j.model.output.Response;
 import java.util.List;
 
 /**
- * 审查模型
+ * 审核模型
  * 表示一个可以审查文本的模型。
  * Represents a model that can moderate text.
  */

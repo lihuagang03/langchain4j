@@ -109,6 +109,11 @@ public class ServiceOutputParser {
         return outputParser.jsonSchema();
     }
 
+    /**
+     * 输出格式说明
+     * @param returnType 返回类型
+     * @return 输出格式说明
+     */
     public String outputFormatInstructions(Type returnType) {
 
         // AI服务调用的结果

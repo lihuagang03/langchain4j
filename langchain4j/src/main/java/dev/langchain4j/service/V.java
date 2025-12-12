@@ -10,6 +10,9 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * 提示模板变量
+ * 当 AI 服务中方法的一个参数被注解为 @V 时，它就会成为一个提示模板变量。
+ * 它的值将被注入通过 @UserMessage、@SystemMessage 和 AiServices.systemMessageProvider(Function) 定义的提示模板中。
  * When a parameter of a method in an AI Service is annotated with {@code @V},
  * it becomes a prompt template variable. Its value will be injected into prompt templates defined
  * via @{@link UserMessage}, @{@link SystemMessage} and {@link AiServices#systemMessageProvider(Function)}.

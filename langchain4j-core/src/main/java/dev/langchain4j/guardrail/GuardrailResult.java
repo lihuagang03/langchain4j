@@ -25,10 +25,12 @@ public sealed interface GuardrailResult<GR extends GuardrailResult<GR>>
      */
     enum Result {
         /**
+         * 验证成功
          * A successful validation.
          */
         SUCCESS,
         /**
+         * 成功验证并获得特定结果
          * A successful validation with a specific result.
          */
         SUCCESS_WITH_RESULT,

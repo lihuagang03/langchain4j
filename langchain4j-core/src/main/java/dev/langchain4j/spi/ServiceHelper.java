@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.ServiceLoader;
 
 /**
+ * ServiceLoader.load() 的实用包装器。
  * Utility wrapper around {@code ServiceLoader.load()}.
  */
 @Internal
@@ -20,6 +21,7 @@ public class ServiceHelper {
     }
 
     /**
+     * 加载给定类型的第一个可用服务。
      * Load the first available service of a given type.
      *
      * @param clazz the type of service
@@ -32,6 +34,7 @@ public class ServiceHelper {
     }
 
     /**
+     * 加载指定类型的所有服务。
      * Load all the services of a given type.
      *
      * @param clazz the type of service
@@ -43,6 +46,7 @@ public class ServiceHelper {
     }
 
     /**
+     * 加载指定类型的所有服务。
      * Load all the services of a given type.
      *
      * <p>Utility mechanism around {@code ServiceLoader.load()}</p>
@@ -62,6 +66,7 @@ public class ServiceHelper {
     public static <T> Collection<T> loadFactories(Class<T> clazz, /* @Nullable */ ClassLoader classLoader) {
         List<T> result;
         if (classLoader != null) {
+            // 从 ServiceLoader 加载所有服务
             result = loadAll(ServiceLoader.load(clazz, classLoader));
         } else {
             // this is equivalent to:
@@ -78,6 +83,7 @@ public class ServiceHelper {
     }
 
     /**
+     * 从 ServiceLoader 加载所有服务。
      * Load all the services from a ServiceLoader.
      *
      * @param loader the loader

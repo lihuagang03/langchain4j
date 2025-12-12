@@ -29,7 +29,7 @@ public interface InvocationContext {
     UUID invocationId();
 
     /**
-     * 发起调用的 AI 服务接口的完全限定名称
+     * 发起调用的 AI 服务接口的类完全限定名称
      * The fully-qualified name of the AI Service interface where the invocation was initiated from
      *
      * @see #methodName()

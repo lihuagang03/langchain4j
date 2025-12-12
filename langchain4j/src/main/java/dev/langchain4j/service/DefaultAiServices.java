@@ -68,10 +68,19 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+/**
+ * AI服务的默认实现
+ */
 @Internal
 class DefaultAiServices<T> extends AiServices<T> {
 
+    /**
+     * 服务输出解析器
+     */
     private final ServiceOutputParser serviceOutputParser = new ServiceOutputParser();
+    /**
+     * 词元流适配器的列表
+     */
     private final Collection<TokenStreamAdapter> tokenStreamAdapters = loadFactories(TokenStreamAdapter.class);
 
     DefaultAiServices(AiServiceContext context) {
@@ -79,6 +88,7 @@ class DefaultAiServices<T> extends AiServices<T> {
     }
 
     static void validateParameters(Class<?> aiServiceClass, Method method) {
+        // 方法的参数列表
         Parameter[] parameters = method.getParameters();
         if (parameters == null || parameters.length < 2) {
             return;
@@ -87,10 +97,14 @@ class DefaultAiServices<T> extends AiServices<T> {
         boolean invocationParametersExist = false;
 
         for (Parameter parameter : parameters) {
+            // 提示模板变量 @V
             V v = parameter.getAnnotation(V.class);
+            // 用户消息 @UserMessage
             dev.langchain4j.service.UserMessage userMessage =
                     parameter.getAnnotation(dev.langchain4j.service.UserMessage.class);
+            // 聊天记忆ID @MemoryId
             MemoryId memoryId = parameter.getAnnotation(MemoryId.class);
+            // 用户名称 @UserName
             UserName userName = parameter.getAnnotation(UserName.class);
 
             if (InvocationParameters.class.isAssignableFrom(parameter.getType())) {
@@ -182,14 +196,22 @@ class DefaultAiServices<T> extends AiServices<T> {
         };
     }
 
+    /**
+     * 构建并返回 AI 服务。
+     * Constructs and returns the AI Service.
+     */
+    @Override
     public T build() {
+        // 验证
         validate();
 
+        // AI服务类的代理实例对象
         Object proxyInstance = Proxy.newProxyInstance(
                 context.aiServiceClass.getClassLoader(),
                 new Class<?>[] {context.aiServiceClass},
                 new InvocationHandler() {
 
+                    // 执行器服务
                     private final ExecutorService executor = Executors.newCachedThreadPool();
 
                     @Override
@@ -212,16 +234,20 @@ class DefaultAiServices<T> extends AiServices<T> {
                             }
                         }
 
+                        // 聊天记忆访问
                         if (method.getDeclaringClass() == ChatMemoryAccess.class) {
                             return handleChatMemoryAccess(method, args);
                         }
 
+                        // 校验AI服务类的方法的参数列表
                         // TODO do it once, when creating AI Service?
                         validateParameters(context.aiServiceClass, method);
 
+                        // AI服务调用参数
                         InvocationParameters invocationParameters = findInvocationParams(args, method.getParameters())
                                 .orElseGet(InvocationParameters::new);
 
+                        // AI服务调用的上下文
                         InvocationContext invocationContext = InvocationContext.builder()
                                 .invocationId(UUID.randomUUID())
                                 .interfaceName(context.aiServiceClass.getName())
@@ -233,6 +259,7 @@ class DefaultAiServices<T> extends AiServices<T> {
                                 .timestampNow()
                                 .build();
                         try {
+                            // 调用AI服务的方法
                             return invoke(method, args, invocationContext);
                         } catch (Exception ex) {
                             context.eventListenerRegistrar.fireEvent(AiServiceErrorEvent.builder()
@@ -243,17 +270,25 @@ class DefaultAiServices<T> extends AiServices<T> {
                         }
                     }
 
+                    /**
+                     * 调用AI服务的方法
+                     */
                     public Object invoke(Method method, Object[] args, InvocationContext invocationContext) {
 
+                        // 聊天记忆
                         Object memoryId = invocationContext.chatMemoryId();
                         ChatMemory chatMemory = context.hasChatMemory()
                                 ? context.chatMemoryService.getOrCreateChatMemory(memoryId)
                                 : null;
 
+                        // 可选的系统消息
                         Optional<SystemMessage> systemMessage = prepareSystemMessage(memoryId, method, args);
+                        // 用户消息模版
                         var userMessageTemplate = getUserMessageTemplate(method, args);
+                        // 模版变量
                         var variables = InternalReflectionVariableResolver.findTemplateVariables(
                                 userMessageTemplate, method, args);
+                        // 用户消息
                         UserMessage userMessage = prepareUserMessage(method, args, userMessageTemplate, variables);
 
                         context.eventListenerRegistrar.fireEvent(AiServiceStartedEvent.builder()
@@ -262,8 +297,10 @@ class DefaultAiServices<T> extends AiServices<T> {
                                 .userMessage(userMessage)
                                 .build());
 
+                        // 检索增强
                         AugmentationResult augmentationResult = null;
                         if (context.retrievalAugmentor != null) {
+                            // 从聊天记录中检索消息列表
                             List<ChatMessage> chatMemoryMessages = chatMemory != null ? chatMemory.messages() : null;
                             Metadata metadata = Metadata.builder()
                                     .chatMessage(userMessage)
@@ -271,7 +308,9 @@ class DefaultAiServices<T> extends AiServices<T> {
                                     .invocationContext(invocationContext)
                                     .build();
                             AugmentationRequest augmentationRequest = new AugmentationRequest(userMessage, metadata);
+                            // 使用检索到的内容增强增强请求中提供的聊天对话消息
                             augmentationResult = context.retrievalAugmentor.augment(augmentationRequest);
+                            // 增强的聊天消息
                             userMessage = (UserMessage) augmentationResult.chatMessage();
                         }
 
@@ -287,12 +326,14 @@ class DefaultAiServices<T> extends AiServices<T> {
                         userMessage = invokeInputGuardrails(
                                 context.guardrailService(), method, userMessage, commonGuardrailParam);
 
+                        // 返回类型
                         Type returnType = method.getGenericReturnType();
                         boolean streaming = returnType == TokenStream.class || canAdaptTokenStreamTo(returnType);
 
                         // TODO should it be called when returnType==String?
                         boolean supportsJsonSchema = supportsJsonSchema();
 
+                        // JSON 模式
                         Optional<JsonSchema> jsonSchema = Optional.empty();
                         if (supportsJsonSchema && !streaming) {
                             jsonSchema = serviceOutputParser.jsonSchema(returnType);
@@ -301,6 +342,7 @@ class DefaultAiServices<T> extends AiServices<T> {
                             userMessage = appendOutputFormatInstructions(returnType, userMessage);
                         }
 
+                        // 响应的内容列表
                         Optional<List<Content>> maybeContents = findContents(method, args);
                         if (maybeContents.isPresent()) {
                             List<Content> allContents = new ArrayList<>();
@@ -314,6 +356,7 @@ class DefaultAiServices<T> extends AiServices<T> {
                             userMessage = UserMessage.from(userMessage.name(), allContents);
                         }
 
+                        // 聊天消息列表
                         List<ChatMessage> messages = new ArrayList<>();
                         if (context.hasChatMemory()) {
                             systemMessage.ifPresent(chatMemory::add);
@@ -324,12 +367,15 @@ class DefaultAiServices<T> extends AiServices<T> {
                             messages.add(userMessage);
                         }
 
+                        // 审核
                         Future<Moderation> moderationFuture = triggerModerationIfNeeded(method, messages);
 
+                        // 工具服务上下文
                         ToolServiceContext toolServiceContext =
                                 context.toolService.createContext(invocationContext, userMessage);
 
                         if (streaming) {
+                            // AI服务的词元流的参数
                             var tokenStreamParameters = AiServiceTokenStreamParameters.builder()
                                     .messages(messages)
                                     .toolSpecifications(toolServiceContext.toolSpecifications())
@@ -345,15 +391,18 @@ class DefaultAiServices<T> extends AiServices<T> {
                                     .methodKey(method)
                                     .build();
 
+                            // AI服务的词元流
                             TokenStream tokenStream = new AiServiceTokenStream(tokenStreamParameters);
                             // TODO moderation
                             if (returnType == TokenStream.class) {
                                 return tokenStream;
                             } else {
+                                // 词元流的适配器
                                 return adapt(tokenStream, returnType);
                             }
                         }
 
+                        // 响应格式
                         ResponseFormat responseFormat = null;
                         if (supportsJsonSchema && jsonSchema.isPresent()) {
                             responseFormat = ResponseFormat.builder()
@@ -362,11 +411,13 @@ class DefaultAiServices<T> extends AiServices<T> {
                                     .build();
                         }
 
+                        // 聊天请求参数
                         ChatRequestParameters parameters = ChatRequestParameters.builder()
                                 .toolSpecifications(toolServiceContext.toolSpecifications())
                                 .responseFormat(responseFormat)
                                 .build();
 
+                        // 聊天请求
                         ChatRequest chatRequest = context.chatRequestTransformer.apply(
                                 ChatRequest.builder()
                                         .messages(messages)
@@ -374,21 +425,27 @@ class DefaultAiServices<T> extends AiServices<T> {
                                         .build(),
                                 memoryId);
 
+                        // 聊天执行器
                         ChatExecutor chatExecutor = ChatExecutor.builder(context.chatModel)
                                 .chatRequest(chatRequest)
                                 .build();
 
+                        // 执行聊天请求
                         ChatResponse chatResponse = chatExecutor.execute();
 
+                        // 触发 AI服务响应已接收到事件
                         context.eventListenerRegistrar.fireEvent(AiServiceResponseReceivedEvent.builder()
                                 .invocationContext(invocationContext)
                                 .response(chatResponse)
                                 .build());
 
+                        // 审核
                         verifyModerationIfNeeded(moderationFuture);
 
+                        // AI服务调用的结果
                         boolean isReturnTypeResult = typeHasRawClass(returnType, Result.class);
 
+                        // 执行推理和工具循环
                         ToolServiceResult toolServiceResult = context.toolService.executeInferenceAndToolsLoop(
                                 chatResponse,
                                 parameters,
@@ -401,6 +458,7 @@ class DefaultAiServices<T> extends AiServices<T> {
                                 context.eventListenerRegistrar);
 
                         if (toolServiceResult.immediateToolReturn() && isReturnTypeResult) {
+                            // AI服务调用的结果
                             var result = Result.builder()
                                     .content(null)
                                     .tokenUsage(toolServiceResult.aggregateTokenUsage())
@@ -411,6 +469,7 @@ class DefaultAiServices<T> extends AiServices<T> {
                                     .finalResponse(toolServiceResult.finalResponse())
                                     .build();
 
+                            // 触发 AI服务完成事件
                             context.eventListenerRegistrar.fireEvent(AiServiceCompletedEvent.builder()
                                     .invocationContext(invocationContext)
                                     .result(result)
@@ -419,6 +478,7 @@ class DefaultAiServices<T> extends AiServices<T> {
                             return result;
                         }
 
+                        // 汇总的聊天响应
                         ChatResponse aggregateResponse = toolServiceResult.aggregateResponse();
 
                         var response = invokeOutputGuardrails(
@@ -429,6 +489,7 @@ class DefaultAiServices<T> extends AiServices<T> {
                                 commonGuardrailParam);
 
                         if ((response != null) && typeHasRawClass(returnType, response.getClass())) {
+                            // 触发 AI服务完成事件
                             context.eventListenerRegistrar.fireEvent(AiServiceCompletedEvent.builder()
                                     .invocationContext(invocationContext)
                                     .result(response)
@@ -437,7 +498,9 @@ class DefaultAiServices<T> extends AiServices<T> {
                             return response;
                         }
 
-                        var parsedResponse = serviceOutputParser.parse((ChatResponse) response, returnType);
+                        // 解析聊天响应
+                        var parsedResponse = serviceOutputParser.
+                                parse((ChatResponse) response, returnType);
                         var actualResponse = (isReturnTypeResult)
                                 ? Result.builder()
                                         .content(parsedResponse)
@@ -460,6 +523,9 @@ class DefaultAiServices<T> extends AiServices<T> {
                         return actualResponse;
                     }
 
+                    /**
+                     * 查找AI服务调用参数
+                     */
                     private Optional<InvocationParameters> findInvocationParams(Object[] args, Parameter[] params) {
                         if (args == null) {
                             return Optional.empty();
@@ -476,6 +542,7 @@ class DefaultAiServices<T> extends AiServices<T> {
                     }
 
                     private boolean canAdaptTokenStreamTo(Type returnType) {
+                        // 词元流适配器
                         for (TokenStreamAdapter tokenStreamAdapter : tokenStreamAdapters) {
                             if (tokenStreamAdapter.canAdaptTokenStreamTo(returnType)) {
                                 return true;
@@ -485,6 +552,7 @@ class DefaultAiServices<T> extends AiServices<T> {
                     }
 
                     private Object adapt(TokenStream tokenStream, Type returnType) {
+                        // 词元流适配器
                         for (TokenStreamAdapter tokenStreamAdapter : tokenStreamAdapters) {
                             if (tokenStreamAdapter.canAdaptTokenStreamTo(returnType)) {
                                 return tokenStreamAdapter.adapt(tokenStream);
@@ -498,12 +566,20 @@ class DefaultAiServices<T> extends AiServices<T> {
                                 && context.chatModel.supportedCapabilities().contains(RESPONSE_FORMAT_JSON_SCHEMA);
                     }
 
+                    /**
+                     * 追加输出格式说明
+                     * @param returnType 返回类型
+                     * @param userMessage 用户消息
+                     * @return 输出格式说明
+                     */
                     private UserMessage appendOutputFormatInstructions(Type returnType, UserMessage userMessage) {
+                        // 输出格式说明
                         String outputFormatInstructions = serviceOutputParser.outputFormatInstructions(returnType);
                         if (isNullOrEmpty(outputFormatInstructions)) {
                             return userMessage;
                         }
 
+                        // 用户消息的单个文本 + 输出格式说明
                         String newText = userMessage.singleText() + outputFormatInstructions;
                         return userMessage.toBuilder()
                                 .contents(List.of(TextContent.from(newText)))
@@ -513,7 +589,9 @@ class DefaultAiServices<T> extends AiServices<T> {
                     private Future<Moderation> triggerModerationIfNeeded(Method method, List<ChatMessage> messages) {
                         if (method.isAnnotationPresent(Moderate.class)) {
                             return executor.submit(() -> {
+                                // 移除工具消息去审核的聊天消息列表
                                 List<ChatMessage> messagesToModerate = removeToolMessages(messages);
+                                // 审核给定的聊天消息列表
                                 return context.moderationModel
                                         .moderate(messagesToModerate)
                                         .content();
@@ -538,6 +616,7 @@ class DefaultAiServices<T> extends AiServices<T> {
                     .userMessage(userMessage)
                     .commonParams(commonGuardrailParams)
                     .build();
+            // 调用执行输入护栏
             return guardrailService.executeGuardrails(method, inputGuardrailRequest);
         }
 
@@ -557,6 +636,7 @@ class DefaultAiServices<T> extends AiServices<T> {
                     .chatExecutor(chatExecutor)
                     .requestParams(commonGuardrailParams)
                     .build();
+            // 调用执行输出护栏
             return guardrailService.executeGuardrails(method, outputGuardrailRequest);
         }
 
@@ -564,6 +644,7 @@ class DefaultAiServices<T> extends AiServices<T> {
     }
 
     private Optional<SystemMessage> prepareSystemMessage(Object memoryId, Method method, Object[] args) {
+        // 准备系统消息
         return findSystemMessageTemplate(memoryId, method).map(systemMessageTemplate -> PromptTemplate.from(
                         systemMessageTemplate)
                 .apply(InternalReflectionVariableResolver.findTemplateVariables(systemMessageTemplate, method, args))
@@ -571,6 +652,7 @@ class DefaultAiServices<T> extends AiServices<T> {
     }
 
     private Optional<String> findSystemMessageTemplate(Object memoryId, Method method) {
+        // 查找系统消息模板 @SystemMessage
         dev.langchain4j.service.SystemMessage annotation =
                 method.getAnnotation(dev.langchain4j.service.SystemMessage.class);
         if (annotation != null) {
@@ -583,8 +665,11 @@ class DefaultAiServices<T> extends AiServices<T> {
 
     private static UserMessage prepareUserMessage(
             Method method, Object[] args, String userMessageTemplate, Map<String, Object> variables) {
+        // 准备用户消息
+        // 用户提示
         Prompt prompt = PromptTemplate.from(userMessageTemplate).apply(variables);
 
+        // 查找用户名称
         Optional<String> maybeUserName = findUserName(method.getParameters(), args);
         return maybeUserName
                 .map(userName -> UserMessage.from(userName, prompt.text()))
@@ -592,7 +677,7 @@ class DefaultAiServices<T> extends AiServices<T> {
     }
 
     private static String getUserMessageTemplate(Method method, Object[] args) {
-
+        // 获取用户消息模版
         Optional<String> templateFromMethodAnnotation = findUserMessageTemplateFromMethodAnnotation(method);
         Optional<String> templateFromParameterAnnotation =
                 findUserMessageTemplateFromAnnotatedParameter(method.getParameters(), args);
@@ -620,12 +705,14 @@ class DefaultAiServices<T> extends AiServices<T> {
     }
 
     private static Optional<String> findUserMessageTemplateFromMethodAnnotation(Method method) {
+        // 查询来自方法注解的用户消息模版 @UserMessage
         return Optional.ofNullable(method.getAnnotation(dev.langchain4j.service.UserMessage.class))
                 .map(a -> getTemplate(method, "User", a.fromResource(), a.value(), a.delimiter()));
     }
 
     private static Optional<String> findUserMessageTemplateFromAnnotatedParameter(
             Parameter[] parameters, Object[] args) {
+        // 查找用户消息模版来自注解的参数 @UserMessage
         for (int i = 0; i < parameters.length; i++) {
             if (parameters[i].isAnnotationPresent(dev.langchain4j.service.UserMessage.class)
                     && !(args[i] instanceof Content)
@@ -637,6 +724,7 @@ class DefaultAiServices<T> extends AiServices<T> {
     }
 
     private static Optional<String> findUserMessageTemplateFromTheOnlyArgument(Parameter[] parameters, Object[] args) {
+        // 查找用户消息模版来自唯一的参数
         if (parameters != null && parameters.length == 1 && parameters[0].getAnnotations().length == 0) {
             return Optional.of(InternalReflectionVariableResolver.asString(args[0]));
         }
@@ -644,6 +732,7 @@ class DefaultAiServices<T> extends AiServices<T> {
     }
 
     private static Optional<String> findUserName(Parameter[] parameters, Object[] args) {
+        // 查找用户名称 @UserName
         for (int i = 0; i < parameters.length; i++) {
             if (parameters[i].isAnnotationPresent(UserName.class)) {
                 return Optional.of(args[i].toString());
@@ -653,6 +742,7 @@ class DefaultAiServices<T> extends AiServices<T> {
     }
 
     private static Optional<List<Content>> findContents(Method method, Object[] args) {
+        // 查找内容列表
         List<Content> contents = new ArrayList<>();
 
         if (findUserMessageTemplateFromMethodAnnotation(method).isPresent()) {
@@ -661,6 +751,7 @@ class DefaultAiServices<T> extends AiServices<T> {
 
         Parameter[] parameters = method.getParameters();
         for (int i = 0; i < parameters.length; i++) {
+            // 用户消息 @UserMessage
             if (parameters[i].isAnnotationPresent(dev.langchain4j.service.UserMessage.class)) {
                 if (args[i] instanceof Content) {
                     contents.add((Content) args[i]);
@@ -686,6 +777,7 @@ class DefaultAiServices<T> extends AiServices<T> {
     }
 
     private static String getTemplate(Method method, String type, String resource, String[] value, String delimiter) {
+        // 消息模版
         String messageTemplate;
         if (!resource.trim().isEmpty()) {
             messageTemplate = getResourceText(method.getDeclaringClass(), resource);
@@ -720,6 +812,7 @@ class DefaultAiServices<T> extends AiServices<T> {
     }
 
     private static Optional<Object> findMemoryId(Method method, Object[] args) {
+        // 查找聊天记忆ID @MemoryId
         Parameter[] parameters = method.getParameters();
         for (int i = 0; i < parameters.length; i++) {
             if (parameters[i].isAnnotationPresent(MemoryId.class)) {

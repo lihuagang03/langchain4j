@@ -4,6 +4,8 @@ import dev.langchain4j.model.chat.request.ResponseFormat;
 import dev.langchain4j.model.chat.request.json.JsonSchema;
 
 /**
+ * 能力
+ * 表示 ChatModel 或 StreamingChatModel 的一种能力。
  * Represents a capability of a {@link ChatModel} or {@link StreamingChatModel}.
  * This is required for the low-level {@link ChatModel} or {@link StreamingChatModel} API
  * to communicate to the high-level APIs (like AI Service) what capabilities are supported and can be utilized.

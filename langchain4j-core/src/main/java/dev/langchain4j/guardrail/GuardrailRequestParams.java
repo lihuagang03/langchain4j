@@ -30,11 +30,11 @@ public final class GuardrailRequestParams {
      */
     private final String userMessageTemplate;
     /**
-     * 变量映射表
+     * 输入变量的映射表
      */
     private final Map<String, Object> variables;
     /**
-     * 调用上下文
+     * AI服务调用的上下文
      */
     private final InvocationContext invocationContext;
     /**

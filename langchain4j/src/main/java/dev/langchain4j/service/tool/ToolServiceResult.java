@@ -20,7 +20,7 @@ public class ToolServiceResult {
      */
     private final List<ChatResponse> intermediateResponses;
     /**
-     * 最终的聊天响应
+     * 最终聊天响应
      */
     private final ChatResponse finalResponse;
     /**
@@ -28,7 +28,7 @@ public class ToolServiceResult {
      */
     private final List<ToolExecution> toolExecutions;
     /**
-     * 聚合的词元使用量
+     * 汇总的词元使用量
      */
     private final TokenUsage aggregateTokenUsage;
     /**
@@ -78,6 +78,7 @@ public class ToolServiceResult {
      * @since 1.2.0
      */
     public ChatResponse aggregateResponse() {
+        // 汇总的聊天响应
         return ChatResponse.builder()
                 .aiMessage(finalResponse.aiMessage())
                 .metadata(finalResponse.metadata().toBuilder()

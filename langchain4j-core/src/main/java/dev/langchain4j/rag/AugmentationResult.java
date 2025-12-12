@@ -9,7 +9,8 @@ import static dev.langchain4j.internal.Utils.copy;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
- * 增强结果，聊天对话消息增强的结果。
+ * 增强结果
+ * 聊天对话消息增强的结果。
  * Represents the result of a {@link ChatMessage} augmentation.
  */
 public class AugmentationResult {

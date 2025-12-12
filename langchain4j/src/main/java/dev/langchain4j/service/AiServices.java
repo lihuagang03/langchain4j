@@ -55,31 +55,50 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 /**
+ * AI服务
+ * AI 服务是 LangChain4j 的一个高级 API，用于与 ChatModel 和 StreamingChatModel 进行交互。
  * AI Services is a high-level API of LangChain4j to interact with {@link ChatModel} and {@link StreamingChatModel}.
  * <p>
+ * 你可以定义你自己的 API（一个包含一个或多个方法的 Java 接口），AiServices 将为其提供实现，隐藏所有复杂性。
  * You can define your own API (a Java interface with one or more methods),
  * and {@code AiServices} will provide an implementation for it, hiding all the complexity from you.
  * <p>
+ * 你可以在这里找到更多详细信息。
  * You can find more details <a href="https://docs.langchain4j.dev/tutorials/ai-services">here</a>.
  * <p>
+ * 请注意，对于相同的 @MemoryId，不应同时调用 AI 服务，因为这可能导致 ChatMemory 被破坏。
+ * 目前，AI 服务没有实现任何机制来防止对相同 @MemoryId 的并发调用。
  * Please note that AI Service should not be called concurrently for the same @{@link MemoryId},
  * as it can lead to corrupted {@link ChatMemory}. Currently, AI Service does not implement any mechanism
  * to prevent concurrent calls for the same @{@link MemoryId}.
  * <p>
+ * 目前，AI 服务支持：
  * Currently, AI Services support:
  * <pre>
  * - Static system message templates, configured via @{@link SystemMessage} annotation on top of the method
+ *   静态系统消息模板
  * - Dynamic system message templates, configured via {@link #systemMessageProvider(Function)}
+ *   动态系统消息模板
  * - Static user message templates, configured via @{@link UserMessage} annotation on top of the method
+ *   静态用户消息模板
  * - Dynamic user message templates, configured via method parameter annotated with @{@link UserMessage}
+ *   动态用户消息模板
  * - Single (shared) {@link ChatMemory}, configured via {@link #chatMemory(ChatMemory)}
+ *   单个的（共享的）聊天记忆
  * - Separate (per-user) {@code ChatMemory}, configured via {@link #chatMemoryProvider(ChatMemoryProvider)} and a method parameter annotated with @{@link MemoryId}
+ *   分开的（每个用户的）聊天记忆
  * - RAG, configured via {@link #contentRetriever(ContentRetriever)} or {@link #retrievalAugmentor(RetrievalAugmentor)}
+ *   检索-增强-生成
  * - Tools, configured via {@link #tools(Collection)}, {@link #tools(Object...)}, {@link #tools(Map)} or {@link #toolProvider(ToolProvider)} and methods annotated with @{@link Tool}
+ *   工具列表
  * - Various method return types (output parsers), see more details below
+ *   各种方法返回类型（输出解析器）
  * - Streaming (use {@link TokenStream} as a return type)
+ *   流式传输（使用 TokenStream 作为返回类型）
  * - Structured prompts as method arguments (see @{@link StructuredPrompt})
+ *   将结构化提示作为方法参数
  * - Auto-moderation, configured via @{@link Moderate} annotation
+ *   自动审核功能，可通过 @Moderate 注解进行配置
  * </pre>
  * <p>
  * Here is the simplest example of an AI Service:
@@ -146,9 +165,18 @@ import java.util.function.UnaryOperator;
  */
 public abstract class AiServices<T> {
 
+    /**
+     * AI服务上下文
+     */
     protected final AiServiceContext context;
 
+    /**
+     * 内容检索器，设置与否
+     */
     private boolean contentRetrieverSet = false;
+    /**
+     * 检索增强器，设置与否
+     */
     private boolean retrievalAugmentorSet = false;
 
     protected AiServices(AiServiceContext context) {
@@ -156,6 +184,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 创建一个AI服务
      * Creates an AI Service (an implementation of the provided interface), that is backed by the provided chat model.
      * This convenience method can be used to create simple AI Services.
      * For more complex cases, please use {@link #builder}.
@@ -183,28 +212,36 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 开始构建AI服务。
      * Begins the construction of an AI Service.
      *
      * @param aiService The class of the interface to be implemented.
      * @return builder
      */
     public static <T> AiServices<T> builder(Class<T> aiService) {
+        // AI服务上下文
         AiServiceContext context = AiServiceContext.create(aiService);
+        // 创建AI服务
         return builder(context);
     }
 
     private static class FactoryHolder {
+        /**
+         * AI服务工厂
+         */
         private static final AiServicesFactory aiServicesFactory = loadFactory(AiServicesFactory.class);
     }
 
     @Internal
     public static <T> AiServices<T> builder(AiServiceContext context) {
+        // 创建AI服务
         return FactoryHolder.aiServicesFactory != null
                 ? FactoryHolder.aiServicesFactory.create(context)
                 : new DefaultAiServices<>(context);
     }
 
     /**
+     * 配置将在 AI 服务底层使用的聊天模型。
      * Configures chat model that will be used under the hood of the AI Service.
      * <p>
      * Either {@link ChatModel} or {@link StreamingChatModel} should be configured,
@@ -219,6 +256,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 配置将在 AI 服务底层使用的流式聊天模型。
      * Configures streaming chat model that will be used under the hood of the AI Service.
      * The methods of the AI Service must return a {@link TokenStream} type.
      * <p>
@@ -234,6 +272,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 配置系统消息提供者，该提供者在每次调用 AI 服务时提供系统消息。
      * Configures the system message provider, which provides a system message to be used each time an AI service is invoked.
      * <br>
      * When both {@code @SystemMessage} and the system message provider are configured,
@@ -255,6 +294,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 配置聊天记忆，用于在方法调用之间保存对话历史。
      * Configures the chat memory that will be used to preserve conversation history between method calls.
      * <p>
      * Unless a {@link ChatMemory} or {@link ChatMemoryProvider} is configured, all method calls will be independent of each other.
@@ -277,6 +317,9 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 配置聊天记忆提供者，它为每个用户/会话提供一个专用的 ChatMemory 实例。
+     * 为了区分不同的用户/会话，该方法的一个参数应为标注为 @MemoryId 的聊天记忆 ID（可以是任意数据类型）。
+     * 对于每个新的（之前未见过的）聊天记忆 ID，将通过调用 ChatMemoryProvider.get(Object id) 自动获取一个 ChatMemory 实例。
      * Configures the chat memory provider, which provides a dedicated instance of {@link ChatMemory} for each user/conversation.
      * To distinguish between users/conversations, one of the method's arguments should be a memory ID (of any data type)
      * annotated with {@link MemoryId}.
@@ -304,6 +347,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 配置一个将在将 ChatRequest 发送到 LLM 之前应用的转换器。
      * Configures a transformer that will be applied to the {@link ChatRequest} before it is sent to the LLM.
      * <p>
      * This can be used to modify the request, e.g., by adding additional messages or modifying existing ones.
@@ -333,6 +377,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 配置一个用于自动内容审核的审核模型。
      * Configures a moderation model to be used for automatic content moderation.
      * If a method in the AI Service is annotated with {@link Moderate}, the moderation model will be invoked
      * to check the user content for any inappropriate or harmful material.
@@ -347,6 +392,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 配置大型语言模型可以使用的工具。
      * Configures the tools that the LLM can use.
      *
      * @param objectsWithTools One or more objects whose methods are annotated with {@link Tool}.
@@ -360,6 +406,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 配置大型语言模型可以使用的工具。
      * Configures the tools that the LLM can use.
      *
      * @param objectsWithTools A list of objects whose methods are annotated with {@link Tool}.
@@ -374,7 +421,8 @@ public abstract class AiServices<T> {
     }
 
     /**
-     * Configures the tool provider that the LLM can use
+     * 配置 LLM 可以使用的工具提供者。
+     * Configures the tool provider that the LLM can use.
      *
      * @param toolProvider Decides which tools the LLM could use to handle the request
      * @return builder
@@ -385,6 +433,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 配置大型语言模型可以使用的工具。
      * Configures the tools that the LLM can use.
      *
      * @param tools A map of {@link ToolSpecification} to {@link ToolExecutor} entries.
@@ -399,6 +448,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 默认情况下，当大型语言模型调用多个工具时，AI服务会按顺序执行它们。
      * By default, when the LLM calls multiple tools, the AI Service executes them sequentially.
      * If you enable this option, tools will be executed concurrently (with one exception - see below),
      * using the default {@link Executor}.
@@ -523,6 +573,9 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 配置一个内容检索器，使其在每次方法调用时被调用，以从底层数据源
+     * （例如，对于 EmbeddingStoreContentRetriever 来说，是嵌入存储）中检索与用户消息相关的内容。
+     * 检索到的相关内容随后会自动被整合到发送给 LLM 的消息中。
      * Configures a content retriever to be invoked on every method call for retrieving relevant content
      * related to the user's message from an underlying data source
      * (e.g., an embedding store in the case of an {@link EmbeddingStoreContentRetriever}).
@@ -547,6 +600,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 配置一个检索增强器，以便在每次方法调用时调用。
      * Configures a retrieval augmentor to be invoked on every method call.
      *
      * @param retrievalAugmentor The retrieval augmentor to be used by the AI Service.
@@ -562,6 +616,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 为此 AI 服务注册一个 AiServiceListener 监听器以监听 AI 服务事件。
      * Registers an {@link AiServiceListener} listener for AI service events for this AI Service.
      *
      * @param listener the listener to be registered, must not be {@code null}
@@ -573,6 +628,8 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 向 AI 服务注册一个或多个调用事件监听器。
+     * 这可以通过提供的监听器跟踪和处理调用事件。
      * Registers one or more invocation event listeners to the AI service.
      * This enables tracking and handling of invocation events through the provided listeners.
      *
@@ -585,6 +642,8 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 向 AI 服务注册一个或多个调用事件监听器。
+     * 这可以通过提供的监听器跟踪和处理调用事件。
      * Registers one or more invocation event listeners to the AI service.
      * This enables tracking and handling of invocation events through the provided listeners.
      *
@@ -912,6 +971,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 构建并返回 AI 服务。
      * Constructs and returns the AI Service.
      *
      * @return An instance of the AI Service implementing the specified interface.
@@ -920,13 +980,20 @@ public abstract class AiServices<T> {
 
     protected void performBasicValidation() {
         if (context.chatModel == null && context.streamingChatModel == null) {
+            // 请指定 chatModel 或 streamingChatModel
             throw illegalConfiguration("Please specify either chatModel or streamingChatModel");
         }
     }
 
+    /**
+     * 移除工具消息
+     * @param messages 聊天消息列表
+     */
     public static List<ChatMessage> removeToolMessages(List<ChatMessage> messages) {
         return messages.stream()
+                // 工具执行结果消息
                 .filter(it -> !(it instanceof ToolExecutionResultMessage))
+                // 工具执行请求的AI消息
                 .filter(it -> !(it instanceof AiMessage && ((AiMessage) it).hasToolExecutionRequests()))
                 .collect(toList());
     }
@@ -936,6 +1003,7 @@ public abstract class AiServices<T> {
             try {
                 Moderation moderation = moderationFuture.get();
                 if (moderation.flagged()) {
+                    // 文本违反内容政策
                     throw new ModerationException(
                             String.format("Text \"%s\" violates content policy", moderation.flaggedText()), moderation);
                 }

@@ -9,6 +9,8 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * 系统消息
+ * 指定每次调用 AI 服务时使用的完整系统消息（提示）或系统消息模板。
  * Specifies either a complete system message (prompt) or a system message template to be used each time an AI service is invoked.
  * <br>
  * An example:
@@ -40,6 +42,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface SystemMessage {
 
     /**
+     * 提示模板可以用一行或多行来定义。
      * Prompt template can be defined in one line or multiple lines.
      * If the template is defined in multiple lines, the lines will be joined with a delimiter defined below.
      */

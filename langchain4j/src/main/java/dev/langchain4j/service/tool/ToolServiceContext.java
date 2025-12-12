@@ -13,7 +13,13 @@ import java.util.Objects;
 @Internal
 public class ToolServiceContext {
 
+    /**
+     * 工具规格列表
+     */
     private final List<ToolSpecification> toolSpecifications;
+    /**
+     * 工具名称到工具执行器的映射表
+     */
     private final Map<String, ToolExecutor> toolExecutors;
 
     public ToolServiceContext(List<ToolSpecification> toolSpecifications, Map<String, ToolExecutor> toolExecutors) {

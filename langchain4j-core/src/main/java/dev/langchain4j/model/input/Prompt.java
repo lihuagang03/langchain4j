@@ -13,7 +13,8 @@ import static dev.langchain4j.internal.Utils.quoted;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 
 /**
- * 提示，一个发送给LLM的输入文本。
+ * 提示
+ * 一个发送给LLM的输入文本。
  * 一个提示通常包含指令、上下文信息、最终用户输入等。
  * 一个提示通常是通过将一个或多个值应用于提示模板来创建的。
  * Represents a prompt (an input text sent to the LLM).

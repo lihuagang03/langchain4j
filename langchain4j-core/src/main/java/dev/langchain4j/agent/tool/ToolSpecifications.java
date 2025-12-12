@@ -39,6 +39,7 @@ public class ToolSpecifications {
      * @return the {@link ToolSpecification}s.
      */
     public static List<ToolSpecification> toolSpecificationsFrom(Class<?> classWithTools) {
+        // 工具类中所有用 @Tool 注解的方法
         List<ToolSpecification> toolSpecifications = stream(classWithTools.getDeclaredMethods())
                 .filter(method -> method.isAnnotationPresent(Tool.class))
                 .map(ToolSpecifications::toolSpecificationFrom)
@@ -86,7 +87,7 @@ public class ToolSpecifications {
      */
     public static ToolSpecification toolSpecificationFrom(Method method) {
 
-        // 工具调用
+        // 工具调用 @Tool
         Tool annotation = method.getAnnotation(Tool.class);
 
         // 工具名称
@@ -116,6 +117,7 @@ public class ToolSpecifications {
         Map<Class<?>, VisitedClassMetadata> visited = new LinkedHashMap<>();
 
         for (Parameter parameter : parameters) {
+            // 工具记忆ID @ToolMemoryId
             if (parameter.isAnnotationPresent(ToolMemoryId.class)
                     || InvocationParameters.class.isAssignableFrom(parameter.getType())
                     || LangChain4jManaged.class.isAssignableFrom(parameter.getType())
@@ -123,6 +125,7 @@ public class ToolSpecifications {
                 continue;
             }
 
+            // 工具的参数 @P
             boolean isRequired = Optional.ofNullable(parameter.getAnnotation(P.class))
                     .map(P::required)
                     .orElse(true);
@@ -153,6 +156,7 @@ public class ToolSpecifications {
 
     private static JsonSchemaElement jsonSchemaElementFrom(Parameter parameter,
                                                            Map<Class<?>, VisitedClassMetadata> visited) {
+        // 工具的参数 @P
         P annotation = parameter.getAnnotation(P.class);
         String description = annotation == null ? null : annotation.value();
         return JsonSchemaElementUtils.jsonSchemaElementFrom(

@@ -14,21 +14,55 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 
 /**
+ * AI服务的词元流的参数
  * Parameters for creating an {@link AiServiceTokenStream}.
  */
 @Internal
 public class AiServiceTokenStreamParameters {
 
+    /**
+     * 聊天消息列表
+     */
     private final List<ChatMessage> messages;
+    /**
+     * 工具规格列表
+     */
     private final List<ToolSpecification> toolSpecifications;
+    /**
+     * 工具名称到工具执行器的映射表
+     */
     private final Map<String, ToolExecutor> toolExecutors;
+    /**
+     * 工具参数错误处理程序
+     */
     private final ToolArgumentsErrorHandler toolArgumentsErrorHandler;
+    /**
+     * 工具执行错误处理程序
+     */
     private final ToolExecutionErrorHandler toolExecutionErrorHandler;
+    /**
+     * 工具执行器
+     */
     private final Executor toolExecutor;
+    /**
+     * 检索到的内容列表
+     */
     private final List<Content> retrievedContents;
+    /**
+     * AI服务的上下文
+     */
     private final AiServiceContext context;
+    /**
+     * AI服务调用的上下文
+     */
     private final InvocationContext invocationContext;
+    /**
+     * 护栏请求参数
+     */
     private final GuardrailRequestParams commonGuardrailParams;
+    /**
+     * 方法的键
+     */
     private final Object methodKey;
 
     protected AiServiceTokenStreamParameters(Builder builder) {
