@@ -5,8 +5,8 @@ import dev.langchain4j.model.chat.request.ChatRequest;
 import dev.langchain4j.model.chat.response.ChatResponse;
 
 /**
- * 聊天对话模型监听器
- * 一个监听请求、响应和错误的聊天对话模型监听器。
+ * 聊天模型监听器
+ * 一个监听请求、响应和错误的聊天模型监听器。
  * A {@link ChatModel} listener that listens for requests, responses and errors.
  */
 public interface ChatModelListener {

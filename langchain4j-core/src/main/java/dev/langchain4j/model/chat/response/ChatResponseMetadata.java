@@ -6,7 +6,7 @@ import dev.langchain4j.model.output.TokenUsage;
 import java.util.Objects;
 
 /**
- * 聊天对话响应元数据
+ * 聊天响应的元数据
  * 表示大多数大型语言模型提供商支持的常见聊天响应元数据。
  * 特定的 LLM 提供商集成可以扩展此接口，以添加提供商特定的元数据。
  * Represents common chat response metadata supported by most LLM providers.

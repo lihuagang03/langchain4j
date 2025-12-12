@@ -11,22 +11,23 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * 聊天对话请求
+ * 聊天请求
  */
 public class ChatRequest {
 
     /**
-     * 聊天对话消息列表
+     * 聊天消息列表
      */
     private final List<ChatMessage> messages;
     /**
-     * 聊天对话请求参数
+     * 聊天请求参数
      */
     private final ChatRequestParameters parameters;
 
     protected ChatRequest(Builder builder) {
         this.messages = copy(ensureNotEmpty(builder.messages, "messages"));
 
+        // 聊天请求参数
         DefaultChatRequestParameters.Builder<?> parametersBuilder = ChatRequestParameters.builder();
 
         if (builder.modelName != null) {

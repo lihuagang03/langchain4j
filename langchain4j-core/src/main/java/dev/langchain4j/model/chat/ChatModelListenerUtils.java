@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 聊天对话模型监听器的实用方法
+ * 聊天模型监听器的实用方法
  */
 @Internal
 class ChatModelListenerUtils {

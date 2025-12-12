@@ -10,6 +10,9 @@ import dev.langchain4j.model.chat.request.json.JsonSchema;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 聊天请求参数
+ */
 public class DefaultChatRequestParameters implements ChatRequestParameters {
 
     public static final ChatRequestParameters EMPTY =
@@ -21,25 +24,38 @@ public class DefaultChatRequestParameters implements ChatRequestParameters {
     private final String modelName;
     /**
      * 温度
+     * 调整生成的随机性，控制生成风格的严谨或随意。
      */
     private final Double temperature;
+    /**
+     * 核采样
+     * 用于控制生成文本的多样性和创造性。
+     * 它定义了一个累积概率阈值，模型在生成下一个词时，只考虑概率累积和达到该阈值的一组最小候选词。
+     * 调整 Top-P 参数可以让您根据具体任务需求（例如，是需要事实准确的总结还是需要有创意的故事）来平衡模型的生成质量和创造力。
+     */
     private final Double topP;
     /**
-     * 返回相似度最高的k个结果
+     * 限制候选词数量，使生成内容集中。
      */
     private final Integer topK;
     /**
      * 频率惩罚
+     * 通过对已经生成的词元施加惩罚，来减少重复词语的出现。
      */
     private final Double frequencyPenalty;
     /**
      * 存在惩罚
+     * 通过对已经生成的词元施加惩罚，来鼓励模型生成更多新内容。
      */
     private final Double presencePenalty;
     /**
-     * 最大输出词元数
+     * 最大输出词元数量
+     * 控制生成的回复中最多可以包含多少个词元（tokens），直接影响生成文本的长度。
      */
     private final Integer maxOutputTokens;
+    /**
+     * 停止词序列
+     */
     private final List<String> stopSequences;
     /**
      * 工具规格列表

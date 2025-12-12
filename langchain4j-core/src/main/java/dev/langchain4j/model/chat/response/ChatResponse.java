@@ -8,7 +8,7 @@ import dev.langchain4j.model.output.TokenUsage;
 import java.util.Objects;
 
 /**
- * 聊天对话响应
+ * 聊天响应
  */
 public class ChatResponse {
 
@@ -17,7 +17,7 @@ public class ChatResponse {
      */
     private final AiMessage aiMessage;
     /**
-     * 聊天对话响应元数据
+     * 聊天响应的元数据
      */
     private final ChatResponseMetadata metadata;
 
