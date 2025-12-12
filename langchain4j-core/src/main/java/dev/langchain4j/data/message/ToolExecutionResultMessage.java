@@ -18,7 +18,7 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 public class ToolExecutionResultMessage implements ChatMessage {
 
     /**
-     * 请求ID
+     * 工具ID
      */
     private final String id;
     /**

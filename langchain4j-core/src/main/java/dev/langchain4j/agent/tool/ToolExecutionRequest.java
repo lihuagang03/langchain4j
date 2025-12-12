@@ -12,7 +12,7 @@ import static dev.langchain4j.internal.Utils.quoted;
 public class ToolExecutionRequest {
 
     /**
-     * 请求ID
+     * 工具ID
      */
     private final String id;
     /**

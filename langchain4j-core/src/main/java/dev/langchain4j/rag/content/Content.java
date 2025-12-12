@@ -21,8 +21,14 @@ import java.util.Map;
  */
 public interface Content {
 
+    /**
+     * 文本片段
+     */
     TextSegment textSegment();
 
+    /**
+     * 内容元数据
+     */
     Map<ContentMetadata, Object> metadata();
 
     static Content from(String text) {

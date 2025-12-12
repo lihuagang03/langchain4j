@@ -13,16 +13,25 @@ import static dev.langchain4j.internal.Utils.copy;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
+ * AI服务调用的结果
+ * 表示 AI 服务调用的结果。
+ * 它包含实际内容（大型语言模型的响应）以及与之相关的附加信息，
  * Represents the result of an AI Service invocation.
  * It contains actual content (LLM response) and additional information associated with it,
  * such as:
  * <pre>
  * - Aggregate {@link TokenUsage} over all calls to the {@link ChatModel}
+ *   对所有聊天模型调用的词元使用量进行汇总
  * - {@link FinishReason} of the final {@link ChatResponse}
+ *   最终聊天响应的完成原因
  * - sources ({@link Content}s) retrieved during RAG retrieval
+ *   在RAG检索过程中获取的来源（内容）
  * - all executed tools (both requests and results)
+ *   所有执行过的工具（包括请求和结果）
  * - all intermediate {@link ChatResponse}s
+ *   所有中间聊天响应
  * - final {@link ChatResponse}
+ *   最终聊天响应
  * </pre>
  *
  * @param <T> The type of the content. Can be of any return type supported by AI Services,
@@ -30,12 +39,33 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
  */
 public class Result<T> {
 
+    /**
+     * 结果内容
+     */
     private final T content;
+    /**
+     * 对所有聊天模型调用的词元使用量进行汇总
+     */
     private final TokenUsage tokenUsage;
+    /**
+     * 在RAG检索过程中获取的来源（内容）
+     */
     private final List<Content> sources;
+    /**
+     * 最终聊天响应的完成原因
+     */
     private final FinishReason finishReason;
+    /**
+     * 所有执行过的工具（包括请求和结果）
+     */
     private final List<ToolExecution> toolExecutions;
+    /**
+     * 所有中间聊天响应
+     */
     private final List<ChatResponse> intermediateResponses;
+    /**
+     * 最终聊天响应
+     */
     private final ChatResponse finalResponse;
 
     /**

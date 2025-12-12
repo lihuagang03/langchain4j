@@ -13,7 +13,7 @@ public enum FinishReason {
     STOP,
 
     /**
-     * 通话结束，因为已达到令牌长度限制。
+     * 调用结束，因为已达到令牌长度限制。
      * The call finished because the token length was reached.
      */
     LENGTH,
@@ -25,13 +25,13 @@ public enum FinishReason {
     TOOL_EXECUTION,
 
     /**
-     * 通话结束，提示需要内容过滤。
+     * 调用结束，提示需要内容过滤。
      * The call finished signalling a need for content filtering.
      */
     CONTENT_FILTER,
 
     /**
-     * 通话因其他原因结束。
+     * 调用因其他原因结束。
      * The call finished for some other reason.
      */
     OTHER
