@@ -370,7 +370,7 @@ class DefaultAiServices<T> extends AiServices<T> {
                         // 审核
                         Future<Moderation> moderationFuture = triggerModerationIfNeeded(method, messages);
 
-                        // 工具服务上下文
+                        // 工具服务的上下文
                         ToolServiceContext toolServiceContext =
                                 context.toolService.createContext(invocationContext, userMessage);
 

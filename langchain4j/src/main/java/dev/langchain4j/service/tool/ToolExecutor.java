@@ -24,6 +24,7 @@ public interface ToolExecutor {
     String execute(ToolExecutionRequest request, Object memoryId);
 
     /**
+     * 使用上下文执行工具请求。
      * Executes a tool request. Override this method if you wish to:
      * <pre>
      * - access the {@link InvocationParameters} when passing extra data into the tool
@@ -39,7 +40,7 @@ public interface ToolExecutor {
         // 聊天记忆ID
         Object memoryId = context == null ? null : context.chatMemoryId();
 
-        // 工具执行的结果文本
+        // 执行工具请求
         String result = execute(request, memoryId);
 
         return ToolExecutionResult.builder()

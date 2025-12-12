@@ -166,7 +166,7 @@ import java.util.function.UnaryOperator;
 public abstract class AiServices<T> {
 
     /**
-     * AI服务上下文
+     * AI服务的上下文
      */
     protected final AiServiceContext context;
 
@@ -219,7 +219,7 @@ public abstract class AiServices<T> {
      * @return builder
      */
     public static <T> AiServices<T> builder(Class<T> aiService) {
-        // AI服务上下文
+        // AI服务的上下文
         AiServiceContext context = AiServiceContext.create(aiService);
         // 创建AI服务
         return builder(context);
@@ -505,6 +505,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 配置在大型语言模型幻觉工具名称（即尝试调用不存在的工具）时使用的策略。
      * Configures the strategy to be used when the LLM hallucinates a tool name (i.e., attempts to call a nonexistent tool).
      *
      * @param hallucinatedToolNameStrategy A Function from {@link ToolExecutionRequest} to {@link ToolExecutionResultMessage} defining
@@ -520,6 +521,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 配置在发生与工具参数相关的错误时调用的处理程序，例如 JSON 解析失败或参数类型不匹配。
      * Configures the handler to be invoked when errors related to tool arguments occur,
      * such as JSON parsing failures or mismatched argument types.
      * <p>
@@ -546,6 +548,7 @@ public abstract class AiServices<T> {
     }
 
     /**
+     * 配置处理程序，以在工具执行过程中发生错误时调用。
      * Configures the handler to be invoked when errors occur during tool execution.
      * <p>
      * Within this handler, you can either:

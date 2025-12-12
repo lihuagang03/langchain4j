@@ -49,6 +49,9 @@ import java.util.function.Function;
 @Internal
 public class ToolService {
 
+    /**
+     * 默认的工具参数错误处理程序
+     */
     private static final ToolArgumentsErrorHandler DEFAULT_TOOL_ARGUMENTS_ERROR_HANDLER = (error, context) -> {
         if (error instanceof RuntimeException re) {
             throw re;
@@ -56,6 +59,9 @@ public class ToolService {
             throw new RuntimeException(error);
         }
     };
+    /**
+     * 默认的工具执行错误处理程序
+     */
     private static final ToolExecutionErrorHandler DEFAULT_TOOL_EXECUTION_ERROR_HANDLER = (error, context) -> {
         String errorMessage = isNullOrBlank(error.getMessage()) ? error.getClass().getName() : error.getMessage();
         return ToolErrorHandlerResult.text(errorMessage);
@@ -66,11 +72,11 @@ public class ToolService {
      */
     private final List<ToolSpecification> toolSpecifications = new ArrayList<>();
     /**
-     * 工具名称到工具执行器/处理器的映射表
+     * 工具名称到工具执行器的映射表
      */
     private final Map<String, ToolExecutor> toolExecutors = new HashMap<>();
     /**
-     * 即时返回的工具列表
+     * 立即返回的工具列表
      */
     private final Set<String> immediateReturnTools = new HashSet<>();
     /**
@@ -81,6 +87,9 @@ public class ToolService {
      * 工具执行器
      */
     private Executor executor;
+    /**
+     * 最大连续的工具调用次数
+     */
     private int maxSequentialToolsInvocations = 100;
     /**
      * 工具参数错误处理程序
@@ -90,6 +99,9 @@ public class ToolService {
      * 工具执行错误处理程序
      */
     private ToolExecutionErrorHandler executionErrorHandler;
+    /**
+     * 工具的幻觉策略
+     */
     private Function<ToolExecutionRequest, ToolExecutionResultMessage> toolHallucinationStrategy =
             HallucinatedToolNameStrategy.THROW_EXCEPTION;
 
@@ -110,12 +122,14 @@ public class ToolService {
     }
 
     public void tools(Collection<Object> objectsWithTools) {
+        // @Tool 的对象列表
         for (Object objectWithTool : objectsWithTools) {
             if (objectWithTool instanceof Class) {
                 throw illegalConfiguration("Tool '%s' must be an object, not a class", objectWithTool);
             }
 
             for (Method method : objectWithTool.getClass().getDeclaredMethods()) {
+                // @Tool
                 getAnnotatedMethod(method, Tool.class)
                         .ifPresent(toolMethod -> processToolMethod(objectWithTool, toolMethod));
             }
@@ -123,21 +137,26 @@ public class ToolService {
     }
 
     private void processToolMethod(Object object, Method method) {
+        // 处理工具方法
+        // 工具规格
         ToolSpecification toolSpecification = toolSpecificationFrom(method);
         if (toolExecutors.containsKey(toolSpecification.name())) {
             throw new IllegalConfigurationException("Duplicated definition for tool: " + toolSpecification.name());
         }
         toolSpecifications.add(toolSpecification);
 
+        // 工具执行器
         ToolExecutor toolExecutor = createToolExecutor(object, method);
         toolExecutors.put(toolSpecification.name(), toolExecutor);
 
         if (method.getAnnotation(Tool.class).returnBehavior() == ReturnBehavior.IMMEDIATE) {
+            // 立即返回的工具
             immediateReturnTools.add(toolSpecification.name());
         }
     }
 
     private static ToolExecutor createToolExecutor(Object object, Method method) {
+        // 创建工具执行器
         return DefaultToolExecutor.builder()
                 .object(object)
                 .originalMethod(method)
@@ -162,6 +181,7 @@ public class ToolService {
     }
 
     private static Executor defaultExecutor() {
+        // 默认的执行器服务
         return DefaultExecutorProvider.getDefaultExecutorService();
     }
 
@@ -197,19 +217,31 @@ public class ToolService {
         return getOrDefault(executionErrorHandler, DEFAULT_TOOL_EXECUTION_ERROR_HANDLER);
     }
 
+    /**
+     * 创建工具服务的上下文
+     * @param invocationContext AI服务调用的上下文
+     * @param userMessage 用户消息
+     * @return 工具服务的上下文
+     */
     public ToolServiceContext createContext(InvocationContext invocationContext, UserMessage userMessage) {
+        // 工具提供者
         if (this.toolProvider == null) {
+            // 工具服务的上下文
             return this.toolSpecifications.isEmpty()
                     ? ToolServiceContext.Empty.INSTANCE
                     : new ToolServiceContext(this.toolSpecifications, this.toolExecutors);
         }
 
+        // 工具规格列表
         List<ToolSpecification> toolsSpecs = new ArrayList<>(this.toolSpecifications);
+        // 工具名称到工具执行器的映射表
         Map<String, ToolExecutor> toolExecs = new HashMap<>(this.toolExecutors);
+        // 工具提供者的请求
         ToolProviderRequest toolProviderRequest = ToolProviderRequest.builder()
                 .invocationContext(invocationContext)
                 .userMessage(userMessage)
                 .build();
+        // 提供用于向大语言模型请求的工具
         ToolProviderResult toolProviderResult = toolProvider.provideTools(toolProviderRequest);
         if (toolProviderResult != null) {
             for (Map.Entry<ToolSpecification, ToolExecutor> entry :
@@ -222,9 +254,13 @@ public class ToolService {
                 }
             }
         }
+        // 工具服务的上下文
         return new ToolServiceContext(toolsSpecs, toolExecs);
     }
 
+    /**
+     * 执行推理和工具循环
+     */
     public ToolServiceResult executeInferenceAndToolsLoop(
             ChatResponse chatResponse,
             ChatRequestParameters parameters,
@@ -235,8 +271,11 @@ public class ToolService {
             Map<String, ToolExecutor> toolExecutors,
             boolean isReturnTypeResult,
             AiServiceListenerRegistrar aiServiceListenerRegistrar) {
+        // 汇总的词元使用情况
         TokenUsage aggregateTokenUsage = chatResponse.metadata().tokenUsage();
+        // 工具执行列表
         List<ToolExecution> toolExecutions = new ArrayList<>();
+        // 中间的聊天响应列表
         List<ChatResponse> intermediateResponses = new ArrayList<>();
 
         int executionsLeft = maxSequentialToolsInvocations;
@@ -247,6 +286,7 @@ public class ToolService {
                         "Something is wrong, exceeded %s sequential tool executions", maxSequentialToolsInvocations);
             }
 
+            // AI消息
             AiMessage aiMessage = chatResponse.aiMessage();
 
             if (chatMemory != null) {
@@ -260,28 +300,35 @@ public class ToolService {
                 break;
             }
 
+            // 中间的聊天响应列表
             intermediateResponses.add(chatResponse);
 
+            // 执行工具
             Map<ToolExecutionRequest, ToolExecutionResult> toolResults =
                     execute(aiMessage.toolExecutionRequests(), toolExecutors, invocationContext);
 
+            // 立即的工具返回标志
             boolean immediateToolReturn = true;
             for (Map.Entry<ToolExecutionRequest, ToolExecutionResult> entry : toolResults.entrySet()) {
                 ToolExecutionRequest request = entry.getKey();
                 ToolExecutionResult result = entry.getValue();
+                // 工具执行结果消息
                 ToolExecutionResultMessage resultMessage =
                         ToolExecutionResultMessage.from(request, result.resultText());
 
+                // 工具执行
                 ToolExecution toolExecution =
                         ToolExecution.builder().request(request).result(result).build();
                 toolExecutions.add(toolExecution);
 
+                // 触发 工具执行事件
                 aiServiceListenerRegistrar.fireEvent(ToolExecutedEvent.builder()
                         .invocationContext(invocationContext)
                         .request(request)
                         .resultText(toolExecution.result())
                         .build());
 
+                // 结果消息
                 if (chatMemory != null) {
                     chatMemory.add(resultMessage);
                 } else {
@@ -302,7 +349,9 @@ public class ToolService {
             }
 
             if (immediateToolReturn) {
+                // 最终聊天响应
                 ChatResponse finalResponse = intermediateResponses.remove(intermediateResponses.size() - 1);
+                // 工具服务结果
                 return ToolServiceResult.builder()
                         .intermediateResponses(intermediateResponses)
                         .finalResponse(finalResponse)
@@ -321,12 +370,16 @@ public class ToolService {
                     .parameters(parameters)
                     .build();
 
+            // 这是与聊天模型交互的主要 API
             chatResponse = chatModel.chat(chatRequest);
+            // 触发 AI服务响应已接收到事件
             fireResponseReceivedEvent(chatResponse, invocationContext, aiServiceListenerRegistrar);
+            // 汇总的词元使用情况
             aggregateTokenUsage =
                     TokenUsage.sum(aggregateTokenUsage, chatResponse.metadata().tokenUsage());
         }
 
+        // 工具服务结果
         return ToolServiceResult.builder()
                 .intermediateResponses(intermediateResponses)
                 .finalResponse(chatResponse)
@@ -339,6 +392,7 @@ public class ToolService {
             ChatResponse chatResponse,
             InvocationContext invocationContext,
             AiServiceListenerRegistrar listenerRegistrar) {
+        // 触发 AI服务响应已接收到事件
         listenerRegistrar.fireEvent(AiServiceResponseReceivedEvent.builder()
                 .invocationContext(invocationContext)
                 .response(chatResponse)
@@ -350,8 +404,10 @@ public class ToolService {
             Map<String, ToolExecutor> toolExecutors,
             InvocationContext invocationContext) {
         if (executor != null && toolRequests.size() > 1) {
+            // 并发地执行工具
             return executeConcurrently(toolRequests, toolExecutors, invocationContext);
         } else {
+            // 顺序地执行工具
             // when there is only one tool to execute, it doesn't make sense to do it in a separate thread
             return executeSequentially(toolRequests, toolExecutors, invocationContext);
         }
@@ -361,15 +417,20 @@ public class ToolService {
             List<ToolExecutionRequest> toolRequests,
             Map<String, ToolExecutor> toolExecutors,
             InvocationContext invocationContext) {
+        // 并发地执行工具
         Map<ToolExecutionRequest, CompletableFuture<ToolExecutionResult>> futures = new LinkedHashMap<>();
 
         for (ToolExecutionRequest toolRequest : toolRequests) {
+            // 提供异步调用
             CompletableFuture<ToolExecutionResult> future = CompletableFuture.supplyAsync(
                     () -> {
+                        // 工具执行器
                         ToolExecutor toolExecutor = toolExecutors.get(toolRequest.name());
                         if (toolExecutor == null) {
+                            // 应用工具的幻觉策略
                             return applyToolHallucinationStrategy(toolRequest);
                         } else {
+                            // 使用错误处理执行工具请求
                             return executeWithErrorHandling(
                                     toolRequest,
                                     toolExecutor,
@@ -405,13 +466,17 @@ public class ToolService {
             List<ToolExecutionRequest> toolRequests,
             Map<String, ToolExecutor> toolExecutors,
             InvocationContext invocationContext) {
+        // 顺序地执行工具
         Map<ToolExecutionRequest, ToolExecutionResult> toolResults = new LinkedHashMap<>();
         for (ToolExecutionRequest toolRequest : toolRequests) {
+            // 执行器
             ToolExecutor executor = toolExecutors.get(toolRequest.name());
             ToolExecutionResult toolResult;
             if (executor == null) {
+                // 应用工具的幻觉策略
                 toolResult = applyToolHallucinationStrategy(toolRequest);
             } else {
+                // 使用错误处理执行工具请求
                 toolResult = executeWithErrorHandling(
                         toolRequest, executor, invocationContext, argumentsErrorHandler(), executionErrorHandler());
             }
@@ -426,14 +491,18 @@ public class ToolService {
             InvocationContext invocationContext,
             ToolArgumentsErrorHandler argumentsErrorHandler,
             ToolExecutionErrorHandler executionErrorHandler) {
+        // 使用错误处理执行工具请求
         try {
+            // 使用上下文执行工具请求
             return toolExecutor.executeWithContext(toolRequest, invocationContext);
         } catch (Exception e) {
+            // 工具错误的上下文
             ToolErrorContext errorContext = ToolErrorContext.builder()
                     .toolExecutionRequest(toolRequest)
                     .invocationContext(invocationContext)
                     .build();
 
+            // 工具错误处理器的结果
             ToolErrorHandlerResult errorHandlerResult;
             if (e instanceof ToolArgumentsException) {
                 errorHandlerResult = argumentsErrorHandler.handle(e.getCause(), errorContext);
@@ -441,6 +510,7 @@ public class ToolService {
                 errorHandlerResult = executionErrorHandler.handle(e.getCause(), errorContext);
             }
 
+            // 工具执行结果
             return ToolExecutionResult.builder()
                     .isError(true)
                     .resultText(errorHandlerResult.text())
@@ -449,6 +519,7 @@ public class ToolService {
     }
 
     public ToolExecutionResult applyToolHallucinationStrategy(ToolExecutionRequest toolRequest) {
+        // 应用工具的幻觉策略
         ToolExecutionResultMessage toolResultMessage = toolHallucinationStrategy.apply(toolRequest);
         return ToolExecutionResult.builder()
                 .resultText(toolResultMessage.text())

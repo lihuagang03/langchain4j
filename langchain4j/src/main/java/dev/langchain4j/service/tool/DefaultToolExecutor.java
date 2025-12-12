@@ -25,12 +25,30 @@ import static dev.langchain4j.internal.Utils.getOrDefault;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 import static dev.langchain4j.service.tool.ToolExecutionRequestUtil.argumentsAsMap;
 
+/**
+ * 工具执行器的默认实现
+ */
 public class DefaultToolExecutor implements ToolExecutor {
 
+    /**
+     * 工具对象
+     */
     private final Object object;
+    /**
+     * 原始方法
+     */
     private final Method originalMethod;
+    /**
+     * 要调用的方法
+     */
     private final Method methodToInvoke;
+    /**
+     * 封装工具参数异常标志
+     */
     private final boolean wrapToolArgumentsExceptions;
+    /**
+     * 传播工具执行异常标志
+     */
     private final boolean propagateToolExecutionExceptions;
 
     public DefaultToolExecutor(Builder builder) {
@@ -91,13 +109,16 @@ public class DefaultToolExecutor implements ToolExecutor {
 
     @Override
     public ToolExecutionResult executeWithContext(ToolExecutionRequest request, InvocationContext context) {
+        // 参数列表
         Object[] arguments = prepareArguments(request, context);
 
         try {
+            // 执行工具调用
             return execute(arguments);
         } catch (IllegalAccessException e) {
             try {
                 methodToInvoke.setAccessible(true);
+                // 执行工具调用
                 return execute(arguments);
             } catch (IllegalAccessException e2) {
                 throw new RuntimeException(e2);
@@ -123,18 +144,24 @@ public class DefaultToolExecutor implements ToolExecutor {
         }
     }
 
+    /**
+     * 执行工具请求。
+     */
     @Override
     public String execute(ToolExecutionRequest request, Object memoryId) {
+        // AI服务调用的上下文
         InvocationContext invocationContext = InvocationContext.builder()
                 .chatMemoryId(memoryId)
                 .build();
 
+        // 使用上下文执行工具调用
         ToolExecutionResult result = executeWithContext(request, invocationContext);
 
         return result.resultText();
     }
 
     private Object[] prepareArguments(ToolExecutionRequest toolExecutionRequest, InvocationContext context) {
+        // 准备参数列表
         try {
             Map<String, Object> argumentsMap = argumentsAsMap(toolExecutionRequest.arguments());
             return prepareArguments(originalMethod, argumentsMap, context);
@@ -147,9 +174,15 @@ public class DefaultToolExecutor implements ToolExecutor {
         }
     }
 
+    /**
+     * 执行工具请求。
+     */
     private ToolExecutionResult execute(Object[] arguments) throws IllegalAccessException, InvocationTargetException {
+        // 调用工具方法
         Object result = methodToInvoke.invoke(object, arguments);
+        // 结果文本
         String resultText = toText(result);
+        // 工具执行结果
         return ToolExecutionResult.builder()
                 .result(result)
                 .resultText(resultText)
@@ -157,24 +190,27 @@ public class DefaultToolExecutor implements ToolExecutor {
     }
 
     private String toText(Object result) {
+        // 返回类型
         Class<?> returnType = methodToInvoke.getReturnType();
         if (returnType == void.class) {
             return "Success";
         } else if (returnType == String.class) {
             return (String) result;
         } else {
+            // JSON字符串
             return Json.toJson(result);
         }
     }
 
     static Object[] prepareArguments(Method method, Map<String, Object> argumentsMap, InvocationContext context) {
+        // 准备参数列表
         Parameter[] parameters = method.getParameters();
         Object[] arguments = new Object[parameters.length];
 
         for (int i = 0; i < parameters.length; i++) {
 
             Parameter parameter = parameters[i];
-
+            // 工具记忆ID @ToolMemoryId
             if (parameter.isAnnotationPresent(ToolMemoryId.class)) {
                 arguments[i] = context.chatMemoryId();
                 continue;
@@ -201,6 +237,7 @@ public class DefaultToolExecutor implements ToolExecutor {
                 Class<?> parameterClass = parameter.getType();
                 Type parameterType = parameter.getParameterizedType();
 
+                // 强制参数
                 arguments[i] = coerceArgument(argument, parameterName, parameterClass, parameterType);
             }
         }

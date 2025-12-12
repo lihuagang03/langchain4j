@@ -21,11 +21,14 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * AI服务上下文
+ * AI服务的上下文
  */
 @Internal
 public class AiServiceContext {
 
+    /**
+     * 默认的消息提供者
+     */
     private static final Function<Object, Optional<String>> DEFAULT_MESSAGE_PROVIDER = x -> Optional.empty();
 
     /**

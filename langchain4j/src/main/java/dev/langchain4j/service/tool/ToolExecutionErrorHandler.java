@@ -23,6 +23,7 @@ import dev.langchain4j.service.AiServices;
 public interface ToolExecutionErrorHandler {
 
     /**
+     * 处理工具执行过程中发生的错误。
      * Handles an error that occurred during tool execution.
      * <p>
      * This method should either throw an exception or return a {@link ToolErrorHandlerResult#text(String)},

@@ -339,7 +339,7 @@ class AiServiceStreamingResponseHandler implements StreamingChatResponseHandler 
                         ToolRequestResult toolRequestResult = toolExecutionFuture.get();
                         // 触发 工具执行事件
                         fireToolExecutedEvent(toolRequestResult);
-                        // 工具执行的结果消息
+                        // 工具执行结果消息
                         ToolExecutionResultMessage toolExecutionResultMessage = ToolExecutionResultMessage.from(
                                 toolRequestResult.request(),
                                 toolRequestResult.result().resultText());
@@ -484,7 +484,7 @@ class AiServiceStreamingResponseHandler implements StreamingChatResponseHandler 
         // TODO applyToolHallucinationStrategy
         // 工具执行前处理
         handleBeforeTool(toolRequest);
-        // 执行工具调用
+        // 使用错误处理执行工具请求
         ToolExecutionResult toolResult = executeWithErrorHandling(
                 toolRequest, toolExecutor, invocationContext, toolArgumentsErrorHandler, toolExecutionErrorHandler);
         // 工具执行后处理

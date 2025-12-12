@@ -18,11 +18,11 @@ public class ToolExecutionResult {
      */
     private final boolean isError;
     /**
-     * 执行结果
+     * 结果
      */
     private final Object result;
     /**
-     * 执行的结果文本
+     * 结果文本
      */
     private final String resultText;
 

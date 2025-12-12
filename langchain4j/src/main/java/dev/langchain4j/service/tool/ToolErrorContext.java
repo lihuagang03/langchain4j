@@ -8,11 +8,19 @@ import dev.langchain4j.agent.tool.ToolExecutionRequest;
 import dev.langchain4j.invocation.InvocationParameters;
 
 /**
+ * 工具错误的上下文
+ *
  * @since 1.4.0
  */
 public class ToolErrorContext {
 
+    /**
+     * 工具执行请求
+     */
     private final ToolExecutionRequest toolExecutionRequest;
+    /**
+     * AI服务调用的上下文
+     */
     private final InvocationContext invocationContext;
 
     public ToolErrorContext(Builder builder) {

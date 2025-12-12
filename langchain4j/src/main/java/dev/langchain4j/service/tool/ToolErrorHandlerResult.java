@@ -6,10 +6,15 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 import java.util.Objects;
 
 /**
+ * 工具错误处理器的结果
+ *
  * @since 1.4.0
  */
 public class ToolErrorHandlerResult {
 
+    /**
+     * 结果文本
+     */
     private final String text;
 
     public ToolErrorHandlerResult(String text) {

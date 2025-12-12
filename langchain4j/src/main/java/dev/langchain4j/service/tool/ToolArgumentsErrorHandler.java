@@ -23,6 +23,7 @@ import dev.langchain4j.service.AiServices;
 public interface ToolArgumentsErrorHandler {
 
     /**
+     * 处理在解析和准备工具参数时发生的错误。
      * Handles an error that occurred during the parsing and preparation of tool arguments.
      * <p>
      * This method should either throw an exception or return a {@link ToolErrorHandlerResult#text(String)},
