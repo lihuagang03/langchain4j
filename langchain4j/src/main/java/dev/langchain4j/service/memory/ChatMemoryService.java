@@ -16,6 +16,9 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 @Internal
 public class ChatMemoryService {
 
+    /**
+     * 默认的聊天记忆ID
+     */
     public static final String DEFAULT = "default";
 
     /**
@@ -41,7 +44,9 @@ public class ChatMemoryService {
     }
 
     public ChatMemory getOrCreateChatMemory(Object memoryId) {
+        // 默认的聊天记忆ID
         if (memoryId == DEFAULT) {
+            // 默认的聊天记忆
             if (defaultChatMemory == null) {
                 defaultChatMemory = chatMemoryProvider.get(DEFAULT);
             }

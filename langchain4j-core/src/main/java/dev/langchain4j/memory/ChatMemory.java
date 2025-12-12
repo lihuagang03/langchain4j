@@ -32,6 +32,7 @@ public interface ChatMemory {
     void add(ChatMessage message);
 
     /**
+     * 将聊天消息列表添加到聊天记录。
      * Adds messages to the chat memory.
      * @param messages The {@link ChatMessage}s to add
      */

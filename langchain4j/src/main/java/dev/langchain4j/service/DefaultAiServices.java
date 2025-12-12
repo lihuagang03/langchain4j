@@ -56,7 +56,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -457,6 +456,7 @@ class DefaultAiServices<T> extends AiServices<T> {
                                 isReturnTypeResult,
                                 context.eventListenerRegistrar);
 
+                        // 立即的工具返回标志
                         if (toolServiceResult.immediateToolReturn() && isReturnTypeResult) {
                             // AI服务调用的结果
                             var result = Result.builder()

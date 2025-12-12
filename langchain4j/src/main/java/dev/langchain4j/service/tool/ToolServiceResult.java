@@ -32,7 +32,7 @@ public class ToolServiceResult {
      */
     private final TokenUsage aggregateTokenUsage;
     /**
-     * 中间的工具返回标志
+     * 立即的工具返回标志
      */
     private final boolean immediateToolReturn;
 

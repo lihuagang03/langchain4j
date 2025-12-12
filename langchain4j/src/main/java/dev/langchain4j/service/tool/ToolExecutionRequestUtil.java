@@ -13,13 +13,23 @@ import dev.langchain4j.agent.tool.ToolExecutionRequest;
 import dev.langchain4j.internal.Json;
 
 /**
+ * 工具执行请求的工具类
  * Utility class for {@link ToolExecutionRequest}.
  */
 @Internal
 class ToolExecutionRequestUtil {
 
+    /**
+     * 尾随逗号模式
+     */
     private static final Pattern TRAILING_COMMA_PATTERN = Pattern.compile(",(\\s*[}\\]])");
+    /**
+     * 首尾引号模式
+     */
     private static final Pattern LEADING_TRAILING_QUOTE_PATTERN = Pattern.compile("^\"|\"$");
+    /**
+     * 转义引号模式
+     */
     private static final Pattern ESCAPED_QUOTE_PATTERN = Pattern.compile("\\\\\"");
 
     private ToolExecutionRequestUtil() {}
@@ -43,6 +53,7 @@ class ToolExecutionRequestUtil {
     };
 
     /**
+     * 将参数列表转换为映射表。
      * Convert arguments to map.
      *
      * @param arguments json string
@@ -62,6 +73,7 @@ class ToolExecutionRequestUtil {
     }
 
     /**
+     * 移除 JSON 字符串中闭合大括号或方括号前的尾随逗号。
      * Removes trailing commas before closing braces or brackets in JSON strings.
      *
      * @param json the JSON string
@@ -76,6 +88,7 @@ class ToolExecutionRequestUtil {
     }
 
     /**
+     * 通过移除首尾引号并取消内部双引号的转义来规范化 JSON 字符串。
      * Normalizes a JSON string by removing leading and trailing quotes and unescaping internal double quotes.
      *
      * @param arguments the raw JSON string

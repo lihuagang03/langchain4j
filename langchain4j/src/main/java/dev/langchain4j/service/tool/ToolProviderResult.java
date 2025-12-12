@@ -32,9 +32,11 @@ public class ToolProviderResult {
     }
 
     private static Map<String, ToolSpecification> indexTools(Map<ToolSpecification, ToolExecutor> tools) {
+        // 索引工具规格
         Map<String, ToolSpecification> toolsByName = new HashMap<>();
         tools.keySet().forEach(toolSpecification -> {
             if (toolsByName.putIfAbsent(toolSpecification.name(), toolSpecification) != null) {
+                // 重复的工具定义
                 throw new IllegalConfigurationException("Duplicated definition for tool: " + toolSpecification.name());
             }
         });
@@ -46,7 +48,9 @@ public class ToolProviderResult {
     }
 
     public ToolExecutor toolExecutorByName(String name) {
+        // 工具规格
         ToolSpecification toolSpecification = toolSpecificationByName(name);
+        // 工具执行器
         return toolSpecification == null ? null : tools.get(toolSpecification);
     }
 
