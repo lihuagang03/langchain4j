@@ -6,6 +6,7 @@ import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.guardrail.InputGuardrailResult.Failure;
 
 /**
+ * 输入护栏
  * An input guardrail is a rule that is applied to the input of the model to ensure that the input (i.e. the user
  * message and parameters) is safe and meets the expectations of the model.
  * <p>

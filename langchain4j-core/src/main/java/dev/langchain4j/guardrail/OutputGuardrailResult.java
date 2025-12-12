@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ * 输出护栏结果
  * The result of the validation of an {@link OutputGuardrail}
  */
 public final class OutputGuardrailResult implements GuardrailResult<OutputGuardrailResult> {

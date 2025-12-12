@@ -21,15 +21,23 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ * 护栏服务构建者
+ * 一个用于创建和配置 GuardrailService 实例的构建器类，该实例为 AI 服务类提供输入和输出的护栏机制。
+ * 此类允许通过配置对象、护栏类或护栏的直接实例来定制护栏。
  * A builder class for creating and configuring a {@link GuardrailService} instance, which provides input and output guardrail
  * mechanisms for an AI service class. This class allows customization of the guardrails through configuration objects,
  * guardrail classes, or direct instances of guardrails.
  * <p>
+ * 这个构建器支持通过注解和代码中的显式配置来设置安全防护。
+ * 方法级别的注解优先于类级别的注解，并且注解的优先级高于在构建器中以编程方式配置的安全防护。
  * This builder supports setting guardrails via both annotations and explicit configurations in code. Annotations at the
  * method level take precedence over annotations at the class level, and annotations take precedence over guardrails
  * configured programmatically in the builder.
  */
 final class GuardrailServiceBuilder implements Builder {
+    /**
+     * 默认的输入护栏执行器的供应商
+     */
     private final Supplier<InputGuardrailExecutor> defaultInputGuardrailSupplier =
             () -> InputGuardrailExecutor.builder()
                     .config(this.inputGuardrailsConfig)
@@ -37,6 +45,9 @@ final class GuardrailServiceBuilder implements Builder {
                             getNonAnnotationBasedClassLevelGuardrails(this.inputGuardrails, this.inputGuardrailClasses))
                     .build();
 
+    /**
+     * 默认的输出护栏执行器的供应商
+     */
     private final Supplier<OutputGuardrailExecutor> defaultOutputGuardrailSupplier =
             () -> OutputGuardrailExecutor.builder()
                     .config(this.outputGuardrailsConfig)
@@ -44,12 +55,33 @@ final class GuardrailServiceBuilder implements Builder {
                             this.outputGuardrails, this.outputGuardrailClasses))
                     .build();
 
+    /**
+     * AI 服务类
+     */
     private final Class<?> aiServiceClass;
+    /**
+     * 输入护栏配置
+     */
     private dev.langchain4j.guardrail.config.InputGuardrailsConfig inputGuardrailsConfig;
+    /**
+     * 输出护栏配置
+     */
     private dev.langchain4j.guardrail.config.OutputGuardrailsConfig outputGuardrailsConfig;
+    /**
+     * 输入护栏类列表
+     */
     private List<Class<? extends InputGuardrail>> inputGuardrailClasses = new ArrayList<>();
+    /**
+     * 输出护栏类列表
+     */
     private List<Class<? extends OutputGuardrail>> outputGuardrailClasses = new ArrayList<>();
+    /**
+     * 输入护栏列表
+     */
     private List<InputGuardrail> inputGuardrails = new ArrayList<>();
+    /**
+     * 输出护栏列表
+     */
     private List<OutputGuardrail> outputGuardrails = new ArrayList<>();
 
     GuardrailServiceBuilder(Class<?> aiServiceClass) {
@@ -57,6 +89,7 @@ final class GuardrailServiceBuilder implements Builder {
     }
 
     /**
+     * 配置输入防护措施
      * Configures the input guardrails for the Builder.
      *
      * @param config The configuration for input guardrails. Must not be null.
@@ -70,6 +103,7 @@ final class GuardrailServiceBuilder implements Builder {
     }
 
     /**
+     * 配置输出防护措施
      * Configures the output guardrails for the Builder.
      *
      * @param config The configuration for output guardrails. Must not be null.
@@ -83,6 +117,7 @@ final class GuardrailServiceBuilder implements Builder {
     }
 
     /**
+     * 配置输入防护栏类。
      * Configures the classes of input guardrails for the Builder. Existing input guardrail classes will be cleared.
      *
      * @param guardrailClasses A list of classes implementing the {@link InputGuardrail} interface to be used
@@ -102,6 +137,7 @@ final class GuardrailServiceBuilder implements Builder {
     }
 
     /**
+     * 配置输出防护栏类。
      * Configures the classes of output guardrails for the Builder.
      * Existing output guardrail classes will be cleared.
      *
@@ -122,6 +158,7 @@ final class GuardrailServiceBuilder implements Builder {
     }
 
     /**
+     * 设置输入护栏。
      * Sets the input guardrails for the Builder. Existing input guardrails
      * will be cleared, and the provided input guardrails will be added.
      *
@@ -141,6 +178,7 @@ final class GuardrailServiceBuilder implements Builder {
     }
 
     /**
+     * 设置输出护栏。
      * Sets the output guardrails for the Builder. Existing output guardrails
      * will be cleared, and the provided output guardrails will be added.
      *
@@ -160,6 +198,9 @@ final class GuardrailServiceBuilder implements Builder {
     }
 
     /**
+     * 构建并返回 GuardrailService 实例。
+     * 此方法使用构建器中定义的设置配置输入和输出的护栏。
+     * 如果未设置，则使用提供的类级或方法级注解。如果没有方法级注解，则使用类级注解。
      * Builds and returns an instance of {@link GuardrailService}.
      * This method configures input and output guardrails using the settings defined in the builder.
      * If not set it then uses the provided class-level or method-level annotations. If no

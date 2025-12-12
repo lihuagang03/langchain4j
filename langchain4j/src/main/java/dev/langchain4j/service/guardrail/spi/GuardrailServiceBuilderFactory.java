@@ -3,6 +3,7 @@ package dev.langchain4j.service.guardrail.spi;
 import dev.langchain4j.service.guardrail.GuardrailService;
 
 /**
+ * 护栏服务构建者工厂
  * A factory for providing instances of {@link GuardrailService.Builder}
  */
 public interface GuardrailServiceBuilderFactory {

@@ -21,6 +21,7 @@ import java.util.ServiceLoader;
  */
 public interface GuardrailService {
     /**
+     * 获取表示适用于守护措施的 AI 服务类。
      * Retrieves the class representing the AI service to which the guardrails apply.
      *
      * @return The {@code Class} object representing the AI service.
@@ -28,6 +29,7 @@ public interface GuardrailService {
     Class<?> aiServiceClass();
 
     /**
+     * 执行与给定方法相关的输入防护措施。
      * Executes the input guardrails associated with a given {@link Method}
      *
      * @param method The method whose input guardrails are to be executed.
@@ -39,6 +41,7 @@ public interface GuardrailService {
     <MethodKey> InputGuardrailResult executeInputGuardrails(MethodKey method, InputGuardrailRequest request);
 
     /**
+     * 执行与给定方法和参数相关的输入防护措施，并根据结果检索修改或验证过的用户消息。
      * Executes the input guardrails associated with the given method and parameters,
      * and retrieves a modified or validated {@link UserMessage} based on the result.
      *
@@ -55,6 +58,7 @@ public interface GuardrailService {
     }
 
     /**
+     * 执行与给定方法相关的输出防护措施。
      * Executes the output guardrails associated with a given {@code Method}.
      *
      * @param method The method whose output guardrails are to be executed.
@@ -82,6 +86,7 @@ public interface GuardrailService {
     <MethodKey> boolean hasOutputGuardrails(MethodKey method);
 
     /**
+     * 执行与给定方法和参数相关的安全防护措施，并返回相应的响应。
      * Executes the guardrails associated with a given method and parameters, returning the appropriate response.
      *
      * @param <MethodKey> The type of the method key, representing a unique identifier for methods.
@@ -95,6 +100,7 @@ public interface GuardrailService {
     }
 
     /**
+     * 为指定的 AI 服务类创建一个新的 GuardrailService.Builder 实例。
      * Creates a new instance of {@link Builder} for the specified AI service class.
      * <p>
      *     Attempts to retrieve an instance through a {@link dev.langchain4j.service.guardrail.spi.GuardrailServiceBuilderFactory}, if available.
@@ -105,6 +111,7 @@ public interface GuardrailService {
      * @return A {@link Builder} instance initialized with the specified AI service class.
      */
     static Builder builder(Class<?> aiServiceClass) {
+        // 护栏服务构建者工厂
         return ServiceLoader.load(GuardrailServiceBuilderFactory.class)
                 .findFirst()
                 .map(builderFactory -> builderFactory.getBuilder(aiServiceClass))
@@ -112,10 +119,12 @@ public interface GuardrailService {
     }
 
     /**
+     * 护栏服务构建者
      * Builder class for building {@link GuardrailService} instances
      */
     interface Builder {
         /**
+         * 配置输入防护措施
          * Configures the input guardrails for the builder.
          *
          * @param config The configuration for input guardrails. Must not be null.
@@ -125,6 +134,7 @@ public interface GuardrailService {
         Builder inputGuardrailsConfig(dev.langchain4j.guardrail.config.InputGuardrailsConfig config);
 
         /**
+         * 配置输出防护措施
          * Configures the output guardrails for the Builder.
          *
          * @param config The configuration for output guardrails. Must not be null.
@@ -134,6 +144,8 @@ public interface GuardrailService {
         Builder outputGuardrailsConfig(dev.langchain4j.guardrail.config.OutputGuardrailsConfig config);
 
         /**
+         * 配置输入防护栏类。
+         * 现有的输入防护栏类将被清除。
          * Configures the classes of input guardrails for the Builder. Existing input guardrail classes will be cleared.
          *
          * @param guardrailClasses A list of classes implementing the {@link InputGuardrail} interface to be used
@@ -144,6 +156,8 @@ public interface GuardrailService {
         <I extends InputGuardrail> Builder inputGuardrailClasses(List<Class<? extends I>> guardrailClasses);
 
         /**
+         * 配置输入防护栏类。
+         * 现有的输入防护栏类将被清除。
          * Configures the classes of input guardrails for the Builder.
          * Existing input guardrail classes will be cleared.
          *
@@ -159,6 +173,8 @@ public interface GuardrailService {
         }
 
         /**
+         * 配置输出防护栏类。
+         * 现有的输出防护类将被清除。
          * Configures the classes of output guardrails for the Builder.
          * Existing output guardrail classes will be cleared.
          *
@@ -170,6 +186,8 @@ public interface GuardrailService {
         <O extends OutputGuardrail> Builder outputGuardrailClasses(List<Class<? extends O>> guardrailClasses);
 
         /**
+         * 配置输出防护栏类。
+         * 现有的输出防护类将被清除。
          * Configures the classes of output guardrails for the Builder.
          * Existing output guardrail classes will be cleared.
          *
@@ -185,6 +203,8 @@ public interface GuardrailService {
         }
 
         /**
+         * 设置输入护栏。
+         * 现有的输入护栏将被清除，并添加提供的输入护栏。
          * Sets the input guardrails for the Builder. Existing input guardrails
          * will be cleared, and the provided input guardrails will be added.
          *
@@ -195,6 +215,7 @@ public interface GuardrailService {
         <I extends InputGuardrail> Builder inputGuardrails(List<I> guardrails);
 
         /**
+         * 配置构建器的输入护栏。
          * Configures the input guardrails for the Builder.
          *
          * @param guardrails An array of input guardrails implementing the {@link InputGuardrail} interface.
@@ -208,6 +229,8 @@ public interface GuardrailService {
         }
 
         /**
+         * 设置输出护栏。
+         * 现有的输出护栏将被清除，并添加提供的输出护栏。
          * Sets the output guardrails for the Builder. Existing output guardrails
          * will be cleared, and the provided output guardrails will be added.
          *
@@ -218,6 +241,7 @@ public interface GuardrailService {
         <O extends OutputGuardrail> Builder outputGuardrails(List<O> guardrails);
 
         /**
+         * 配置输出护栏。
          * Configures the output guardrails for the Builder.
          *
          * @param guardrails An array of output guardrails implementing the {@link OutputGuardrail} interface.
@@ -231,6 +255,9 @@ public interface GuardrailService {
         }
 
         /**
+         * 构建并返回 GuardrailService 的实例。
+         * 此方法使用提供的类级或方法级注解在服务级别配置输入和输出保护措施。
+         * 如果没有方法级注解，则会使用类级注解，如果类级注解也不存在，则使用构建器中定义的设置。
          * Builds and returns an instance of {@link GuardrailService}.
          * This method configures input and output guardrails at the service level
          * using the provided class-level or method-level annotations. If no

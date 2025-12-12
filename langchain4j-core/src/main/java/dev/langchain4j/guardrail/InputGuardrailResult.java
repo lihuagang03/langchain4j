@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
+ * 输入护栏结果
  * The result of the validation of an {@link InputGuardrail}
  */
 public final class InputGuardrailResult implements GuardrailResult<InputGuardrailResult> {

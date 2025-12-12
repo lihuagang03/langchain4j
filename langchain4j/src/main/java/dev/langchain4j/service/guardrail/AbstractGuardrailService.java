@@ -17,21 +17,37 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 护栏服务的实现基类
+ * 负责管理和应用输入和输出的防护措施到指定 AI 服务类的方法。
+ * 防护措施通过类级或方法级的注解定义，用于对 AI 服务方法的输入和输出执行约束、验证或转换逻辑。
  * Responsible for managing and applying input and output guardrails to methods
  * of a specified AI service class. Guardrails are defined through annotations at either the
  * class or method level and are used to enforce constraints, validation, or transformation
  * logic on inputs and outputs of AI service methods.
  *
+ * 此类负责处理关联 AI 服务类方法的输入和输出保护逻辑的初始化、配置和执行，确保在调用方法时自动应用输入和输出约束。
  * This class handles the initialization, configuration, and execution of input and output
  * guardrail logic for the methods of the associated AI service class, ensuring both input
  * and output constraints are applied automatically when methods are invoked.
  */
 @Internal
 public abstract class AbstractGuardrailService implements GuardrailService {
+    /**
+     * 空键
+     */
     private static final Object NULL_KEY = new Object();
 
+    /**
+     * AI 服务类
+     */
     private final Class<?> aiServiceClass;
+    /**
+     * 方法的键到输入护栏执行器的映射表
+     */
     private final Map<Object, InputGuardrailExecutor> inputGuardrails = new ConcurrentHashMap<>();
+    /**
+     * 方法的键到输出护栏执行器的映射表
+     */
     private final Map<Object, OutputGuardrailExecutor> outputGuardrails = new ConcurrentHashMap<>();
 
     // Caches for whether or not a method has input or output guardrails
@@ -54,6 +70,7 @@ public abstract class AbstractGuardrailService implements GuardrailService {
 
     @Override
     public <MethodKey> InputGuardrailResult executeInputGuardrails(MethodKey method, InputGuardrailRequest request) {
+        // 执行输入防护措施
         return Optional.ofNullable(method)
                 .map(this.inputGuardrails::get)
                 .map(executor -> executor.execute(request))
@@ -62,6 +79,7 @@ public abstract class AbstractGuardrailService implements GuardrailService {
 
     @Override
     public <MethodKey> OutputGuardrailResult executeOutputGuardrails(MethodKey method, OutputGuardrailRequest request) {
+        // 执行输出防护措施
         return Optional.ofNullable(method)
                 .map(this.outputGuardrails::get)
                 .map(executor -> executor.execute(request))
@@ -95,14 +113,19 @@ public abstract class AbstractGuardrailService implements GuardrailService {
     }
 
     <MethodKey> Optional<dev.langchain4j.guardrail.config.InputGuardrailsConfig> getInputConfig(MethodKey method) {
+        // 输入护栏配置
+        // 输入护栏执行器
         return Optional.ofNullable(this.inputGuardrails.get(method)).map(InputGuardrailExecutor::config);
     }
 
     <MethodKey> Optional<dev.langchain4j.guardrail.config.OutputGuardrailsConfig> getOutputConfig(MethodKey method) {
+        // 输出护栏配置
+        // 输出护栏执行器
         return Optional.ofNullable(this.outputGuardrails.get(method)).map(OutputGuardrailExecutor::config);
     }
 
     <MethodKey> List<InputGuardrail> getInputGuardrails(MethodKey method) {
+        // 输入护栏执行器
         return Optional.ofNullable(method)
                 .map(this.inputGuardrails::get)
                 .map(InputGuardrailExecutor::guardrails)
@@ -110,6 +133,7 @@ public abstract class AbstractGuardrailService implements GuardrailService {
     }
 
     <MethodKey> List<OutputGuardrail> getOutputGuardrails(MethodKey method) {
+        // 输出护栏执行器
         return Optional.ofNullable(method)
                 .map(this.outputGuardrails::get)
                 .map(OutputGuardrailExecutor::guardrails)
