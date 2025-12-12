@@ -13,9 +13,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 输出解析器工厂的默认实现
+ */
 @Internal
 class DefaultOutputParserFactory implements OutputParserFactory {
 
+    /**
+     * 实现类到输出解析器的映射表
+     */
     private static final Map<Class<?>, OutputParser<?>> OUTPUT_PARSERS = new HashMap<>();
 
     static {
