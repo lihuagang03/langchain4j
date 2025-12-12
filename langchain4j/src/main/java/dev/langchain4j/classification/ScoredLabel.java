@@ -6,13 +6,21 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 import java.util.Objects;
 
 /**
+ * 评分标签
+ * 表示具有分数的分类标签。
  * Represents a classification label with score.
  *
  * @param <L> The type of the label (e.g., String, Enum, etc.)
  */
 public class ScoredLabel<L> {
 
+    /**
+     * 分类标签
+     */
     private final L label;
+    /**
+     * 分数
+     */
     private final double score;
 
     public ScoredLabel(L label, double score) {

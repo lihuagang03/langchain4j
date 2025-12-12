@@ -6,12 +6,17 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * 分类结果
+ * 表示分类结果。
  * Represent the result of classification.
  *
  * @param <L> The type of the label (e.g., String, Enum, etc.)
  */
 public class ClassificationResult<L> {
 
+    /**
+     * 评分标签列表
+     */
     private final List<ScoredLabel<L>> scoredLabels;
 
     public ClassificationResult(List<ScoredLabel<L>> scoredLabels) {

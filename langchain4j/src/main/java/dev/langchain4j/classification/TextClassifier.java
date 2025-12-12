@@ -8,6 +8,9 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 /**
+ * 文本分类器
+ * 根据一组标签对给定文本进行分类。
+ * 它可以为每个分类返回零个、一个或多个标签。
  * Classifies a given text based on a set of labels.
  * It can return zero, one, or multiple labels for each classification.
  *
@@ -16,6 +19,7 @@ import static java.util.stream.Collectors.toList;
 public interface TextClassifier<L> {
 
     /**
+     * 对给定的文本进行分类。
      * Classifies the given text.
      *
      * @param text Text to classify.
@@ -28,6 +32,7 @@ public interface TextClassifier<L> {
     }
 
     /**
+     * 对给定的文本片段进行分类。
      * Classifies the given {@link TextSegment}.
      *
      * @param textSegment {@link TextSegment} to classify.
@@ -38,6 +43,7 @@ public interface TextClassifier<L> {
     }
 
     /**
+     * 对给定的文档进行分类。
      * Classifies the given {@link Document}.
      *
      * @param document {@link Document} to classify.
@@ -48,6 +54,7 @@ public interface TextClassifier<L> {
     }
 
     /**
+     * 对给定文本进行分类，并返回带有分数的标签。
      * Classifies the given text and returns labels with scores.
      *
      * @param text Text to classify.
@@ -57,6 +64,7 @@ public interface TextClassifier<L> {
     ClassificationResult<L> classifyWithScores(String text);
 
     /**
+     * 对给定的文本片段进行分类，并返回带有分数的标签。
      * Classifies the given {@link TextSegment} and returns labels with scores.
      *
      * @param textSegment {@link TextSegment} to classify.
@@ -68,6 +76,7 @@ public interface TextClassifier<L> {
     }
 
     /**
+     * 对给定的文档进行分类，并返回带有分数的标签。
      * Classifies the given {@link Document} and returns labels with scores.
      *
      * @param document {@link Document} to classify.

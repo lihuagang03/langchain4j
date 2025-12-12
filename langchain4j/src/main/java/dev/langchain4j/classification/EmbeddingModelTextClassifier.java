@@ -20,6 +20,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 嵌入模型的文本分类器
+ * 一个使用嵌入模型和预定义示例进行分类的文本分类器。
+ * 分类是通过计算输入文本的嵌入与带标签示例文本的嵌入之间的相似度来执行的。
+ * 每个标签的示例数量越多，分类质量就越高。
+ * 借助大型语言模型（LLM）可以轻松生成示例。
  * A {@link TextClassifier} that uses an {@link EmbeddingModel} and predefined examples to perform classification.
  * Classification is performed by computing the similarity between the input text's embedding and the embeddings of labeled example texts.
  * The classification quality improves with a greater number of examples for each label.
@@ -49,13 +54,30 @@ import java.util.Map;
  */
 public class EmbeddingModelTextClassifier<L> implements TextClassifier<L> {
 
+    /**
+     * 嵌入模型
+     */
     private final EmbeddingModel embeddingModel;
+    /**
+     * 评分标签到嵌入列表的映射表
+     */
     private final Map<L, List<Embedding>> exampleEmbeddingsByLabel;
+    /**
+     * 最大的结果数量
+     */
     private final int maxResults;
+    /**
+     * 最低分
+     */
     private final double minScore;
+    /**
+     * 平均分到最高分的比率
+     */
     private final double meanToMaxScoreRatio;
 
     /**
+     * 使用默认值创建分类器，
+     * 默认值为 maxResults（1）、minScore（0）和 meanToMaxScoreRatio（0.5）。
      * Creates a classifier with the default values for {@link #maxResults} (1), {@link #minScore} (0)
      * and {@link #meanToMaxScoreRatio} (0.5).
      *
@@ -69,6 +91,7 @@ public class EmbeddingModelTextClassifier<L> implements TextClassifier<L> {
     }
 
     /**
+     * 创建一个分类器。
      * Creates a classifier.
      *
      * @param embeddingModel      The embedding model used for embedding both the examples and the text to be classified.
@@ -103,6 +126,7 @@ public class EmbeddingModelTextClassifier<L> implements TextClassifier<L> {
         this.meanToMaxScoreRatio = ensureBetween(meanToMaxScoreRatio, 0.0, 1.0, "meanToMaxScoreRatio");
 
         this.exampleEmbeddingsByLabel = new HashMap<>();
+        // 嵌入一系列文本段的文本内容
         examplesByLabel.forEach((label, examples) -> exampleEmbeddingsByLabel.put(
                 label,
                 embeddingModel
@@ -110,24 +134,34 @@ public class EmbeddingModelTextClassifier<L> implements TextClassifier<L> {
                         .content()));
     }
 
+    /**
+     * 对给定文本进行分类，并返回带有分数的标签。
+     */
     @Override
     public ClassificationResult<L> classifyWithScores(String text) {
         ensureNotBlank(text, "text");
 
+        // 嵌入文本
         Embedding textEmbedding = embeddingModel.embed(text).content();
 
+        // 评分标签列表
         List<ScoredLabel<L>> scoredLabels = new ArrayList<>();
         exampleEmbeddingsByLabel.forEach((label, exampleEmbeddings) -> {
+            // 平均分
             double meanScore = 0;
+            // 最高分
             double maxScore = 0;
             for (Embedding exampleEmbedding : exampleEmbeddings) {
+                // 计算两个向量之间的余弦相似度
                 double cosineSimilarity = CosineSimilarity.between(textEmbedding, exampleEmbedding);
+                // 将余弦相似度转换为相关度评分
                 double score = RelevanceScore.fromCosineSimilarity(cosineSimilarity);
                 meanScore += score;
                 maxScore = Math.max(score, maxScore);
             }
             meanScore /= exampleEmbeddings.size();
 
+            // 综合得分
             double aggregateScore = aggregatedScore(meanScore, maxScore);
             if (aggregateScore >= minScore) {
                 scoredLabels.add(new ScoredLabel<>(label, aggregateScore));
@@ -142,6 +176,7 @@ public class EmbeddingModelTextClassifier<L> implements TextClassifier<L> {
     }
 
     private double aggregatedScore(double meanScore, double maxScore) {
+        // 综合得分
         return (meanToMaxScoreRatio * meanScore) + ((1 - meanToMaxScoreRatio) * maxScore);
     }
 }
