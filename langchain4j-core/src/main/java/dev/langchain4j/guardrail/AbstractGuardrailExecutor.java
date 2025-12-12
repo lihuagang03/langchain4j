@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * 护栏执行器的实现基类
  * Abstract base class for {@link GuardrailExecutor}s.
  * @param <C>
  *            The type of {@link GuardrailsConfig} to use for configuration
@@ -36,7 +37,13 @@ public abstract sealed class AbstractGuardrailExecutor<
                 F extends Failure>
         implements GuardrailExecutor<C, P, R, G, E> permits InputGuardrailExecutor, OutputGuardrailExecutor {
 
+    /**
+     * 护栏配置
+     */
     private final C config;
+    /**
+     * 护栏列表
+     */
     private final List<G> guardrails;
 
     protected AbstractGuardrailExecutor(C config, List<G> guardrails) {

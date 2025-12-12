@@ -11,6 +11,8 @@ import java.util.Optional;
 
 /**
  * 护栏请求参数
+ * 表示在验证用户与语言模型交互时，护栏检查共享的常见参数。
+ * 此类封装了聊天记忆、用户消息模板以及护栏处理所需的其他变量。
  * Represents the common parameters shared across guardrail checks when validating interactions
  * between a user and a language model. This class encapsulates the chat memory, user message
  * template, and additional variables required for guardrail processing.

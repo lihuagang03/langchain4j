@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ServiceLoader;
 
 /**
+ * 输入护栏执行器
  * The {@link GuardrailExecutor} for {@link InputGuardrail}s.
  */
 public non-sealed class InputGuardrailExecutor

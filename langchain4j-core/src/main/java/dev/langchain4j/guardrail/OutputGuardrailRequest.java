@@ -7,11 +7,22 @@ import dev.langchain4j.model.chat.response.ChatResponse;
 import java.util.Optional;
 
 /**
+ * 输出护栏请求
+ * 表示传递给 OutputGuardrail.validate(OutputGuardrailRequest) 的参数。
  * Represents the parameter passed to {@link OutputGuardrail#validate(OutputGuardrailRequest)}.
  */
 public final class OutputGuardrailRequest implements GuardrailRequest<OutputGuardrailRequest> {
+    /**
+     * 来自大模型的聊天响应
+     */
     private final ChatResponse responseFromLLM;
+    /**
+     * 聊天执行器
+     */
     private final ChatExecutor chatExecutor;
+    /**
+     * 护栏请求参数
+     */
     private final GuardrailRequestParams requestParams;
 
     private OutputGuardrailRequest(Builder builder) {
@@ -52,11 +63,14 @@ public final class OutputGuardrailRequest implements GuardrailRequest<OutputGuar
     public OutputGuardrailRequest withText(String text) {
         ensureNotNull(text, "text");
 
+        // AI消息
+        // 工具执行请求列表
         var aiMessage = Optional.ofNullable(this.responseFromLLM.aiMessage().toolExecutionRequests())
                 .filter(t -> !t.isEmpty())
                 .map(t -> new AiMessage(text, t))
                 .orElseGet(() -> new AiMessage(text));
 
+        // 聊天响应
         var chatResponse = ChatResponse.builder()
                 .aiMessage(aiMessage)
                 .metadata(this.responseFromLLM.metadata())

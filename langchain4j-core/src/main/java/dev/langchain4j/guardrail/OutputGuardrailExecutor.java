@@ -16,6 +16,7 @@ import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
 /**
+ * 输出护栏执行器
  * The {@link GuardrailExecutor} for {@link OutputGuardrail}s.
  * <p>
  *     When executing output guardrails, if any {@link OutputGuardrail} triggers a reprompt or retry,
@@ -32,6 +33,10 @@ public non-sealed class OutputGuardrailExecutor
                 OutputGuardrailExecutedEvent,
                 Failure> {
 
+    /**
+     * 输出验证失败。保护措施已达到最大重试次数。
+     * 保护措施消息：
+     */
     public static final String MAX_RETRIES_MESSAGE_TEMPLATE =
             """
             Output validation failed. The guardrails have reached the maximum number of retries.

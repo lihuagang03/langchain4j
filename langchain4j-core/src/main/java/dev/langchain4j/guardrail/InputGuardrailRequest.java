@@ -8,10 +8,19 @@ import dev.langchain4j.data.message.UserMessage;
 import java.util.Objects;
 
 /**
+ * 输入护栏请求
+ * 表示传递给 InputGuardrail.validate(InputGuardrailRequest) 的参数。
  * Represents the parameter passed to {@link InputGuardrail#validate(InputGuardrailRequest)}.
  */
 public final class InputGuardrailRequest implements GuardrailRequest<InputGuardrailRequest> {
+    /**
+     * 用户消息
+     */
     private final UserMessage userMessage;
+    /**
+     * 护栏请求参数
+     * 共享的常见参数
+     */
     private final GuardrailRequestParams commonParams;
 
     private InputGuardrailRequest(Builder builder) {
@@ -51,6 +60,7 @@ public final class InputGuardrailRequest implements GuardrailRequest<InputGuardr
             return this.userMessage;
         }
 
+        // 重写内容
         var rewrittenContent = this.userMessage.contents().stream()
                 .map(c -> (c.type() == ContentType.TEXT) ? new TextContent(text) : c)
                 .toList();
