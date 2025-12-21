@@ -15,16 +15,19 @@ public interface Document {
 
     /**
      * 文件名称
+     * 文档加载自哪个文件的名称。
      * Common metadata key for the name of the file from which the document was loaded.
      */
     String FILE_NAME = "file_name";
     /**
-     * 绝对的目录路径
+     * 目录的绝对路径
+     * 加载该文档的目录的绝对路径。
      * Common metadata key for the absolute path of the directory from which the document was loaded.
      */
     String ABSOLUTE_DIRECTORY_PATH = "absolute_directory_path";
     /**
      * 网址
+     * 文档加载的 URL。
      * Common metadata key for the URL from which the document was loaded.
      */
     String URL = "url";
@@ -38,6 +41,7 @@ public interface Document {
     String text();
 
     /**
+     * 返回与此文档关联的元数据。
      * Returns the metadata associated with this document.
      *
      * @return the metadata.
@@ -45,6 +49,7 @@ public interface Document {
     Metadata metadata();
 
     /**
+     * 从此文档构建一个文本片段。
      * Builds a {@link TextSegment} from this document.
      *
      * @return a {@link TextSegment}
@@ -58,6 +63,7 @@ public interface Document {
     }
 
     /**
+     * 从给定的文本创建一个新文档。
      * Creates a new Document from the given text.
      *
      * <p>The created document will have empty metadata.</p>
@@ -70,6 +76,7 @@ public interface Document {
     }
 
     /**
+     * 从给定的文本创建一个新文档。
      * Creates a new Document from the given text.
      *
      * @param text     the text of the document.

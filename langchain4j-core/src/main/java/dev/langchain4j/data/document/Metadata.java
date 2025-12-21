@@ -64,6 +64,7 @@ public class Metadata {
     private final Map<String, Object> metadata;
 
     /**
+     * 构建一个元数据对象，其中包含一个空的键值对映射。
      * Construct a Metadata object with an empty map of key-value pairs.
      */
     public Metadata() {
