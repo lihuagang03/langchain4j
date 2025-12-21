@@ -24,6 +24,7 @@ public interface DocumentTransformer {
     Document transform(Document document);
 
     /**
+     * 转换所有提供的文档。
      * Transforms all the provided documents.
      *
      * @param documents A list of documents to be transformed.

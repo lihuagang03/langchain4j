@@ -23,6 +23,7 @@ public interface DocumentSplitter {
 
     /**
      * 将单个文档拆分为文本片段对象列表。
+     * 元数据通常是从文档中复制的，并通过特定段落的信息进行丰富，例如在文档中的位置、页码等。
      * Splits a single Document into a list of TextSegment objects.
      * The metadata is typically copied from the document and enriched with segment-specific information,
      * such as position in the document, page number, etc.
@@ -34,6 +35,7 @@ public interface DocumentSplitter {
 
     /**
      * 将文档列表拆分为文本片段对象列表。
+     * 这是一个便捷方法，它会对列表中的每个文档调用 split 方法。
      * Splits a list of Documents into a list of TextSegment objects.
      * This is a convenience method that calls the split method for each Document in the list.
      *
@@ -47,8 +49,11 @@ public interface DocumentSplitter {
     }
 
     /**
+     * 将多个文档实例拆分为 TextSegment 对象的列表。
      * Splits multiple {@link Document} instances into a list of {@link TextSegment} objects.
      * <p>
+     * 这个便捷方法允许调用者传入可变数量的文档参数（使用可变参数），而不必显式创建列表。
+     * 在内部，它通过将可变参数数组转换为列表来委托给 splitAll(List) 方法。
      * This is a convenience method that allows callers to pass a variable number of Document arguments
      * (using varargs) instead of explicitly creating a list. Internally, it delegates to the {@link #splitAll(List)}
      * method by converting the varargs array into a {@link List}.

@@ -13,9 +13,11 @@ public interface DocumentParser {
 
     /**
      * 将给定的输入流解析为文档。
+     * 该方法的具体实现将取决于所解析文档的类型。
      * Parses a given {@link InputStream} into a {@link Document}.
      * The specific implementation of this method will depend on the type of the document being parsed.
      * <p>
+     * 注意：此方法不会关闭提供的 InputStream——由调用者负责管理流的生命周期。
      * Note: This method does not close the provided {@link InputStream} - it is the
      * caller's responsibility to manage the lifecycle of the stream.
      *
