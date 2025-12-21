@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 聊天记忆(对话历史)
+ * 聊天记忆(对话历史、聊天记录)
  * 表示聊天对话的记忆（历史）。
  * 由于语言模型不会保留对话状态，因此在每次与语言模型交互时，都需要提供之前的所有消息。
  * 聊天记忆帮助跟踪对话，并确保消息适合语言模型的上下文窗口。
@@ -24,7 +24,7 @@ public interface ChatMemory {
     Object id();
 
     /**
-     * 向聊天记忆中添加一条消息。
+     * 向聊天记忆中添加一条聊天消息。
      * Adds a message to the chat memory.
      *
      * @param message The {@link ChatMessage} to add.
@@ -32,7 +32,7 @@ public interface ChatMemory {
     void add(ChatMessage message);
 
     /**
-     * 将聊天消息列表添加到聊天记录。
+     * 将聊天消息列表添加到聊天记忆。
      * Adds messages to the chat memory.
      * @param messages The {@link ChatMessage}s to add
      */
@@ -43,7 +43,7 @@ public interface ChatMemory {
     }
 
     /**
-     * 将聊天消息列表添加到聊天记录。
+     * 将聊天消息列表添加到聊天记忆。
      * Adds messages to the chat memory.
      * @param messages The {@link ChatMessage}s to add
      */
@@ -54,7 +54,7 @@ public interface ChatMemory {
     }
 
     /**
-     * 从聊天记录中检索消息列表。
+     * 从聊天记忆中检索聊天消息列表。
      * Retrieves messages from the chat memory.
      * Depending on the implementation, it may not return all previously added messages,
      * but rather a subset, a summary, or a combination thereof.
@@ -64,7 +64,7 @@ public interface ChatMemory {
     List<ChatMessage> messages();
 
     /**
-     * 清除聊天记录。
+     * 清除聊天记忆。
      * Clears the chat memory.
      */
     void clear();

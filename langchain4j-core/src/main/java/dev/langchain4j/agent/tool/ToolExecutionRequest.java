@@ -5,14 +5,14 @@ import java.util.Objects;
 import static dev.langchain4j.internal.Utils.quoted;
 
 /**
- * 工具执行请求
+ * 工具执行的请求
  * 表示一个由大型语言模型生成的执行工具的请求。
  * Represents an LLM-generated request to execute a tool.
  */
 public class ToolExecutionRequest {
 
     /**
-     * 工具ID
+     * 工具的 ID
      */
     private final String id;
     /**
@@ -60,7 +60,9 @@ public class ToolExecutionRequest {
 
     @Override
     public boolean equals(Object another) {
-        if (this == another) return true;
+        if (this == another) {
+            return true;
+        }
         return another instanceof ToolExecutionRequest ter
                 && equalTo(ter);
     }
