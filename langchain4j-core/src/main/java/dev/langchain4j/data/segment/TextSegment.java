@@ -59,8 +59,12 @@ public class TextSegment {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         TextSegment that = (TextSegment) o;
         return Objects.equals(this.text, that.text)
                 && Objects.equals(this.metadata, that.metadata);
