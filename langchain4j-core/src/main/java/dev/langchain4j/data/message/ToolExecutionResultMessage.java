@@ -9,7 +9,7 @@ import static dev.langchain4j.internal.Utils.quoted;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 
 /**
- * 工具执行结果消息
+ * 工具执行的结果消息
  * 表示针对 ToolExecutionRequest 执行工具后的结果。
  * ToolExecutionRequest 来源于之前的 AiMessage.toolExecutionRequests()。
  * Represents the result of a tool execution in response to a {@link ToolExecutionRequest}.
@@ -18,7 +18,7 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotBlank;
 public class ToolExecutionResultMessage implements ChatMessage {
 
     /**
-     * 工具ID
+     * 工具的 ID
      */
     private final String id;
     /**
@@ -26,7 +26,7 @@ public class ToolExecutionResultMessage implements ChatMessage {
      */
     private final String toolName;
     /**
-     * 工具执行的结果文本
+     * 工具执行的结果
      */
     private final String text;
 

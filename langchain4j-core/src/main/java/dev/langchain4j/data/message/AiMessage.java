@@ -32,7 +32,7 @@ import java.util.Objects;
 public class AiMessage implements ChatMessage {
 
     /**
-     * 文本内容
+     * 消息的文本
      */
     private final String text;
     /**

@@ -18,7 +18,7 @@ import java.util.Optional;
 public class SystemMessage implements ChatMessage {
 
     /**
-     * 文本
+     * 消息的文本
      */
     private final String text;
 
