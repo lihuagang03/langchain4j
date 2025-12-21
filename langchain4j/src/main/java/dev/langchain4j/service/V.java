@@ -43,6 +43,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface V {
 
     /**
+     * 提示模板中变量（占位符）的名称。
      * Name of a variable (placeholder) in a prompt template.
      */
     String value();
