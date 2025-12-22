@@ -58,6 +58,7 @@ public interface Document {
         if (metadata().containsKey("index")) {
             return TextSegment.from(text(), metadata().copy());
         } else {
+            // 片段索引
             return TextSegment.from(text(), metadata().copy().put("index", "0"));
         }
     }

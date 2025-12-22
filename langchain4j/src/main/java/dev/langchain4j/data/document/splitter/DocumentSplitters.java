@@ -10,7 +10,8 @@ public class DocumentSplitters {
 
     /**
      * 这是一个推荐用于通用文本的文档拆分器。
-     * 它会先尝试将文档拆分为段落，并尽可能将多个段落放入单个文本片段中。
+     * 它首先尝试将文档拆分为段落，并尽可能多地将段落放入单个 TextSegment 中。
+     * 如果某些段落过长，它们会递归地拆分为行，然后是句子，再然后是单词，最后是字符，直到它们适合放入一个段落中。
      * This is a recommended {@link DocumentSplitter} for generic text.
      * It tries to split the document into paragraphs first and fits
      * as many paragraphs into a single {@link dev.langchain4j.data.segment.TextSegment} as possible.
@@ -26,13 +27,13 @@ public class DocumentSplitters {
     public static DocumentSplitter recursive(int maxSegmentSizeInTokens,
                                              int maxOverlapSizeInTokens,
                                              TokenCountEstimator tokenCountEstimator) {
-        // 段落
+        // 按段落拆分文档
         return new DocumentByParagraphSplitter(maxSegmentSizeInTokens, maxOverlapSizeInTokens, tokenCountEstimator,
-                // 行
+                // 按行拆分文档
                 new DocumentByLineSplitter(maxSegmentSizeInTokens, maxOverlapSizeInTokens, tokenCountEstimator,
-                        // 句
+                        // 按句拆分文档
                         new DocumentBySentenceSplitter(maxSegmentSizeInTokens, maxOverlapSizeInTokens, tokenCountEstimator,
-                                // 单词
+                                // 按单词拆分文档
                                 new DocumentByWordSplitter(maxSegmentSizeInTokens, maxOverlapSizeInTokens, tokenCountEstimator)
                         )
                 )
@@ -40,6 +41,9 @@ public class DocumentSplitters {
     }
 
     /**
+     * 这是一个推荐用于通用文本的文档拆分器。
+     * 它首先尝试将文档拆分为段落，并尽可能多地将段落放入单个 TextSegment 中。
+     * 如果某些段落过长，它们会递归地拆分为行，然后是句子，再然后是单词，最后是字符，直到它们适合一个段落中。
      * This is a recommended {@link DocumentSplitter} for generic text.
      * It tries to split the document into paragraphs first and fits
      * as many paragraphs into a single {@link dev.langchain4j.data.segment.TextSegment} as possible.
