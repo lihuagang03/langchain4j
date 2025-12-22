@@ -3,6 +3,7 @@ package dev.langchain4j.data.document.source;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentSource;
 import dev.langchain4j.data.document.Metadata;
+import dev.langchain4j.exception.LangChain4jException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,7 +44,7 @@ public class UrlSource implements DocumentSource {
         try {
             return new UrlSource(new URL(url));
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            throw new LangChain4jException(e);
         }
     }
 
@@ -55,7 +56,7 @@ public class UrlSource implements DocumentSource {
         try {
             return new UrlSource(uri.toURL());
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            throw new LangChain4jException(e);
         }
     }
 }

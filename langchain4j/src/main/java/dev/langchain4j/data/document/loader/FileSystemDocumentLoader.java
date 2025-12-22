@@ -11,6 +11,7 @@ import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentLoader;
 import dev.langchain4j.data.document.DocumentParser;
 import dev.langchain4j.data.document.parser.TextDocumentParser;
+import dev.langchain4j.exception.LangChain4jException;
 import dev.langchain4j.spi.data.document.parser.DocumentParserFactory;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -133,9 +134,9 @@ public class FileSystemDocumentLoader {
         }
 
         try (Stream<Path> pathStream = Files.list(directoryPath)) {
-            return loadDocuments(pathStream, (path) -> true, directoryPath, documentParser);
+            return loadDocuments(pathStream, path -> true, directoryPath, documentParser);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new LangChain4jException(e);
         }
     }
 
@@ -220,7 +221,7 @@ public class FileSystemDocumentLoader {
         try (Stream<Path> pathStream = Files.list(directoryPath)) {
             return loadDocuments(pathStream, pathMatcher, directoryPath, documentParser);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new LangChain4jException(e);
         }
     }
 
@@ -315,9 +316,9 @@ public class FileSystemDocumentLoader {
         }
 
         try (Stream<Path> pathStream = Files.walk(directoryPath)) {
-            return loadDocuments(pathStream, (path) -> true, directoryPath, documentParser);
+            return loadDocuments(pathStream, path -> true, directoryPath, documentParser);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new LangChain4jException(e);
         }
     }
 
@@ -405,7 +406,7 @@ public class FileSystemDocumentLoader {
         try (Stream<Path> pathStream = Files.walk(directoryPath)) {
             return loadDocuments(pathStream, pathMatcher, directoryPath, documentParser);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new LangChain4jException(e);
         }
     }
 
@@ -492,6 +493,7 @@ public class FileSystemDocumentLoader {
 
     private static List<Document> loadDocuments(
             Stream<Path> pathStream, PathMatcher pathMatcher, Path pathMatcherRoot, DocumentParser documentParser) {
+        // 文档列表
         List<Document> documents = new ArrayList<>();
 
         pathStream
@@ -502,16 +504,17 @@ public class FileSystemDocumentLoader {
                 .filter(pathMatcher::matches)
                 // converting relative path back into absolute before loading document
                 .map(pathMatcherRoot::resolve)
-                .forEach(file -> {
+                .forEach(filePath -> {
                     try {
                         // 从指定的文件路径加载文档
-                        Document document = loadDocument(file, documentParser);
+                        Document document = loadDocument(filePath, documentParser);
                         documents.add(document);
                     } catch (BlankDocumentException ignored) {
+                        // 空白/空文档将被忽略
                         // blank/empty documents are ignored
                     } catch (Exception e) {
                         String message = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
-                        log.warn("Failed to load '{}': {}", file, message);
+                        log.warn("Failed to load '{}': {}", filePath, message);
                     }
                 });
 

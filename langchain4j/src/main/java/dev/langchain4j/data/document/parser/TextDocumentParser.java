@@ -3,6 +3,7 @@ package dev.langchain4j.data.document.parser;
 import dev.langchain4j.data.document.BlankDocumentException;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentParser;
+import dev.langchain4j.exception.LangChain4jException;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -41,7 +42,7 @@ public class TextDocumentParser implements DocumentParser {
         } catch (BlankDocumentException e) {
             throw e;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new LangChain4jException(e);
         }
     }
 }

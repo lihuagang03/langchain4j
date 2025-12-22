@@ -4,6 +4,7 @@ import static dev.langchain4j.spi.ServiceHelper.loadFactories;
 
 import dev.langchain4j.Internal;
 import dev.langchain4j.data.document.DocumentParser;
+import dev.langchain4j.exception.LangChain4jException;
 import dev.langchain4j.spi.data.document.parser.DocumentParserFactory;
 
 /**
@@ -20,7 +21,7 @@ class DocumentParserLoader {
         var factories = loadFactories(DocumentParserFactory.class);
 
         if (factories.size() > 1) {
-            throw new RuntimeException("Conflict: multiple document parsers have been found in the classpath. "
+            throw new LangChain4jException("Conflict: multiple document parsers have been found in the classpath. "
                     + "Please explicitly specify the one you wish to use.");
         }
 
