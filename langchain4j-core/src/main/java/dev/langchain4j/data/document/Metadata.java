@@ -18,6 +18,7 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * 文档或文本片段的元数据
+ * 表示文档或文本片段的元数据。
  * Represents metadata of a {@link Document} or a {@link TextSegment}.
  * <br>
  * 对于文档，其元数据可以存储诸如来源、创建日期、所有者或其他相关信息等内容。
@@ -432,6 +433,7 @@ public class Metadata {
     }
 
     /**
+     * 从单个键值对构建一个元数据对象。
      * Constructs a Metadata object from a single key-value pair.
      *
      * @param key   the key
@@ -443,6 +445,7 @@ public class Metadata {
     }
 
     /**
+     * 从键值对映射构建一个元数据对象。
      * Constructs a Metadata object from a map of key-value pairs.
      *
      * @param metadata the map of key-value pairs

@@ -8,17 +8,36 @@ import static dev.langchain4j.internal.ValidationUtils.ensureGreaterThanZero;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
- * 用于分层文档拆分器的片段构建器。
+ * 片段构建者
+ * 用于分层文档拆分器的片段构建者。
  * Segment builder utility class for HierarchicalDocumentSplitter.
  */
 @Internal
 class SegmentBuilder {
 
+    /**
+     * 最大片段数量
+     */
     private final int maxSegmentSize;
+    /**
+     * 文本到大小的转换函数
+     */
     private final Function<String, Integer> sizeFunction;
+    /**
+     * 连接分隔符
+     */
     private final String joinSeparator;
+    /**
+     * 连接分隔符的大小
+     */
     private final int joinSeparatorSize;
+    /**
+     * 片段
+     */
     private String segment = "";
+    /**
+     * 片段大小
+     */
     private int segmentSize = 0;
 
     /**
@@ -59,6 +78,7 @@ class SegmentBuilder {
     }
 
     /**
+     * 如果提供的大小可以添加到当前段，则返回 true。
      * Returns {@code true} if the provided size can be added to the current segment.
      *
      * @param size The size to check.
@@ -73,6 +93,7 @@ class SegmentBuilder {
     }
 
     /**
+     * 返回提供的文本的大小（由 sizeFunction 返回）。
      * Returns the size of the provided text (as returned by the {@code sizeFunction}).
      *
      * @param text The text to check.
@@ -83,6 +104,7 @@ class SegmentBuilder {
     }
 
     /**
+     * 将提供的文本附加到当前段落。
      * Appends the provided text to the current segment.
      *
      * @param text The text to append.
@@ -96,6 +118,7 @@ class SegmentBuilder {
     }
 
     /**
+     * 将提供的文本添加到当前段的开头。
      * Prepends the provided text to the current segment.
      *
      * @param text The text to prepend.
@@ -124,6 +147,7 @@ class SegmentBuilder {
     }
 
     /**
+     * 重置当前段落。
      * Resets the current segment.
      */
     public void reset() {

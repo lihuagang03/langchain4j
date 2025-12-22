@@ -84,6 +84,7 @@ public class TextSegment {
     }
 
     /**
+     * 创建一个新的文本片段。
      * Creates a new text segment.
      *
      * @param text the text.
@@ -94,6 +95,7 @@ public class TextSegment {
     }
 
     /**
+     * 创建一个新的文本片段。
      * Creates a new text segment.
      *
      * @param text     the text.
