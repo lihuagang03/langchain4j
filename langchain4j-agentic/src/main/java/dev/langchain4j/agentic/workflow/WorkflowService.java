@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * 工作流服务
+ */
 public interface WorkflowService<T, W> {
 
     W build();

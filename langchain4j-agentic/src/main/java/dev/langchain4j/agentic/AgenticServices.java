@@ -72,6 +72,8 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
+ * 智能体自主服务
+ * 提供静态工厂方法来创建和配置各种类型的智能体服务。
  * Provides static factory methods to create and configure various types of agent services.
  */
 public class AgenticServices {
@@ -113,6 +115,7 @@ public class AgenticServices {
     }
 
     /**
+     * 为给定的智能体服务类创建一个智能体构建者。
      * Creates an agent builder for the given agent service class.
      *
      * @param agentServiceClass the class of the agent service
