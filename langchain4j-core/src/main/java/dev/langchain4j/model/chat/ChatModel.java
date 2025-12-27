@@ -7,6 +7,7 @@ import static dev.langchain4j.model.chat.ChatModelListenerUtils.onResponse;
 
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.UserMessage;
+import dev.langchain4j.exception.LangChain4jException;
 import dev.langchain4j.model.ModelProvider;
 import dev.langchain4j.model.chat.listener.ChatModelListener;
 import dev.langchain4j.model.chat.request.ChatRequest;
@@ -63,7 +64,7 @@ public interface ChatModel {
 
     default ChatResponse doChat(ChatRequest chatRequest) {
         // 进行聊天
-        throw new RuntimeException("Not implemented");
+        throw new LangChain4jException("Not implemented");
     }
 
     default ChatRequestParameters defaultRequestParameters() {
@@ -89,14 +90,16 @@ public interface ChatModel {
 
         // 用户消息
         // 聊天请求
-        ChatRequest chatRequest =
-                ChatRequest.builder().messages(UserMessage.from(userMessage)).build();
+        ChatRequest chatRequest = ChatRequest.builder()
+                .messages(UserMessage.from(userMessage))
+                .build();
 
         // 聊天
         ChatResponse chatResponse = chat(chatRequest);
 
-        // AI消息的文本内容
-        return chatResponse.aiMessage().text();
+        // AI 消息的文本内容
+        return chatResponse.aiMessage()
+                .text();
     }
 
     /**
@@ -106,7 +109,9 @@ public interface ChatModel {
     default ChatResponse chat(ChatMessage... messages) {
 
         // 聊天请求
-        ChatRequest chatRequest = ChatRequest.builder().messages(messages).build();
+        ChatRequest chatRequest = ChatRequest.builder()
+                .messages(messages)
+                .build();
 
         // 聊天
         return chat(chatRequest);
@@ -119,7 +124,9 @@ public interface ChatModel {
     default ChatResponse chat(List<ChatMessage> messages) {
 
         // 聊天请求
-        ChatRequest chatRequest = ChatRequest.builder().messages(messages).build();
+        ChatRequest chatRequest = ChatRequest.builder()
+                .messages(messages)
+                .build();
 
         // 聊天
         return chat(chatRequest);

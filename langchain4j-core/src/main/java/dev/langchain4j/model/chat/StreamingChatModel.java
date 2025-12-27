@@ -6,6 +6,7 @@ import static dev.langchain4j.model.chat.ChatModelListenerUtils.onResponse;
 
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.UserMessage;
+import dev.langchain4j.exception.LangChain4jException;
 import dev.langchain4j.model.ModelProvider;
 import dev.langchain4j.model.chat.listener.ChatModelListener;
 import dev.langchain4j.model.chat.request.ChatRequest;
@@ -104,6 +105,7 @@ public interface StreamingChatModel {
             }
         };
 
+        // 监听请求
         onRequest(finalChatRequest, provider(), attributes, listeners);
         // 进行聊天
         doChat(finalChatRequest, observingHandler);
@@ -111,26 +113,30 @@ public interface StreamingChatModel {
 
     default void doChat(ChatRequest chatRequest, StreamingChatResponseHandler handler) {
         // 进行聊天
-        throw new RuntimeException("Not implemented");
+        throw new LangChain4jException("Not implemented");
     }
 
     default ChatRequestParameters defaultRequestParameters() {
+        // 聊天请求参数
         return DefaultChatRequestParameters.EMPTY;
     }
 
     default List<ChatModelListener> listeners() {
+        // 聊天模型监听器
         return List.of();
     }
 
     default ModelProvider provider() {
+        // 模型提供者
         return OTHER;
     }
 
     default void chat(String userMessage, StreamingChatResponseHandler handler) {
 
         // 聊天请求
-        ChatRequest chatRequest =
-                ChatRequest.builder().messages(UserMessage.from(userMessage)).build();
+        ChatRequest chatRequest = ChatRequest.builder()
+                .messages(UserMessage.from(userMessage))
+                .build();
 
         // 这是与聊天模型交互的主要 API
         chat(chatRequest, handler);
@@ -139,7 +145,9 @@ public interface StreamingChatModel {
     default void chat(List<ChatMessage> messages, StreamingChatResponseHandler handler) {
 
         // 聊天请求
-        ChatRequest chatRequest = ChatRequest.builder().messages(messages).build();
+        ChatRequest chatRequest = ChatRequest.builder()
+                .messages(messages)
+                .build();
 
         // 这是与聊天模型交互的主要 API
         chat(chatRequest, handler);
