@@ -18,13 +18,22 @@ import static dev.langchain4j.data.message.ContentType.TEXT;
 import static dev.langchain4j.internal.Utils.isNullOrEmpty;
 import static dev.langchain4j.model.chat.request.ToolChoice.AUTO;
 
+/**
+ * 聊天请求验证工具
+ */
 @Internal
 public class ChatRequestValidationUtils {
 
+    /**
+     * 验证聊天消息列表
+     * @param messages 聊天消息列表
+     */
     public static void validateMessages(List<ChatMessage> messages) {
         for (ChatMessage message : messages) {
             if (message instanceof UserMessage userMessage) {
+                // 用户消息
                 for (Content content : userMessage.contents()) {
+                    // 文本内容
                     if (content.type() != TEXT) {
                         throw new UnsupportedFeatureException(String.format(
                                 "Content of type %s is not supported yet by this model provider",
@@ -35,6 +44,10 @@ public class ChatRequestValidationUtils {
         }
     }
 
+    /**
+     * 验证聊天请求参数
+     * @param parameters 聊天请求参数
+     */
     public static void validateParameters(ChatRequestParameters parameters) {
         String errorTemplate = "%s is not supported yet by this model provider";
 
@@ -64,12 +77,20 @@ public class ChatRequestValidationUtils {
         }
     }
 
+    /**
+     * 验证工具规格列表
+     * @param toolSpecifications 工具规格列表
+     */
     public static void validate(List<ToolSpecification> toolSpecifications) {
         if (!isNullOrEmpty(toolSpecifications)) {
             throw new UnsupportedFeatureException("tools are not supported yet by this model provider");
         }
     }
 
+    /**
+     * 验证工具选择机制
+     * @param toolChoice 工具选择机制
+     */
     public static void validate(ToolChoice toolChoice) {
         if (toolChoice != null && toolChoice != AUTO) {
             throw new UnsupportedFeatureException(String.format("%s.%s is not supported yet by this model provider",
@@ -77,6 +98,10 @@ public class ChatRequestValidationUtils {
         }
     }
 
+    /**
+     * 验证响应格式
+     * @param responseFormat 响应格式
+     */
     public static void validate(ResponseFormat responseFormat) {
         String errorTemplate = "%s is not supported yet by this model provider";
         if (responseFormat != null && responseFormat.type() == ResponseFormatType.JSON) {

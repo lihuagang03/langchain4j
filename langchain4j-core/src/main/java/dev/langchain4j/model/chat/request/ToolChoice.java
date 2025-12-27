@@ -16,11 +16,13 @@ public enum ToolChoice {
     AUTO,
 
     /**
+     * 聊天模型需要使用一个或多个工具。
      * The chat model is required to use one or more tools.
      */
     REQUIRED,
 
     /**
+     * 聊天模型无法使用工具
      * The chat model cannot use tools
      */
     NONE,

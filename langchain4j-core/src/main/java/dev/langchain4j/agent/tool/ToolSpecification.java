@@ -118,8 +118,18 @@ public class ToolSpecification {
      */
     public static final class Builder {
 
+        /**
+         * 工具名称
+         */
         private String name;
+        /**
+         * 工具的描述
+         */
         private String description;
+        /**
+         * 工具的参数列表
+         * JSON对象模式
+         */
         private JsonObjectSchema parameters;
 
         /**
