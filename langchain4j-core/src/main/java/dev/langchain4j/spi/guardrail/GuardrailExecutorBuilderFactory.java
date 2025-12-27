@@ -9,6 +9,10 @@ import dev.langchain4j.guardrail.config.GuardrailsConfig;
 import dev.langchain4j.observability.api.event.GuardrailExecutedEvent;
 
 /**
+ * 护栏执行器构建者工厂
+ * 表示用于创建 AbstractGuardrailExecutor.GuardrailExecutorBuilder 实例的工厂。
+ * 该接口是封闭的，只能由特定实现扩展，
+ * 例如 InputGuardrailExecutorBuilderFactory 和 OutputGuardrailExecutorBuilderFactory。
  * Represents a factory for creating instances of {@link GuardrailExecutorBuilder}.
  * This interface is sealed and can only be extended by specific implementations like
  * {@code InputGuardrailExecutorBuilderFactory} and {@code OutputGuardrailExecutorBuilderFactory}.
@@ -30,6 +34,7 @@ public sealed interface GuardrailExecutorBuilderFactory<
         permits InputGuardrailExecutorBuilderFactory, OutputGuardrailExecutorBuilderFactory {
 
     /**
+     * 获取用于创建 GuardrailExecutor 实例的构建者。
      * Retrieves a builder for creating instances of {@link GuardrailExecutor}.
      * @return A new instance of type {@link B}, which is a builder extending from {@link GuardrailExecutorBuilder}.
      */
