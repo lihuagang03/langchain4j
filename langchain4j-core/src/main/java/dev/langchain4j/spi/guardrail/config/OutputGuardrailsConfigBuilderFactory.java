@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 /**
  * 输出护栏配置构建者工厂
+ * 用于覆盖和/或扩展默认 OutputGuardrailsConfig.OutputGuardrailsConfigBuilder 实现的 SPI。
  * SPI for overriding and/or extending the default {@link OutputGuardrailsConfig.OutputGuardrailsConfigBuilder} implementation.
  */
 public interface OutputGuardrailsConfigBuilderFactory
