@@ -8,6 +8,7 @@ import dev.langchain4j.invocation.InvocationContext;
 /**
  * 护栏执行事件
  * 表示在护栏验证发生时执行的事件。
+ * 此接口作为包含与护栏验证相关的参数和结果的事件的标记。
  * Represents an event that is executed when a guardrail validation occurs.
  * This interface serves as a marker for events that contain both parameters
  * and results associated with guardrail validation.
@@ -55,8 +56,17 @@ public interface GuardrailExecutedEvent<
                     T extends GuardrailExecutedEvent<P, R, G>>
             extends Builder<T> {
 
+        /**
+         * 护栏请求
+         */
         private P request;
+        /**
+         * 护栏结果
+         */
         private R result;
+        /**
+         * 护栏实现类
+         */
         private Class<G> guardrailClass;
 
         protected GuardrailExecutedEventBuilder() {}

@@ -43,7 +43,7 @@ public interface InvocationContext {
     String methodName();
 
     /**
-     * 传递给 AI 服务方法的参数
+     * 传递给 AI 服务方法的参数列表
      * The arguments passed into the AI Service method
      */
     List<Object> methodArguments();
@@ -55,7 +55,7 @@ public interface InvocationContext {
     Object chatMemoryId();
 
     /**
-     * 调用参数
+     * AI 服务调用参数映射表
      * The invocation parameters
      */
     InvocationParameters invocationParameters();
@@ -96,13 +96,37 @@ public interface InvocationContext {
      */
     class Builder {
 
+        /**
+         * 整个 AI 服务调用的唯一标识符
+         */
         private UUID invocationId;
+        /**
+         * 发起调用的 AI 服务接口的类完全限定名称
+         */
         private String interfaceName;
+        /**
+         * 调用发起自 interfaceName() 的方法名称
+         */
         private String methodName;
+        /**
+         * 传递给 AI 服务方法的参数列表
+         */
         private final List<@NonNull Object> methodArguments = new ArrayList<>();
+        /**
+         * 该方法的聊天记忆ID
+         */
         private Object chatMemoryId;
+        /**
+         * AI 服务调用参数映射表
+         */
         private InvocationParameters invocationParameters;
+        /**
+         * LangChain4j 管理的参数
+         */
         private Map<Class<? extends LangChain4jManaged>, LangChain4jManaged> managedParameters;
+        /**
+         * 调用发生的时间点
+         */
         private Instant timestamp;
 
         protected Builder() {}

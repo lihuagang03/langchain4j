@@ -36,11 +36,11 @@ public final class GuardrailRequestParams {
      */
     private final Map<String, Object> variables;
     /**
-     * AI服务调用的上下文
+     * AI 服务调用的上下文
      */
     private final InvocationContext invocationContext;
     /**
-     * AI服务监视器的注册器
+     * AI 服务监视器的注册器
      */
     private final AiServiceListenerRegistrar aiServiceListenerRegistrar;
 
@@ -133,11 +133,29 @@ public final class GuardrailRequestParams {
      * Builder for {@link GuardrailRequestParams}.
      */
     public static class Builder {
+        /**
+         * 聊天记忆
+         */
         private ChatMemory chatMemory;
+        /**
+         * 增强结果
+         */
         private AugmentationResult augmentationResult;
+        /**
+         * 用户消息模版
+         */
         private String userMessageTemplate;
+        /**
+         * 输入变量的映射表
+         */
         private Map<String, Object> variables;
+        /**
+         * AI 服务调用的上下文
+         */
         private InvocationContext invocationContext;
+        /**
+         * AI 服务监视器的注册器
+         */
         private AiServiceListenerRegistrar aiServiceListenerRegistrar;
 
         public Builder() {}

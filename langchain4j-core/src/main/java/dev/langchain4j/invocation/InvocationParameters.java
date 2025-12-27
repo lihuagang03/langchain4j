@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * AI服务调用参数
+ * AI服务调用参数映射表
  * 表示在一次 AI 服务调用期间可用的任意参数。
  * 调用 AI 服务时可以指定 InvocationParameters：
  * Represents arbitrary parameters available during a single AI Service invocation.

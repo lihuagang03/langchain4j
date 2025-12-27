@@ -46,7 +46,13 @@ public class AugmentationResult {
 
     public static class AugmentationResultBuilder {
 
+        /**
+         * 增强的聊天消息
+         */
         private ChatMessage chatMessage;
+        /**
+         * 用于增强原始聊天消息的内容列表
+         */
         private List<Content> contents;
 
         AugmentationResultBuilder() {

@@ -105,12 +105,30 @@ public class ChatResponse {
     }
 
     public static class Builder {
+        /**
+         * AI消息
+         */
         private AiMessage aiMessage;
+        /**
+         * 聊天响应的元数据
+         */
         private ChatResponseMetadata metadata;
 
+        /**
+         * 聊天对话ID
+         */
         private String id;
+        /**
+         * 模型名称
+         */
         private String modelName;
+        /**
+         * 词元使用情况
+         */
         private TokenUsage tokenUsage;
+        /**
+         * 完成原因
+         */
         private FinishReason finishReason;
 
         public Builder() {}
