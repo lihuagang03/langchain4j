@@ -19,6 +19,7 @@ public interface OutputGuardrailsConfig extends GuardrailsConfig {
     int MAX_RETRIES_DEFAULT = 2;
 
     /**
+     * 配置防护措施的最大重试次数。
      * Configures the maximum number of retries for the guardrail.
      * <p>
      *     Defaults to {@link #MAX_RETRIES_DEFAULT} if not set.
@@ -28,6 +29,7 @@ public interface OutputGuardrailsConfig extends GuardrailsConfig {
     int maxRetries();
 
     /**
+     * 获取用于构建 OutputGuardrailsConfig 实例的 newBuilder 实例。
      * Gets a newBuilder instance for building {@link OutputGuardrailsConfig} instances.
      * @return A {@link OutputGuardrailsConfigBuilder} for building {@link OutputGuardrailsConfig} instances.
      */
@@ -40,6 +42,7 @@ public interface OutputGuardrailsConfig extends GuardrailsConfig {
     }
 
     /**
+     * OutputGuardrailsConfig 实例的构建者。
      * Builder for {@link OutputGuardrailsConfig} instances.
      * <p>
      *     This is needed so other frameworks (like Quarkus and Spring) can extend the configuration mechanism with their own
@@ -48,6 +51,7 @@ public interface OutputGuardrailsConfig extends GuardrailsConfig {
      */
     interface OutputGuardrailsConfigBuilder extends GuardrailsConfigBuilder<OutputGuardrailsConfig> {
         /**
+         * 设置输出保护机制的最大重试次数。
          * Sets the maximum number of retries for output guardrails.
          * <p>
          *     Defaults to {@link OutputGuardrailsConfig#maxRetries()} if not set.

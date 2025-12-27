@@ -4,6 +4,7 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
  * 输出护栏配置的默认实现
+ * 如果其他库没有提供自己的实现，则此库的 OutputGuardrailsConfig 的默认实现。
  * The default implementation of {@link OutputGuardrailsConfig} for this library if no other libraries provide their own implementations.
  */
 final class DefaultOutputGuardrailsConfig implements OutputGuardrailsConfig {
@@ -18,6 +19,7 @@ final class DefaultOutputGuardrailsConfig implements OutputGuardrailsConfig {
     }
 
     /**
+     * 获取用于构建 DefaultOutputGuardrailsConfig 实例的构建者实例。
      * Gets a builder instance for building {@link DefaultOutputGuardrailsConfig} instances.
      * @return The builder instance for building {@link DefaultOutputGuardrailsConfig} instances.
      */
@@ -31,6 +33,7 @@ final class DefaultOutputGuardrailsConfig implements OutputGuardrailsConfig {
     }
 
     /**
+     * 用于构建 DefaultOutputGuardrailsConfig 实例。
      * Builder for {@link DefaultOutputGuardrailsConfig} instances.
      */
     static class Builder implements OutputGuardrailsConfigBuilder {

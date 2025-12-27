@@ -4,6 +4,7 @@ import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 /**
  * 输入护栏配置的默认实现
+ * 如果没有其他库提供自己的实现，这是该库的 InputGuardrailsConfig 的默认实现。
  * The default implementation of {@link InputGuardrailsConfig} for this library if no other libraries provide their own implementations.
  */
 final class DefaultInputGuardrailsConfig implements InputGuardrailsConfig {
@@ -12,6 +13,7 @@ final class DefaultInputGuardrailsConfig implements InputGuardrailsConfig {
     }
 
     /**
+     * 获取用于构建 DefaultInputGuardrailsConfig 实例的构建者实例。
      * Gets a builder instance for building {@link DefaultInputGuardrailsConfig} instances.
      * @return The builder instance for building {@link DefaultInputGuardrailsConfig} instances.
      */
@@ -20,6 +22,7 @@ final class DefaultInputGuardrailsConfig implements InputGuardrailsConfig {
     }
 
     /**
+     * 用于 DefaultInputGuardrailsConfig 实例的构建者。
      * Builder for {@link DefaultInputGuardrailsConfig} instances.
      */
     static class Builder implements InputGuardrailsConfigBuilder {
