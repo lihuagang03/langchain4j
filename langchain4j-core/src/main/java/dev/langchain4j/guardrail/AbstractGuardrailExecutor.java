@@ -53,6 +53,7 @@ public abstract sealed class AbstractGuardrailExecutor<
     }
 
     /**
+     * 从一些 GuardrailResult.Failures 创建一个失败结果。
      * Creates a failure result from some {@link Failure}s.
      * @param failures The failures
      * @return A {@link GuardrailResult} containing the failures
@@ -60,12 +61,14 @@ public abstract sealed class AbstractGuardrailExecutor<
     protected abstract R createFailure(List<F> failures);
 
     /**
+     * 创建一个成功结果。
      * Creates a success result.
      * @return A {@link GuardrailResult} representing success
      */
     protected abstract R createSuccess();
 
     /**
+     * 使用提供的消息和可选原因创建 GuardrailException。
      * Creates a {@link GuardrailException} using the provided message and optional cause.
      *
      * @param message The detailed message for the exception.
@@ -75,6 +78,7 @@ public abstract sealed class AbstractGuardrailExecutor<
     protected abstract GuardrailException createGuardrailException(String message, Throwable cause);
 
     /**
+     * 创建一个空的 GuardrailExecutedEvent.GuardrailExecutedEventBuilder 实例，用于构建可观测性事件对象。
      * Creates an empty instance of {@link GuardrailExecutedEventBuilder} used for constructing observability event objects.
      *
      * @return An initialized instance of {@link GuardrailExecutedEventBuilder} with the appropriate type parameters.
@@ -92,6 +96,7 @@ public abstract sealed class AbstractGuardrailExecutor<
     }
 
     /**
+     * 针对一组请求验证护栏的有效性。
      * Validates a guardrail against a set of request.
      * <p>
      *     If any kind of {@link Exception} is thrown during validation, it will be wrapped in a {@link GuardrailException}.
@@ -106,13 +111,15 @@ public abstract sealed class AbstractGuardrailExecutor<
         ensureNotNull(guardrail, "guardrail");
 
         try {
-            return guardrail.validate(request).validatedBy(guardrail.getClass());
+            return guardrail.validate(request)
+                    .validatedBy(guardrail.getClass());
         } catch (Exception e) {
             throw createGuardrailException(e.getMessage(), e);
         }
     }
 
     /**
+     * 处理致命的结果。
      * Handles a fatal result.
      * @param accumulatedResult The accumulated result
      * @param result The fatal result
@@ -154,6 +161,7 @@ public abstract sealed class AbstractGuardrailExecutor<
                     accumulatedRequest = accumulatedRequest.withText(result.successfulText());
                 }
 
+                // 组成结果
                 accumulatedResult = composeResult(accumulatedResult, result);
             }
         }
@@ -206,8 +214,17 @@ public abstract sealed class AbstractGuardrailExecutor<
             permits InputGuardrailExecutor.InputGuardrailExecutorBuilder,
                     OutputGuardrailExecutor.OutputGuardrailExecutorBuilder {
 
+        /**
+         * 默认的护栏配置
+         */
         private final C defaultConfig;
+        /**
+         * 护栏配置
+         */
         private C config;
+        /**
+         * 护栏列表
+         */
         private List<G> guardrails = new ArrayList<>();
 
         protected GuardrailExecutorBuilder(C defaultConfig) {
@@ -288,7 +305,9 @@ public abstract sealed class AbstractGuardrailExecutor<
          * @return The updated instance of the builder, allowing for method chaining.
          */
         public B guardrails(G... guardrails) {
-            Optional.ofNullable(guardrails).map(List::of).ifPresent(this::guardrails);
+            Optional.ofNullable(guardrails)
+                    .map(List::of)
+                    .ifPresent(this::guardrails);
 
             return (B) this;
         }

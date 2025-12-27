@@ -17,8 +17,11 @@ import java.util.stream.Collectors;
 
 /**
  * 输出护栏执行器
+ * 用于输出护栏的 GuardrailExecutor。
  * The {@link GuardrailExecutor} for {@link OutputGuardrail}s.
  * <p>
+ *     在执行输出防护时，如果任何输出防护触发了重新提示或重试，
+ *     新响应必须重新经过整个输出防护链，以确保新响应通过所有输出防护。
  *     When executing output guardrails, if any {@link OutputGuardrail} triggers a reprompt or retry,
  *     the new response has to go back through the entire chain of output guardrails to ensure the new response
  *     passes all the output guardrails.
@@ -34,8 +37,10 @@ public non-sealed class OutputGuardrailExecutor
                 Failure> {
 
     /**
-     * 输出验证失败。保护措施已达到最大重试次数。
-     * 保护措施消息：
+     * 输出验证失败。护栏已达到最大重试次数。
+     * 护栏消息：
+     *
+     * %s
      */
     public static final String MAX_RETRIES_MESSAGE_TEMPLATE =
             """
@@ -50,6 +55,7 @@ public non-sealed class OutputGuardrailExecutor
     }
 
     /**
+     * 在给定的 OutputGuardrailRequest 上执行 OutputGuardrails。
      * Executes the {@link OutputGuardrail}s on the given {@link OutputGuardrailRequest}.
      *
      * @param request     The {@link OutputGuardrailRequest} to validate
@@ -60,6 +66,7 @@ public non-sealed class OutputGuardrailExecutor
         OutputGuardrailResult result = null;
         var accumulatedRequest = request;
         var attempt = 0;
+        // 最大尝试次数
         var maxAttempts = config().maxRetries();
 
         if (maxAttempts == 0) {
@@ -69,6 +76,7 @@ public non-sealed class OutputGuardrailExecutor
         }
 
         while (attempt < maxAttempts) {
+            // 重写结果
             result = rewriteResult(request, accumulatedRequest, executeGuardrails(accumulatedRequest));
 
             if (result.isSuccess()) {
@@ -82,6 +90,8 @@ public non-sealed class OutputGuardrailExecutor
             }
 
             if (++attempt < maxAttempts) {
+                // 如果我们到这里，我们就知道这是某种重试
+                // 我们不想在内存中添加中间的用户消息
                 // If we get here we know it is some kind of retry
                 // We don't want to add intermediary UserMessages to the memory
                 var chatMessages = Optional.ofNullable(
@@ -90,6 +100,8 @@ public non-sealed class OutputGuardrailExecutor
                         .orElseGet(ArrayList::new);
                 result.getReprompt().map(UserMessage::from).ifPresent(chatMessages::add);
 
+                // 重新执行带有附加消息的请求
+                // 但不要将其或生成的消息添加到记忆中
                 // Re-execute the request with the appended message
                 // But don't add it or the resulting message to the memory
                 var response = accumulatedRequest.chatExecutor().execute(chatMessages);
@@ -117,9 +129,13 @@ public non-sealed class OutputGuardrailExecutor
             String originalText = originalRequest.responseFromLLM().aiMessage().text();
             String validatedText = validatedRequest.responseFromLLM().aiMessage().text();
             if (!originalText.equals(validatedText)) {
+                // 由于成功的重新提示，输出护栏验证的文本与原始文本不同，
+                // 因此我们需要使用新文本创建一个新的成功结果
                 // The text validated by the output guardrail is different form the original one because of a
                 // successful reprompt, so we need to create a new success result with the new text
-                return successWith(originalRequest.responseFromLLM().aiMessage().withText(validatedText));
+                return successWith(originalRequest.responseFromLLM()
+                        .aiMessage()
+                        .withText(validatedText));
             }
         }
         return result;
@@ -161,6 +177,8 @@ public non-sealed class OutputGuardrailExecutor
     }
 
     /**
+     * 创建一个新的 OutputGuardrailExecutor.OutputGuardrailExecutorBuilder 实例。
+     * 该构建者用于构造和配置 OutputGuardrailExecutor.OutputGuardrailExecutorBuilder 的实例。
      * Creates a new instance of {@link OutputGuardrailExecutorBuilder}.
      * The builder is used to construct and configure instances of {@link OutputGuardrailExecutorBuilder}.
      * @return A new {@link OutputGuardrailExecutorBuilder} instance.
@@ -173,17 +191,25 @@ public non-sealed class OutputGuardrailExecutor
     }
 
     /**
+     * 用于构建 OutputGuardrailExecutor 实例的构建者类。
      * Builder class for constructing instances of {@link OutputGuardrailExecutor}.
      *
+     * 该构建者允许通过指定关联的配置类型（OutputGuardrailsConfig）和要执行的输出安全栏来配置 OutputGuardrailExecutor。
      * This builder allows configuration of an {@link OutputGuardrailExecutor} by specifying the associated configuration
      * type ({@link OutputGuardrailsConfig}) and the output guardrails to be executed.
      *
+     * 扩展 AbstractGuardrailExecutor.GuardrailExecutorBuilder，针对以下特定类型：
+     * - 配置类型：OutputGuardrailsConfig
+     * - 结果类型：OutputGuardrailResult
+     * - 参数类型：OutputGuardrailRequest
+     * - 安全栅栏类型：OutputGuardrail
      * Extends {@link GuardrailExecutorBuilder} for the specific types:
      * - Configuration type: {@link OutputGuardrailsConfig}
      * - Result type: {@link OutputGuardrailResult}
      * - Parameter type: {@link OutputGuardrailRequest}
      * - Guardrail type: {@link OutputGuardrail}
      *
+     * 提供 build() 方法以创建 OutputGuardrailExecutor 实例。
      * Provides the {@code build()} method to create an {@link OutputGuardrailExecutor} instance.
      */
     public static non-sealed class OutputGuardrailExecutorBuilder
