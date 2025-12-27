@@ -13,14 +13,30 @@ import java.util.stream.Stream;
 
 /**
  * 输出护栏结果
+ * 输出护栏验证的结果
  * The result of the validation of an {@link OutputGuardrail}
  */
 public final class OutputGuardrailResult implements GuardrailResult<OutputGuardrailResult> {
+    /**
+     * 输出护栏的成功结果
+     */
     private static final OutputGuardrailResult SUCCESS = new OutputGuardrailResult();
 
+    /**
+     * 护栏结果
+     */
     private final Result result;
+    /**
+     * 成功的 AI 消息
+     */
     private final AiMessage successfulAiMessage;
+    /**
+     * 成功结果
+     */
     private final Object successfulResult;
+    /**
+     * 输出防护失败列表
+     */
     private final List<Failure> failures;
 
     private OutputGuardrailResult(
@@ -66,6 +82,7 @@ public final class OutputGuardrailResult implements GuardrailResult<OutputGuardr
     }
 
     /**
+     * 获得成功的输出护栏结果
      * Gets a successful output guardrail result
      */
     public static OutputGuardrailResult success() {
@@ -73,6 +90,7 @@ public final class OutputGuardrailResult implements GuardrailResult<OutputGuardr
     }
 
     /**
+     * 产生具有特定成功文本的成功结果
      * Produces a successful result with specific success text
      *
      * @return The result of a successful output guardrail validation with a specific text.
@@ -85,6 +103,7 @@ public final class OutputGuardrailResult implements GuardrailResult<OutputGuardr
     }
 
     /**
+     * 产生非致命失败
      * Produces a non-fatal failure
      *
      * @param successfulText
@@ -98,6 +117,7 @@ public final class OutputGuardrailResult implements GuardrailResult<OutputGuardr
     }
 
     /**
+     * 产生具有特定成功文本的成功结果
      * Produces a successful result with specific success text
      *
      * @return The result of a successful output guardrail validation with a specific AiMessage.
@@ -110,6 +130,7 @@ public final class OutputGuardrailResult implements GuardrailResult<OutputGuardr
     }
 
     /**
+     * 产生非致命失败
      * Produces a non-fatal failure
      *
      * @param successfulAiMessage
@@ -123,6 +144,7 @@ public final class OutputGuardrailResult implements GuardrailResult<OutputGuardr
     }
 
     /**
+     * 产生非致命失败
      * Produces a non-fatal failure
      *
      * @param failures A list of {@link Failure}s
@@ -134,6 +156,7 @@ public final class OutputGuardrailResult implements GuardrailResult<OutputGuardr
     }
 
     /**
+     * 护栏是否正在强制重试
      * Whether or not the guardrail is forcing a retry
      */
     public boolean isRetry() {
@@ -141,6 +164,7 @@ public final class OutputGuardrailResult implements GuardrailResult<OutputGuardr
     }
 
     /**
+     * 护栏是否正在强制重新提示
      * Whether or not the guardrail is forcing a reprompt
      */
     public boolean isReprompt() {
@@ -153,6 +177,7 @@ public final class OutputGuardrailResult implements GuardrailResult<OutputGuardr
     }
 
     /**
+     * 阻止对此结果的所有重试
      * Block all retries for this result
      */
     public OutputGuardrailResult blockRetry() {
@@ -161,6 +186,7 @@ public final class OutputGuardrailResult implements GuardrailResult<OutputGuardr
     }
 
     /**
+     * 获取再次提示消息
      * Gets the reprompt message
      */
     public Optional<String> getReprompt() {
@@ -194,6 +220,7 @@ public final class OutputGuardrailResult implements GuardrailResult<OutputGuardr
     }
 
     /**
+     * 获取从 OutputGuardrailRequest 中的原始 ChatResponse 与此结果组合计算出的响应
      * Gets the response computed from the combination of the original {@link ChatResponse} in the {@link OutputGuardrailRequest}
      * and this result
      * @param request The output guardrail request
@@ -233,13 +260,29 @@ public final class OutputGuardrailResult implements GuardrailResult<OutputGuardr
     }
 
     /**
+     * 表示输出防护失败
      * Represents an output guardrail failure
      */
     public static final class Failure implements GuardrailResult.Failure {
+        /**
+         * 失败消息
+         */
         private final String message;
+        /**
+         * 失败的原因
+         */
         private final Throwable cause;
+        /**
+         * 护栏实现类
+         */
         private final Class<? extends Guardrail> guardrailClass;
+        /**
+         * 重试开关
+         */
         private final boolean retry;
+        /**
+         * 重新提示
+         */
         private final String reprompt;
 
         Failure(
@@ -293,6 +336,7 @@ public final class OutputGuardrailResult implements GuardrailResult<OutputGuardr
         }
 
         /**
+         * 从此失败中创建一个阻止重试的失败
          * Create a failure from this failure that blocks retries
          */
         public Failure blockRetry() {

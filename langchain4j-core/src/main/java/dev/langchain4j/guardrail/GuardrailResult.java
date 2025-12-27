@@ -70,11 +70,13 @@ public sealed interface GuardrailResult<GR extends GuardrailResult<GR>>
         Throwable cause();
 
         /**
+         * 护栏实现类
          * The {@link Guardrail} class
          */
         Class<? extends Guardrail> guardrailClass();
 
         /**
+         * 失败的字符串表示
          * The string representation of the failure
          * @return A string representation of the failure
          */
@@ -93,16 +95,19 @@ public sealed interface GuardrailResult<GR extends GuardrailResult<GR>>
     Result result();
 
     /**
+     * 最终由一组验证导致的失败列表。
      * @return The list of failures eventually resulting from a set of validations.
      */
     <F extends Failure> List<F> failures();
 
     /**
+     * 成功结果的消息
      * The message of the successful result
      */
     String successfulText();
 
     /**
+     * 无论结果是否成功，但结果被重新编写，可能是由于重新提示导致的
      * Whether or not the result is successful, but the result was re-written, potentially due to re-prompting
      */
     default boolean hasRewrittenResult() {
@@ -110,6 +115,7 @@ public sealed interface GuardrailResult<GR extends GuardrailResult<GR>>
     }
 
     /**
+     * 无论结果是否被视为致命
      * Whether or not the result is considered fatal
      */
     default boolean isFatal() {
@@ -117,6 +123,7 @@ public sealed interface GuardrailResult<GR extends GuardrailResult<GR>>
     }
 
     /**
+     * 无论结果是否被视为成功
      * Whether or not the result is considered successful
      */
     default boolean isSuccess() {
@@ -125,6 +132,7 @@ public sealed interface GuardrailResult<GR extends GuardrailResult<GR>>
     }
 
     /**
+     * 获取第一次失败的异常
      * Gets the exception from the first failure
      */
     default Throwable getFirstFailureException() {
@@ -138,6 +146,7 @@ public sealed interface GuardrailResult<GR extends GuardrailResult<GR>>
     }
 
     /**
+     * 执行此验证的 Guardrail 类
      * The {@link Guardrail} class which performed this validation
      */
     default GR validatedBy(Class<? extends Guardrail> guardrailClass) {
@@ -161,6 +170,8 @@ public sealed interface GuardrailResult<GR extends GuardrailResult<GR>>
             return hasRewrittenResult() ? "Success with '%s'".formatted(successfulText()) : "Success";
         }
 
-        return failures().stream().map(Failure::toString).collect(Collectors.joining(", "));
+        return failures().stream()
+                .map(Failure::toString)
+                .collect(Collectors.joining(", "));
     }
 }

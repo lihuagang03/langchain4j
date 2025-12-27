@@ -11,13 +11,26 @@ import java.util.Optional;
 
 /**
  * 输入护栏结果
+ * 输入护栏验证的结果
  * The result of the validation of an {@link InputGuardrail}
  */
 public final class InputGuardrailResult implements GuardrailResult<InputGuardrailResult> {
+    /**
+     * 输入护栏的成功结果
+     */
     private static final InputGuardrailResult SUCCESS = new InputGuardrailResult();
 
+    /**
+     * 护栏结果
+     */
     private final Result result;
+    /**
+     * 成功文本
+     */
     private final String successfulText;
+    /**
+     * 输入防护失败列表
+     */
     private final List<Failure> failures;
 
     private InputGuardrailResult(Result result, String successfulText, List<Failure> failures) {
@@ -43,6 +56,7 @@ public final class InputGuardrailResult implements GuardrailResult<InputGuardrai
     }
 
     /**
+     * 获取成功的输入护栏结果
      * Gets a successful input guardrail result
      */
     public static InputGuardrailResult success() {
@@ -50,6 +64,7 @@ public final class InputGuardrailResult implements GuardrailResult<InputGuardrai
     }
 
     /**
+     * 产生具有特定成功文本的成功结果
      * Produces a successful result with specific success text
      *
      * @return The result of a successful input guardrail validation with a specific text.
@@ -83,6 +98,7 @@ public final class InputGuardrailResult implements GuardrailResult<InputGuardrai
     }
 
     /**
+     * 获取由 InputGuardrailRequest 中的原始用户消息与此结果组合计算得出的用户消息
      * Gets the {@link UserMessage} computed from the combination of the original {@link UserMessage} in the {@link InputGuardrailRequest}
      * and this result
      * @param params The input guardrail params
@@ -109,11 +125,21 @@ public final class InputGuardrailResult implements GuardrailResult<InputGuardrai
     }
 
     /**
+     * 表示输入防护失败
      * Represents an input guardrail failure
      */
     public static final class Failure implements GuardrailResult.Failure {
+        /**
+         * 失败消息
+         */
         private final String message;
+        /**
+         * 失败的原因
+         */
         private final Throwable cause;
+        /**
+         * 护栏实现类
+         */
         private final Class<? extends Guardrail> guardrailClass;
 
         Failure(String message, Throwable cause, Class<? extends Guardrail> guardrailClass) {
