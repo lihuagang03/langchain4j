@@ -16,13 +16,17 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 流式到同步的聊天执行器
+ * ChatExecutor 接口的一个具体实现，它使用指定的 StreamingChatModel 执行聊天请求。
+ * 然后，它会像同步执行一样执行这些请求，本质上将流式请求转换为同步请求。
  * A concrete implementation of the {@link ChatExecutor} interface that executes
  * chat requests using a specified {@link StreamingChatModel}. It then executes the requests as if it were
  * synchronous, essentially transforming a streaming request to a synchronous request
  *
+ * 该类使用 ChatRequest 来封装输入消息和参数，并将聊天的执行委托给提供的 StreamingChatModel。
  * This class utilizes a {@link ChatRequest} to encapsulate the input messages
  *  and parameters and delegates the execution of the chat to the provided {@link StreamingChatModel}.
  *
+ * 该类的实例是不可变的，通常使用 ChatExecutor.StreamingToSynchronousBuilder 进行实例化。
  *  Instances of this class are immutable and are typically instantiated using
  *  the {@link StreamingToSynchronousBuilder}.
  */
@@ -59,6 +63,10 @@ final class StreamingToSynchronousChatExecutor extends AbstractChatExecutor {
      */
     private static class StreamingToSyncResponseHandler implements StreamingChatResponseHandler {
         private static final Logger LOG = LoggerFactory.getLogger(StreamingToSyncResponseHandler.class);
+
+        /**
+         * 错误异常的处理器
+         */
         private final Consumer<Throwable> errorHandler;
         /**
          * 倒计时锁
@@ -78,12 +86,14 @@ final class StreamingToSynchronousChatExecutor extends AbstractChatExecutor {
 
         @Override
         public void onCompleteResponse(ChatResponse completeResponse) {
+            // 聊天响应完成
             response.set(completeResponse);
             this.latch.countDown();
         }
 
         private void waitForCompletion() {
             try {
+                // 等待完成
                 this.latch.await();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -91,6 +101,7 @@ final class StreamingToSynchronousChatExecutor extends AbstractChatExecutor {
         }
 
         ChatResponse getResponse() {
+            // 等待完成
             waitForCompletion();
             return this.response.get();
         }

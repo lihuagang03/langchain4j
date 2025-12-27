@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * 聊天执行器的抽象基类
- * 用于聊天执行器的抽象基类，提供了实现 ChatExecutor 接口的通用结构和共享功能。
+ * 聊天执行器的抽象基类，为实现 ChatExecutor 接口提供通用结构和共享功能。
  * Abstract base class for chat executors that provides a common structure and shared functionality
  * for implementing the {@link ChatExecutor} interface.
  *
@@ -46,7 +46,7 @@ abstract class AbstractChatExecutor implements ChatExecutor {
 
     @Override
     public ChatResponse execute(List<ChatMessage> chatMessages) {
-        // 聊天请求
+        // 根据聊天消息列表，构建新的聊天请求
         var newChatRequest = this.chatRequest.toBuilder().messages(chatMessages).build();
 
         // 执行聊天请求

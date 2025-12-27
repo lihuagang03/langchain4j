@@ -25,7 +25,7 @@ public interface ChatExecutor {
     ChatResponse execute();
 
     /**
-     * 使用提供的聊天消息执行聊天请求
+     * 使用提供的聊天消息列表执行聊天请求
      * Executes a chat request using the provided chat messages
      * @param chatMessages The chat messages containing the context of the conversation.
      *                     It provides the history of messages required for proper interaction with the chat model
@@ -56,8 +56,11 @@ public interface ChatExecutor {
     }
 
     /**
+     * 一个用于构建 ChatExecutor 实例的抽象基础构建者类。
      * An abstract base-builder class for constructing instances of {@link ChatExecutor}.
      *
+     * 该类提供了用于设置所需组件（例如 ChatRequest）的流式 API，并定义了构建 ChatExecutor 实例的契约。
+     * 子类应实现 build() 方法，以确保目标聊天执行器对象的正确构建。
      * This class provides a fluent API for setting required components, such as
      * {@link ChatRequest}, and defines a contract for building {@link ChatExecutor}
      * instances. Subclasses should implement the {@code build()} method to ensure
