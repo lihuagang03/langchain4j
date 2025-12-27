@@ -29,7 +29,7 @@ final class SynchronousChatExecutor extends AbstractChatExecutor {
      */
     private final ChatModel chatModel;
 
-    protected SynchronousChatExecutor(SynchronousBuilder builder) {
+    SynchronousChatExecutor(SynchronousBuilder builder) {
         super(builder);
         this.chatModel = ensureNotNull(builder.chatModel, "chatModel");
     }

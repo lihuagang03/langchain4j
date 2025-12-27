@@ -18,8 +18,10 @@ public interface Guardrail<P extends GuardrailRequest, R extends GuardrailResult
      *
      * @param request
      *            The parameters of the request or the response to be validated
+     *            要验证的请求或响应的参数
      *
      * @return The result of the validation
+     *         验证结果
      */
     R validate(P request);
 }

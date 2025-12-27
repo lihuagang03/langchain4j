@@ -3,6 +3,7 @@ package dev.langchain4j.guardrail;
 import static dev.langchain4j.internal.ValidationUtils.ensureNotNull;
 
 import dev.langchain4j.Internal;
+import dev.langchain4j.exception.LangChain4jException;
 import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.model.chat.request.ChatRequest;
 import dev.langchain4j.model.chat.response.ChatResponse;
@@ -41,7 +42,7 @@ final class StreamingToSynchronousChatExecutor extends AbstractChatExecutor {
      */
     private final Consumer<Throwable> errorHandler;
 
-    protected StreamingToSynchronousChatExecutor(StreamingToSynchronousBuilder builder) {
+    StreamingToSynchronousChatExecutor(StreamingToSynchronousBuilder builder) {
         super(builder);
 
         this.streamingChatModel = ensureNotNull(builder.streamingChatModel, "streamingChatModel");
@@ -75,7 +76,7 @@ final class StreamingToSynchronousChatExecutor extends AbstractChatExecutor {
         /**
          * 聊天响应的引用
          */
-        private AtomicReference<ChatResponse> response = new AtomicReference<>();
+        private final AtomicReference<ChatResponse> response = new AtomicReference<>();
 
         StreamingToSyncResponseHandler(Consumer<Throwable> errorHandler) {
             this.errorHandler = errorHandler;
@@ -96,7 +97,7 @@ final class StreamingToSynchronousChatExecutor extends AbstractChatExecutor {
                 // 等待完成
                 this.latch.await();
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                throw new LangChain4jException(e);
             }
         }
 
@@ -110,6 +111,7 @@ final class StreamingToSynchronousChatExecutor extends AbstractChatExecutor {
         public void onError(Throwable error) {
             if (errorHandler != null) {
                 try {
+                    // 接受错误
                     errorHandler.accept(error);
                 } catch (Exception e) {
                     LOG.error("While handling the following error...", error);

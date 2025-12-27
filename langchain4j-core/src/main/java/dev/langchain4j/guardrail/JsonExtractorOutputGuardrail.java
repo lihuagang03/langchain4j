@@ -12,9 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * JSON提取器输出防护
+ * 一个输出防护机制，用于检查响应是否可以成功反序列化为类型为 T 的对象（从 JSON）。
  * An {@link OutputGuardrail} that will check whether or not a response can be successfully deserialized to an object
- * of type {@code T} from JSON
+ * of type {@code T} from JSON.
  * <p>
+ *     如果反序列化失败，LLM 将使用 getInvalidJsonReprompt(AiMessage, String) 重新提示，
+ *     默认情况下为 DEFAULT_REPROMPT_PROMPT。
  *     If deserialization fails, the LLM will be reprompted with {@link #getInvalidJsonReprompt(AiMessage, String)}, which
  *     defaults to {@link #DEFAULT_REPROMPT_PROMPT}.
  * </p>
@@ -23,19 +27,32 @@ import org.slf4j.LoggerFactory;
  */
 public class JsonExtractorOutputGuardrail<T> implements OutputGuardrail {
     /**
+     * 重新提示时使用的默认消息
      * The default message to use when reprompting
      */
     public static final String DEFAULT_REPROMPT_MESSAGE = "Invalid JSON";
 
     /**
+     * 在重新提示期间附加到大型语言模型的默认提示
      * The default prompt to append to the LLM during a reprompt
+     *
+     * 确保你返回一个符合指定格式的有效 JSON 对象
      */
     public static final String DEFAULT_REPROMPT_PROMPT =
             "Make sure you return a valid JSON object following the specified format";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonExtractorOutputGuardrail.class);
+    /**
+     * 对象映射器
+     */
     private final ObjectMapper objectMapper;
+    /**
+     * 输出类
+     */
     private Class<T> outputClass;
+    /**
+     * 输出类型
+     */
     private TypeReference<T> outputType;
 
     public JsonExtractorOutputGuardrail(ObjectMapper objectMapper, Class<T> outputClass) {
@@ -72,6 +89,7 @@ public class JsonExtractorOutputGuardrail<T> implements OutputGuardrail {
     }
 
     /**
+     * 生成一条消息，指示提供的 JSON 无效。
      * Generates a message indicating that the provided JSON is invalid.
      *
      * @param aiMessage the AI message associated with the invalid JSON. This parameter is not used.
@@ -84,8 +102,10 @@ public class JsonExtractorOutputGuardrail<T> implements OutputGuardrail {
     }
 
     /**
+     * 生成一个重试提示消息，指出提供的 JSON 无效。
      * Generates a reprompt message indicating that the provided JSON is invalid.
      * <p>
+     *     此消息附加在上一次请求中的用户消息后。
      *     This message is appended to the user message from the previous request.
      * </p>
      *
@@ -99,6 +119,8 @@ public class JsonExtractorOutputGuardrail<T> implements OutputGuardrail {
     }
 
     /**
+     * 尝试使用配置的 ObjectMapper 将提供的 LLM 响应字符串反序列化为类型 T 的对象。
+     * 如果反序列化失败，则返回一个空的 Optional。
      * Tries to deserialize the provided LLM response string into an object of type T using the configured {@link ObjectMapper}.
      * If deserialization fails, an empty Optional is returned.
      *
