@@ -49,19 +49,26 @@ public final class InputGuardrailRequest implements GuardrailRequest<InputGuardr
 
     @Override
     public InputGuardrailRequest withText(String text) {
+        // 重写用户消息
         return new Builder()
                 .userMessage(rewriteUserMessage(text))
                 .commonParams(this.commonParams)
                 .build();
     }
 
+    /**
+     * 重写用户消息
+     * @param text 文本
+     * @return 用户消息
+     */
     public UserMessage rewriteUserMessage(String text) {
         if (Objects.isNull(this.userMessage) || Objects.isNull(text)) {
             return this.userMessage;
         }
 
         // 重写内容
-        var rewrittenContent = this.userMessage.contents().stream()
+        var rewrittenContent = this.userMessage.contents()
+                .stream()
                 .map(c -> (c.type() == ContentType.TEXT) ? new TextContent(text) : c)
                 .toList();
 
@@ -83,7 +90,14 @@ public final class InputGuardrailRequest implements GuardrailRequest<InputGuardr
      * Builder for {@link InputGuardrailRequest}.
      */
     public static class Builder {
+        /**
+         * 用户消息
+         */
         private UserMessage userMessage;
+        /**
+         * 护栏请求参数
+         * 共享的常见参数
+         */
         private GuardrailRequestParams commonParams;
 
         /**

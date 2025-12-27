@@ -76,6 +76,7 @@ public final class OutputGuardrailRequest implements GuardrailRequest<OutputGuar
                 .metadata(this.responseFromLLM.metadata())
                 .build();
 
+        // 输出护栏请求
         return builder()
                 .responseFromLLM(chatResponse)
                 .chatExecutor(this.chatExecutor)
@@ -96,8 +97,17 @@ public final class OutputGuardrailRequest implements GuardrailRequest<OutputGuar
      * Builder for {@link OutputGuardrailRequest}.
      */
     public static class Builder {
+        /**
+         * 来自大模型的聊天响应
+         */
         private ChatResponse responseFromLLM;
+        /**
+         * 聊天执行器
+         */
         private ChatExecutor chatExecutor;
+        /**
+         * 护栏请求参数
+         */
         private GuardrailRequestParams requestParams;
 
         private Builder() {}
