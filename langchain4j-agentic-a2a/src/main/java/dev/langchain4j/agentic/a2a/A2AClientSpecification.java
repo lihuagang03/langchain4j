@@ -9,7 +9,7 @@ import io.a2a.spec.AgentCard;
 public interface A2AClientSpecification extends AgentSpecification {
 
     /**
-     * 输入变量的键的列表
+     * 输入变量的键列表
      */
     String[] inputKeys();
 

@@ -59,7 +59,7 @@ public class DefaultAgenticScope implements AgenticScope {
     private final List<AgentMessage> context = Collections.synchronizedList(new ArrayList<>());
 
     /**
-     * 智能体ID到智能体的映射表
+     * 智能体ID到智能体对象的映射表
      */
     private final transient Map<String, Object> agents = new ConcurrentHashMap<>();
 

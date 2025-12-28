@@ -4,25 +4,45 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
+/**
+ * 智能体到智能体的服务
+ */
 public interface A2AService {
 
     boolean isPresent();
 
+    /**
+     * 智能体到智能体的客户端构建者
+     * @param a2aServerUrl 智能体到智能体的服务器地址
+     * @param agentServiceClass 智能体服务实现类
+     */
     <T> A2AClientBuilder<T> a2aBuilder(String a2aServerUrl, Class<T> agentServiceClass);
 
+    /**
+     * 方法到智能体执行器
+     * @param a2aClient 智能体到智能体的客户端，智能体规范
+     * @param method 方法
+     */
     Optional<AgentExecutor> methodToAgentExecutor(AgentSpecification a2aClient, Method method);
 
+    /**
+     * 获取智能体到智能体的服务
+     */
     static A2AService get() {
         return Provider.a2aService;
     }
 
     class Provider {
 
+        /**
+         * 智能体到智能体的服务
+         */
         static A2AService a2aService = loadA2AService();
 
         private Provider() { }
 
         private static A2AService loadA2AService() {
+            // 加载智能体到智能体的服务
             ServiceLoader<A2AService> loader =
                     ServiceLoader.load(A2AService.class);
 

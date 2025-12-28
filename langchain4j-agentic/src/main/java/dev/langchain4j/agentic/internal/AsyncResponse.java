@@ -9,6 +9,9 @@ import java.util.function.Supplier;
  */
 public class AsyncResponse<T> {
 
+    /**
+     * 异步的响应
+     */
     private final CompletableFuture<T> futureResponse;
 
     public AsyncResponse(Supplier<T> responseSupplier) {
@@ -17,6 +20,7 @@ public class AsyncResponse<T> {
     }
 
     public T blockingGet() {
+        // 阻塞地获取
         return futureResponse.join();
     }
 
@@ -26,6 +30,7 @@ public class AsyncResponse<T> {
     }
 
     public Object result() {
+        // 响应结果
         return futureResponse.isDone() ? futureResponse.join() : "<pending>";
     }
 }

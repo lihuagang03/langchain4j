@@ -7,7 +7,7 @@ import java.util.Map;
  * 智能体请求
  * @param agenticScope 智能体自主范围
  * @param agentName 智能体名称
- * @param inputs 输入参数
+ * @param inputs 输入参数的映射表
  */
 public record AgentRequest(AgenticScope agenticScope, String agentName, Map<String, Object> inputs) {
 }

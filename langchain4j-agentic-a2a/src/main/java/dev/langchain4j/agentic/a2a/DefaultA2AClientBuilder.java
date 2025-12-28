@@ -7,6 +7,7 @@ import dev.langchain4j.agentic.agent.AgentRequest;
 import dev.langchain4j.agentic.agent.AgentResponse;
 import dev.langchain4j.agentic.internal.A2AClientBuilder;
 import dev.langchain4j.agentic.internal.AgentSpecification;
+import dev.langchain4j.exception.LangChain4jException;
 import io.a2a.A2A;
 import io.a2a.client.Client;
 import io.a2a.client.ClientEvent;
@@ -36,21 +37,52 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 智能体到智能体的客户端构建者的默认实现
+ */
 public class DefaultA2AClientBuilder<T> implements A2AClientBuilder<T> {
 
-    private final Class<T> agentServiceClass;
     private static final Logger LOG = LoggerFactory.getLogger(DefaultA2AClientBuilder.class);
 
+    /**
+     * 智能体服务实现类
+     */
+    private final Class<T> agentServiceClass;
+
+    /**
+     * 智能体卡片
+     */
     private final AgentCard agentCard;
+    /**
+     * 智能体到智能体的客户端
+     */
     private final Client a2aClient;
 
+    /**
+     * 名称
+     */
     private String name;
+    /**
+     * 唯一的名称
+     */
     private String uniqueName;
+    /**
+     * 输入变量的键列表
+     */
     private String[] inputKeys;
+    /**
+     * 输出变量的键
+     */
     private String outputKey;
     private boolean async;
 
+    /**
+     * 在调用之前的监听器
+     */
     private Consumer<AgentRequest> beforeListener = request -> {};
+    /**
+     * 在调用之后的监听器
+     */
     private Consumer<AgentResponse> afterListener = response -> {};
 
     DefaultA2AClientBuilder(String a2aServerUrl, Class<T> agentServiceClass) {
@@ -58,6 +90,7 @@ public class DefaultA2AClientBuilder<T> implements A2AClientBuilder<T> {
         this.name = agentCard.name();
         this.uniqueName = uniqueAgentName(this.name);
         try {
+            // 智能体到智能体的客户端
             this.a2aClient = Client.builder(agentCard)
                     .clientConfig(new ClientConfig.Builder()
                             .setStreaming(false) // Disabling streaming
@@ -65,7 +98,7 @@ public class DefaultA2AClientBuilder<T> implements A2AClientBuilder<T> {
                     .withTransport(JSONRPCTransport.class, new JSONRPCTransportConfig())
                     .build();
         } catch (A2AClientException e) {
-            throw new RuntimeException(e);
+            throw new LangChain4jException(e);
         }
         this.agentServiceClass = agentServiceClass;
     }
@@ -74,7 +107,7 @@ public class DefaultA2AClientBuilder<T> implements A2AClientBuilder<T> {
         try {
             return A2A.getAgentCard(a2aServerUrl);
         } catch (A2AClientError e) {
-            throw new RuntimeException(e);
+            throw new LangChain4jException(e);
         }
     }
 
@@ -84,6 +117,7 @@ public class DefaultA2AClientBuilder<T> implements A2AClientBuilder<T> {
             throw new IllegalArgumentException("Input names must be provided for UntypedAgent.");
         }
 
+        // 智能体对象，新的代理实例
         Object agent = Proxy.newProxyInstance(
                 agentServiceClass.getClassLoader(),
                 new Class<?>[] {agentServiceClass, A2AClientSpecification.class},
@@ -142,6 +176,7 @@ public class DefaultA2AClientBuilder<T> implements A2AClientBuilder<T> {
             }
         }
 
+        // 用户消息
         Message message =
                 new Message.Builder().role(Message.Role.USER).parts(parts).build();
 

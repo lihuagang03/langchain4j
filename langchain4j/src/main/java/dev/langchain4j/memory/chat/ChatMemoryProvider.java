@@ -22,7 +22,8 @@ public interface ChatMemoryProvider {
      * is called with a previously unseen memory ID.
      * Once the {@link ChatMemory} instance is returned, it's retained in memory and managed by {@link dev.langchain4j.service.AiServices}.
      *
-     * @param memoryId The ID of the chat memory. 聊天记忆ID
+     * @param memoryId The ID of the chat memory.
+     *                 聊天记忆ID
      * @return A {@link ChatMemory} instance.
      * @see MemoryId
      */

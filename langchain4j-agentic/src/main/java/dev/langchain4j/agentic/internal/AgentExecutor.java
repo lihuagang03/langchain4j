@@ -47,9 +47,11 @@ public record AgentExecutor(AgentInvoker agentInvoker, Object agent) {
             // 智能体调用参数列表
             AgentInvocationArguments args = agentInvoker.toInvocationArguments(agenticScope);
             // 调用智能体
+            // 智能体调用者
             Object response = async
                     ? new AsyncResponse<>(() -> {
                         try {
+                            // 异步地调用
                             return agentInvoker.invoke(agenticScope, invokedAgent, args);
                         } catch (AgentInvocationException e) {
                             return handleAgentFailure(e, agenticScope, invokedAgent);

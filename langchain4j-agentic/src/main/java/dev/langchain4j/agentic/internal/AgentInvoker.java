@@ -46,7 +46,7 @@ public interface AgentInvoker extends AgentSpecification {
             // 在调用之前
             beforeInvocation(new AgentRequest(agenticScope, name(), args.namedArgs()));
         } catch (Exception e) {
-            LOG.error("Before agent invocation listener for agent " + name() + " failed: " + e.getMessage(), e);
+            LOG.error("Before agent invocation listener for agent {} failed: {}", name(), e.getMessage(), e);
         }
         // 设置当前线程的智能体自主范围
         LangChain4jManaged.setCurrent(Map.of(AgenticScope.class, agenticScope));
@@ -57,7 +57,7 @@ public interface AgentInvoker extends AgentSpecification {
             // 在调用完成之后
             afterInvocation(new AgentResponse(agenticScope, name(), args.namedArgs(), result));
         } catch (Exception e) {
-            LOG.error("After agent invocation listener for agent " + name() + " failed: " + e.getMessage(), e);
+            LOG.error("After agent invocation listener for agent {} failed: {}", name(), e.getMessage(), e);
         }
         return result;
     }
@@ -78,9 +78,11 @@ public interface AgentInvoker extends AgentSpecification {
      */
     static AgentInvoker fromMethod(AgentSpecification spec, Method method) {
         if (method.getDeclaringClass() == UntypedAgent.class) {
+            // 无类型的智能体调用者
             return new UntypedAgentInvoker(method, spec);
         }
 
+        // 方法的智能体调用者
         return new MethodAgentInvoker(method, spec, argumentsFromMethod(method));
     }
 
@@ -94,10 +96,12 @@ public interface AgentInvoker extends AgentSpecification {
     }
 
     static Optional<String> optionalParameterName(Parameter parameter) {
+        // 工具的参数
         P p = parameter.getAnnotation(P.class);
         if (p != null) {
             return Optional.of(p.value());
         }
+        // 提示模板变量
         V v = parameter.getAnnotation(V.class);
         if (v != null) {
             return Optional.of(v.value());

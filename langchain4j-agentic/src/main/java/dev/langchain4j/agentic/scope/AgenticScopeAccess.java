@@ -7,7 +7,7 @@ package dev.langchain4j.agentic.scope;
 public interface AgenticScopeAccess {
 
     /**
-     * 返回具有给定 id 的 AgenticScope，用于此 AI 服务，
+     * 返回具有给定聊天记忆 ID 的 AgenticScope，用于此 AI 服务，
      * 如果此类内存不存在，则返回 null。
      * Returns the {@link AgenticScope} with the given id for this AI service or null if such memory doesn't exist.
      *
@@ -17,6 +17,7 @@ public interface AgenticScopeAccess {
     AgenticScope getAgenticScope(Object memoryId);
 
     /**
+     * 驱逐具有给定聊天记忆 ID 的 AgenticScope。
      * Evicts the {@link AgenticScope} with the given id.
      *
      * @param memoryId The id of the {@link AgenticScope} to be evicted.
